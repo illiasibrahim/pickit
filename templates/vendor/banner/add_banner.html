@@ -1,0 +1,41 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block banner %} active {% endblock %}
+{% block nav-brand %} Banner management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Add banner</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ banner_form.as_p }}
+                        {{ banner_form.media }}
+
+
+                        
+                            <div class="update ml-auto mr-auto">
+                                <button href="add-banner" type="submit" class="btn btn-primary btn-round">Add banner</button>
+                                <a href="{% url 'banner' %}" class="btn btn-secondary">Cancel</a>
+
+                            </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

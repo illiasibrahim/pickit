@@ -1,0 +1,51 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block poster %} active {% endblock %}
+{% block nav-brand %} Poster management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Edit poster</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-4">
+                            <label for="">Poster name</label>
+                            {{ poster_form.poster_name }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Status</label>
+                            {{ poster_form.status }}
+                        </div>
+                        
+                        <div col-md-4>
+                            <img src="{{ poster.poster.url }}" alt="">
+                            <label for="">Poster</label>
+                            {{ poster_form.poster }}
+
+                        </div>
+
+                        <div class="update ml-auto mr-auto">
+                            <button href="edit-poster" type="submit" class="btn btn-primary btn-round">Save Changes</button>
+                            <a href="{% url 'poster' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

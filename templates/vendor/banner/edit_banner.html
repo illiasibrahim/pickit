@@ -1,0 +1,51 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block banner %} active {% endblock %}
+{% block nav-brand %} Banner management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Edit banner</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-4">
+                            <label for="">Banner title</label>
+                            {{ banner_form.banner_title }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Status</label>
+                            {{ banner_form.status }}
+                        </div>
+                        
+                        <div col-md-4>
+                            <img src="{{ banner.banner.url }}" alt="">
+                            <label for="">Banner</label>
+                            {{ banner_form.banner }}
+
+                        </div>
+
+                        <div class="update ml-auto mr-auto">
+                            <button href="edit-banner" type="submit" class="btn btn-primary btn-round">Save Changes</button>
+                            <a href="{% url 'banner' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm">
+	<div class="container">
+
+		<div class="intro-banner-wrap">
+			<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+				<div class="carousel-inner">
+					{% for banner in banners %}
+					<div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}" data-bs-interval="5000">
+						<img src="{{ banner.banner.url }}" class="d-block w-100" alt="...">
+					</div>
+					{% endfor %}
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+						data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+						data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+
+
+		</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+
+<!-- ========================= SECTION categories ========================= -->
+<section class="section-cat padding-y-sm">
+	<div class="container">
+
+		<header class="section-heading">
+			<h3 class="section-title">Shop by categories</h3>
+		</header><!-- sect-heading -->
+		<div class="row">
+			{% for category in categories %}
+			<div class="card col-4 col-sm-4 col-md-2 col-lg-2 col-lg-2 cat-card">
+				<div class="card-body">
+					<img src="{{ category.cat_image.url }}" class="card-img-top mx-auto" alt="...">
+					<p class="cat-name">{{ category.category_name }}</p>
+				</div>
+
+			</div>
+			{% endfor %}
+		</div>
+
+	</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION Categories END// ========================= -->
+
+<!-- ========================= SECTION categories ========================= -->
+<section class="section-poster margin-y-sm">
+	<div class="container">
+		<div class="row">
+			{% for poster in posters %}
+			<div class="col-lg-6 ">
+				<img src="{{ poster.poster.url }}" class="card-img-top mx-auto" alt="...">
+			</div>
+			{% endfor %}
+		</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION Categories END// ========================= -->
+
+
+
+<!-- ========================= SECTION top deals  ========================= -->
+<section class="section-name padding-y-sm">
+	<div class="container">
+
+		<header class="section-heading">
+			<h3 class="section-title">Select from top deals</h3>
+		</header><!-- sect-heading -->
+
+		<div class="row">
+			{% for product in products %}
+			<div class="col-md-3 card-outer">
+				<div class="offer-flag-div"><img src="{% static 'users/images/offer-flag.png' %}" alt=""></div>
+				<div class="offer-tag"><p>{{ product.offer }}% off</p></div>
+				<div class="card card-product-grid">
+					<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}"> </a>
+					<figcaption class="info-wrap">
+						<h5 class="title">{{ product.product_name }} {{ product.quantity }}</h5>
+						<h4 class="price mt-1 text-success">₹ {{ product.discount_price }}.00</h4>
+						<p class="">₹ <s>{{ product.mrp }}.00</s></p>
+					</figcaption>
+					<button class="btn btn-major mb-4 ml-5 mr-5">Add to cart</button>
+				</div>
+			</div> <!-- col.// -->
+			{% endfor %}
+		</div> <!-- row.// -->
+
+	</div><!-- container // -->
+</section>
+<!-- ========================= SECTION top deals  END// ========================= -->
+
+
+{% endblock %}

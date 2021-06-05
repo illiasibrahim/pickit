@@ -1,0 +1,62 @@
+{% load static %}
+<header class="nav-container">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg ">
+            <div class="container-fluid	">
+
+                <h1><a class=" pickit" href="#">PiCK<span>it</span></a></h1>
+                <button class="navbar-toggler float-right" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <form class="d-flex nav-search search-nav ">
+                        <input class="form-control search-nav search-nav-input" type="search" placeholder="Search"
+                            aria-label="Search">
+                        <button class="btn btn-outline-success search-nav search-nav-btn" type="submit"><i
+                                class="fas fa-search"></i></button>
+                    </form>
+                    <div class="d-flex flex-row">
+                        <div class="d-flex flex-column welcome">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-link">Welcome guest!</li>
+                            </ul>
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">Sign in</a>
+                                </li>
+                                <li class="nav-item pipe">
+                                    <a class="nav-link active" href="#">|</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">Sign up</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active cart-text" href="#">Cart</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="align-self-center cart-icon">
+                            <a href="" class="widget-header pl-3 ml-3">
+                                <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
+                                <span class="badge badge-pill badge-danger notify">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </nav>
+        <!-- this is to add search bar out of the nav-toggler the media queries can be found at the bottom of ui.css -->
+        <!-- <div class="row justify-content-center">
+        <form class="d-flex nav-search search-toggle col-12 col-sm-10 col-md-8">
+            <input class="form-control  search-toggle search-nav-input" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success search-toggle search-nav-btn" type="submit">Search</button>
+        </form>
+        </div> -->
+    </div>
+</header>

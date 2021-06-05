@@ -1,0 +1,96 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block brand %} active {% endblock %}
+{% block nav-brand %} Brand management {% endblock %}
+
+{% block content %}
+
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="card-header col-md-4 ">
+                        <h4 class="card-title ml-3"> Brands</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <form class="m-4">
+                            <div class=" no-border row">
+                                <input type="text" id="search-input" value=""
+                                    class="form-control col-md-4 cat-search-input" placeholder="Search category">
+                            </div>
+                        </form>
+                    </div>
+                    <!-- uncomment this if you want to add a button -->
+                    <div class="card-header col-md-2">
+                        <a href="{% url 'add-brand' %}" class="btn btn-warning">Add brand</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="data-table" class="table">
+                            <thead class=" text-secondary">
+                                <th>
+                                    No.
+                                </th>
+                                <th>
+                                    Brand name
+                                </th>
+
+                                <th>
+                                    Added at
+                                </th>
+                                <th class="text-right">
+                                    Actions
+                                </th>
+                            </thead>
+                            <tbody>
+                                {% for brand in brands %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ brand.brand_name }}
+                                    </td>
+
+                                    <td>
+                                        {{ brand.time_added }}
+                                    </td>
+
+                                    <td class="text-right">
+                                        <a href="{% url 'edit-brand' brand.id %}"><i
+                                                class="fas fa-edit mr-4 text-success"></i></a>
+                                        <i class="far fa-trash-alt text-danger delete-brand-item"></i>
+                                        <div  class="modal delete-brand-modal">
+                                            <form class="modal-content">
+                                                <div class="container">
+                                                    <h4>Delete brand!</h4>
+                                                    <p>Are you sure you want to delete this brand?</p>
+
+                                                    <div class="clearfix">
+                                                        <button id="cancel-delete-brand"
+                                                            class="btn btn-secondary">Cancel</button>
+                                                        <a href="{% url 'delete-brand' brand.id %}"
+                                                            class="btn btn-danger">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

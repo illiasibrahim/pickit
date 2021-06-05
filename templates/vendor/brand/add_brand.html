@@ -1,0 +1,40 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block brand %} active {% endblock %}
+{% block nav-brand %} Brand management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Add brand</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ brand_form.as_p }}
+
+
+                        
+                            <div class="update ml-auto mr-auto">
+                                <button href="add-brand" type="submit" class="btn btn-primary btn-round">Add brand</button>
+                                <a href="{% url 'brand' %}" class="btn btn-secondary">Cancel</a>
+
+                            </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

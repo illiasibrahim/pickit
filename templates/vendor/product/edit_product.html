@@ -1,0 +1,90 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block product %} active {% endblock %}
+{% block nav-brand %} Product management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Edit product</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-4">
+                            <label for="">Product name</label>
+                            {{ product_form.product_name }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">MRP</label>
+                            {{ product_form.mrp }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">offer</label>
+                            {{ product_form.offer }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Quantity</label>
+                            {{ product_form.quantity }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Brand</label>
+                            {{ product_form.brand }}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Category</label>
+                            {{ product_form.category }}
+                        </div>
+                        
+                        <!-- <div class="col-md-4">
+                            <img src="{{ category.cat_image.url }}" alt="">
+                        </div> -->
+                        <div col-md-4>
+                            <img src="{{ product.image_1.url }}" alt="">
+                            <label for="">Product primary image</label>
+                            {{ product_form.image_1 }}
+
+                        </div>
+                        <div col-md-4>
+                            <img src="{{ product.image_2.url }}" alt="">
+                            <label for="">Product image 2</label>
+                            {{ product_form.image_2 }}
+
+                        </div>
+                        <div col-md-4>
+                            <img src="{{ product.image_3.url }}" alt="">
+                            <label for="">Product image 3</label>
+                            {{ product_form.image_3 }}
+
+                        </div>
+                        <div col-md-4>
+                            <img src="{{ product.image_4.url }}" alt="">
+                            <label for="">Product image 3</label>
+                            {{ product_form.image_4 }}
+
+                        </div>
+                        
+
+
+                        <div class="update ml-auto mr-auto">
+                            <button href="edit-product" type="submit" class="btn btn-primary btn-round">Save Changes</button>
+                            <a href="{% url 'product' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

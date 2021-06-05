@@ -1,0 +1,18 @@
+/* category page changes */
+
+.data-table i:hover{
+    cursor: pointer;
+}
+
+#delete-category-modal{
+    max-width: 30em;
+    height: 15em;
+    background: #8865653d;
+    margin-top: 2em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+   
+}
+

@@ -1,0 +1,41 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block category %} active {% endblock %}
+{% block nav-brand %} Category management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Add category</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ category_form.media }}
+                        {{ category_form.as_p }}
+
+
+                        
+                            <div class="update ml-auto mr-auto">
+                                <button href="add-category" type="submit" class="btn btn-primary btn-round">Add Category</button>
+                                <a href="{% url 'category' %}" class="btn btn-secondary">Cancel</a>
+
+                            </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

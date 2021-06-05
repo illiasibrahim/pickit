@@ -1,0 +1,92 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block banner %} active {% endblock %}
+{% block nav-brand %} Banner management {% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="card-header col-md-6 ">
+                        <h4 class="card-title ml-3"> Banners</h4>
+                    </div>
+                    <div class="card-header col-md-6">
+                        <a href="{% url 'add-banner' %}" class="btn btn-warning">Add banner</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-secondary">
+                                <th>
+                                    No.
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    image
+                                </th>
+                                <th>
+                                    created at
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </thead>
+                            <tbody>
+                                {% for banner in banners %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ banner.banner_title }}
+                                    </td>
+                                    <td>
+                                        <img src="{{ banner.banner.url }}" alt="">
+                                    </td>
+                                    <td>
+                                        {{ banner.added_at }}
+                                    </td>
+                                    <td>
+                                        {{ banner.status|yesno:"Active,Inactive" }}
+                                    </td>
+                                    <td>
+                                    <a href="{% url 'edit-banner' banner.id %}"><i class="fas fa-edit mr-4 text-success"></i></a>
+                                    <i class="far fa-trash-alt text-danger delete-banner-item"></i>
+                                    <div class="modal delete-banner-modal">
+                                        <form class="modal-content">
+                                            <div class="container">
+                                                <h4>Delete banner!</h4>
+                                                <p>Are you sure you want to delete this banner?</p>
+
+                                                <div class="clearfix">
+                                                    <button id="cancel-delete-banner"
+                                                        class="btn btn-secondary">Cancel</button>
+                                                    <a href="{% url 'delete-banner' banner.id %}"
+                                                        class="btn btn-danger">Delete</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

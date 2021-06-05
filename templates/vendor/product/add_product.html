@@ -1,0 +1,40 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block product %} active {% endblock %}
+{% block nav-brand %} Product management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Add product</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {{ product_form.as_p }}
+                        {{ product_form.media }}
+                        
+                            <div class="update ml-auto mr-auto">
+                                <button href="" type="submit" class="btn btn-primary btn-round">Add product</button>
+                                <a href="{% url 'product' %}" class="btn btn-secondary">Cancel</a>
+
+                            </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}
