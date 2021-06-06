@@ -10,6 +10,11 @@ class CategoryForm(forms.ModelForm):
             'category_name',
             'cat_image',
         ]
+    def __init__(self,*args,**kwargs):
+        super(CategoryForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+
 
 class BrandForm(forms.ModelForm):
     class Meta:
@@ -17,8 +22,17 @@ class BrandForm(forms.ModelForm):
         fields = [
             'brand_name',
         ]
+    def __init__(self,*args,**kwargs):
+        super(BrandForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+
 
 class ProductForm(forms.ModelForm):
+    image_1 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    image_2 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    image_3 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    image_4 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
     class Meta:
         model = Product
         fields = {
@@ -35,7 +49,13 @@ class ProductForm(forms.ModelForm):
 
         }
 
+    def __init__(self,*args,**kwargs):
+        super(ProductForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+
 class BannerForm(forms.ModelForm):
+    banner = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
     class Meta:
         model = Banner
         fields = {
@@ -44,7 +64,13 @@ class BannerForm(forms.ModelForm):
             'status',
         }
 
+    def __init__(self,*args,**kwargs):
+        super(BannerForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+
 class PosterForm(forms.ModelForm):
+    poster = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
     class Meta:
         model = Poster
         fields = {
@@ -52,3 +78,8 @@ class PosterForm(forms.ModelForm):
             'poster',
             'status'
         }
+
+    def __init__(self,*args,**kwargs):
+        super(PosterForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'

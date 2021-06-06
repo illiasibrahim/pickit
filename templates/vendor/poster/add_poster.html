@@ -18,17 +18,39 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ poster_form.as_p }}
-                        {{ poster_form.media }}
-
-
-                        
-                            <div class="update ml-auto mr-auto">
-                                <button href="add-poster" type="submit" class="btn btn-primary btn-round">Add poster</button>
-                                <a href="{% url 'poster' %}" class="btn btn-secondary">Cancel</a>
-
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Poster name*</label>
+                                    {{ poster_form.poster_name }}
+                                </div>
                             </div>
-                        
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Status*</label>
+                                    {{ poster_form.status }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="">
+                                    <label>Poster*</label>
+                                    {{ poster_form.poster }}
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="update ml-3 mt-4">
+                            <button href="add-poster" type="submit" class="btn btn-primary btn-round">Add
+                                poster</button>
+                            <a href="{% url 'poster' %}" class="btn btn-secondary btn-round">Cancel</a>
+
+                        </div>
+
                     </form>
                 </div>
             </div>

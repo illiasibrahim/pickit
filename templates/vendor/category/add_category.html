@@ -18,14 +18,29 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ category_form.media }}
-                        {{ category_form.as_p }}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Category name*</label>
+                                    {{ category_form.category_name }}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="">
+                                    <label>Image*</label>
+                                    {{ category_form.cat_image }}
+                                </div>
+                            </div>
 
+                        </div>
 
                         
-                            <div class="update ml-auto mr-auto">
+                            <div class="update ml-4 mt-3">
                                 <button href="add-category" type="submit" class="btn btn-primary btn-round">Add Category</button>
-                                <a href="{% url 'category' %}" class="btn btn-secondary">Cancel</a>
+                                <a href="{% url 'category' %}" class="btn btn-secondary btn-round">Cancel</a>
 
                             </div>
                         

@@ -67,22 +67,9 @@
                                     <td class="text-right">
                                         <a href="{% url 'edit-category' category.id %}"><i
                                                 class="fas fa-edit mr-4 text-success"></i></a>
-                                        <i id="" class="far fa-trash-alt text-danger delete-cat-item"></i>
-                                        <div id="delete-cat-modal" class="modal">
-                                            <form class="modal-content">
-                                                <div class="container">
-                                                    <h4>Delete category!</h4>
-                                                    <p>Are you sure you want to delete this category?</p>
-        
-                                                    <div class="clearfix">
-                                                        <button id="cancel-delete-cat"
-                                                            class="btn btn-secondary">Cancel</button>
-                                                        <a href="{% url 'delete-category' category.id %}"
-                                                            class="btn btn-danger">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
+                                                <a href="{% url 'delete-category' category.id %}"
+                                                onclick="return confirm('Are you sure you want to delete this item?')"><i
+                                                    class="far fa-trash-alt text-danger"></i></a>
                                     </td>
                                 </tr>
                                 

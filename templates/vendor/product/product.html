@@ -84,22 +84,7 @@
                                     <td class="text-right">
                                         <a href="{% url 'edit-product' product.id %}"><i
                                                 class="fas fa-edit mr-4 text-success"></i></a>
-                                        <i class="far fa-trash-alt text-danger delete-product-item"></i>
-                                        <div  class="modal delete-product-modal">
-                                            <form class="modal-content">
-                                                <div class="container">
-                                                    <h4>Delete product!</h4>
-                                                    <p>Are you sure you want to delete this product?</p>
-
-                                                    <div class="clearfix">
-                                                        <button id="cancel-delete-product"
-                                                            class="btn btn-secondary">Cancel</button>
-                                                        <a href="{% url 'delete-product' product.id %}"
-                                                            class="btn btn-danger">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
+                                        <a href="{% url 'delete-product' product.id %}" onclick="return confirm('Are you sure you want to delete this item?')"><i class="far fa-trash-alt text-danger"></i></a>    
                                     </td>
 
                                 </tr>

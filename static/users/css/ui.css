@@ -1212,7 +1212,7 @@ a[class*=card]:hover .title {
 .img-block img{
   width: 5em;
   height: 5em;
-  margin-top: 2em;
+  margin: 1em;
 }
 
 /* ====================== block ==================== */
@@ -1563,6 +1563,9 @@ a[class*=card]:hover .title {
   text-decoration: underline;
 }
 
+.product-title{
+  font-weight: bold;
+}
 
 
 /* Inorder to display different views in nav in collapse and expanded views */

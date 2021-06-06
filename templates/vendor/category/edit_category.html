@@ -18,24 +18,31 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="col-md-4">
-                            <label for="">Category name</label>
-                            {{ form.category_name }}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="">Category name</label>
+                                {{ form.category_name }}
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <img src="{{ category.cat_image.url }}" alt="">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="{{ category.cat_image.url }}" alt="">
+                            </div>
                         </div>
-                        <div col-md-4>
-                            
-                            <label for="">Category image</label>
-                            {{ form.cat_image }}
+                        <div class="row">
+                            <div class="col-md-4">
 
+                                <label for="">Category image</label>
+                                {{ form.cat_image }}
+
+                            </div>
+                        </div>
                         </div>
 
-
-                        <div class="update ml-auto mr-auto">
-                            <button href="edit-category" type="submit" class="btn btn-primary btn-round">Save Changes</button>
-                            <a href="{% url 'category' %}" class="btn btn-secondary">Cancel</a>
+                        <div class="update ml-4 mt-3">
+                            <button href="edit-category" type="submit" class="btn btn-primary btn-round">Save
+                                Changes</button>
+                            <a href="{% url 'category' %}" class="btn btn-secondary btn-round">Cancel</a>
                         </div>
 
                     </form>

@@ -18,16 +18,22 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ brand_form.as_p }}
-
-
-                        
-                            <div class="update ml-auto mr-auto">
-                                <button href="add-brand" type="submit" class="btn btn-primary btn-round">Add brand</button>
-                                <a href="{% url 'brand' %}" class="btn btn-secondary">Cancel</a>
-
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Brand*</label>
+                                    {{ brand_form.brand_name }}
+                                </div>
                             </div>
-                        
+                        </div>
+
+
+                        <div class="update ml-3 mt-4">
+                            <button href="add-brand" type="submit" class="btn btn-primary btn-round">Add brand</button>
+                            <a href="{% url 'brand' %}" class="btn btn-secondary btn-round">Cancel</a>
+
+                        </div>
+
                     </form>
                 </div>
             </div>

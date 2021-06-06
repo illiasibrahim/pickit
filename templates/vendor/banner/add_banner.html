@@ -18,17 +18,39 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ banner_form.as_p }}
-                        {{ banner_form.media }}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Banner title*</label>
+                                    {{ banner_form.banner_title }}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Status*</label>
+                                    {{ banner_form.status }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="">
+                                    <label>Banner*</label>
+                                    {{ banner_form.banner }}
+                                </div>
+                            </div>
+
+                        </div>
 
 
-                        
-                            <div class="update ml-auto mr-auto">
-                                <button href="add-banner" type="submit" class="btn btn-primary btn-round">Add banner</button>
-                                <a href="{% url 'banner' %}" class="btn btn-secondary">Cancel</a>
+                        <div class="row">
+                            <div class="update ml-4">
+                                <button href="add-banner" type="submit" class="btn btn-primary btn-round">Add
+                                    banner</button>
+                                <a href="{% url 'banner' %}" class="btn btn-secondary btn-round">Cancel</a>
 
                             </div>
-                        
+
                     </form>
                 </div>
             </div>

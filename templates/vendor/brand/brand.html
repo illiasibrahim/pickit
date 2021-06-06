@@ -19,7 +19,7 @@
                         <form class="m-4">
                             <div class=" no-border row">
                                 <input type="text" id="search-input" value=""
-                                    class="form-control col-md-4 cat-search-input" placeholder="Search category">
+                                    class="form-control col-md-4 cat-search-input" placeholder="Search brand">
                             </div>
                         </form>
                     </div>
@@ -63,22 +63,10 @@
                                     <td class="text-right">
                                         <a href="{% url 'edit-brand' brand.id %}"><i
                                                 class="fas fa-edit mr-4 text-success"></i></a>
-                                        <i class="far fa-trash-alt text-danger delete-brand-item"></i>
-                                        <div  class="modal delete-brand-modal">
-                                            <form class="modal-content">
-                                                <div class="container">
-                                                    <h4>Delete brand!</h4>
-                                                    <p>Are you sure you want to delete this brand?</p>
+                                        <a href="{% url 'delete-brand' brand.id %}"
+                                            onclick="return confirm('Are you sure you want to delete this item?')"><i
+                                                class="far fa-trash-alt text-danger"></i></a>
 
-                                                    <div class="clearfix">
-                                                        <button id="cancel-delete-brand"
-                                                            class="btn btn-secondary">Cancel</button>
-                                                        <a href="{% url 'delete-brand' brand.id %}"
-                                                            class="btn btn-danger">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}

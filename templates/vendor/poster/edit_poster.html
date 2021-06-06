@@ -18,25 +18,29 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="col-md-4">
-                            <label for="">Poster name</label>
-                            {{ poster_form.poster_name }}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="">Poster name</label>
+                                {{ poster_form.poster_name }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="">Status</label>
+                                {{ poster_form.status }}
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <label for="">Status</label>
-                            {{ poster_form.status }}
-                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <img src="{{ poster.poster.url }}" alt="">
+                                <label for="">Poster</label>
+                                {{ poster_form.poster }}
                         
-                        <div col-md-4>
-                            <img src="{{ poster.poster.url }}" alt="">
-                            <label for="">Poster</label>
-                            {{ poster_form.poster }}
-
+                            </div>
                         </div>
 
                         <div class="update ml-auto mr-auto">
-                            <button href="edit-poster" type="submit" class="btn btn-primary btn-round">Save Changes</button>
-                            <a href="{% url 'poster' %}" class="btn btn-secondary">Cancel</a>
+                            <button href="edit-poster" type="submit" class="btn btn-primary btn-round">Save
+                                Changes</button>
+                            <a href="{% url 'poster' %}" class="btn btn-secondary btn-round">Cancel</a>
                         </div>
 
                     </form>
