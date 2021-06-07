@@ -1,4 +1,5 @@
 {% extends 'user/base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -6,22 +7,23 @@
 
         <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
           <div class="card-body">
-          <h4 class="card-title mb-4">Sign in</h4>
+          <h4 class="card-title mb-4">Verify</h4>
           <form method="POST">
               {% csrf_token %}
               <div class="form-group">
                 <label for="otp">Enter the OTP sent to your number</label>
-                 <input type="text" class="form-control" placeholder="Phone number" name="otp" required>
+                 <input type="text" class="form-control" placeholder="OTP" name="otp" required>
+                 {% for message in messages %}
+                 <label class="text-danger" for="messages">{{messagge}}</label>
               </div> <!-- form-group// -->
-            
+              {% endfor %}
               <div class="form-group">
-                  <button type="submit" class="btn btn-major btn-block m"> Verify </button>
+                  <button type="submit" class="btn btn-major btn-block mt-4"> Verify </button>
               </div> <!-- form-group// -->    
           </form>
           </div> <!-- card-body.// -->
         </div> <!-- card .// -->
     
-         <p class="text-center mt-4">Dont have account? <a class="text-major" href="#">Sign up</a></p>
          <br><br>
     
     

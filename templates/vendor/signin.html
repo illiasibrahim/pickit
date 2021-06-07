@@ -27,15 +27,20 @@
     <div class="container-fluid row sign-container">
         <div class="sign-in-border ">
             <h3 class="mb-4">Sign in</h3>
-            <form>
+            <form method="POST">
+                {% csrf_token %}
+
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Username</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="username">
+                    <label for="exampleInputEmail1" class="form-label">Phone number</label>
+                    <input type="phone" name="phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        placeholder="phone">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+                    {% for message in messages %}
+                    <label for="message" class="form-label text-danger">{{ message }}</label>
+                    {% endfor %}
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>

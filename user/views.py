@@ -6,6 +6,7 @@ from django.contrib import messages,auth
 import random
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from twilio.rest import Client
 
 # Create your views here.
 
@@ -22,8 +23,7 @@ def home(request):
     }
     return render(request,'user/index.html',context)
 
-def sign_in(request):
-    return render(request,'user/signin.html')
+
 
 def sign_up(request):
     if request.method == 'POST':
@@ -49,6 +49,15 @@ def sign_up(request):
             otp = random.randint(100000,999999)
             request.session['otp'] = otp
             print(otp)
+            # account_sid = 'ACebf98e0fff644ccb36708cc0984af114'
+            # auth_token = 'bbb861541cffc9f84cdbf8f47612d672'
+            # client = Client(account_sid, auth_token)
+            # message = client.messages.create(
+            #                                 body= f'Your OTP for registration is -{ otp }',
+            #                                 from_='+17816615925',
+            #                                 to=f'+91{phone}'
+            #                             )
+
             return redirect('verify-signup')
 
     return render(request,'user/register.html')

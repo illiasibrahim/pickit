@@ -57,7 +57,7 @@
           </li>
           </li>
           <li class="{% block user %} {% endblock %}">
-            <a href="{% url 'dashboard' %}">
+            <a href="{% url 'user' %}">
               <i class="fas fa-ad"></i>
               <p>User management</p>
             </a>
@@ -87,7 +87,7 @@
             </a>
           </li>
           <li>
-            <a href="">
+            <a href="{% url 'admin-logout' %}">
               <i class="fas fa-sign-out-alt"></i>
               <p>Logout</p>
             </a>
