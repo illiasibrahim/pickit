@@ -491,29 +491,22 @@ p:last-child {
   font-weight: bolder;
   text-decoration: none;
 }
-.pickit:hover{
-  color: var(--cyan-mix);
-}
-.pickit span{
-  color: white;
-}
+
+
 
 .search-nav-btn{
   background: var(--major);
-  color: white;
-  border: .3px solid white;
+  color: white;;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   width: 5em;
 }
 
 .search-nav-btn:hover{
-  background: var(--major);
   opacity: 0.9;
 }
 
 .search-nav-input{
-  border: .3px solid var(--major);
   width: 24em;
   height: 2.6em;
   border-top-right-radius: 0px;

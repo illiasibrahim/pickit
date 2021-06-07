@@ -71,6 +71,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pickit.wsgi.application'
 
+AUTH_USER_MODEL = 'user.Account'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'user.backends.CustomModelBackend'
+)
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

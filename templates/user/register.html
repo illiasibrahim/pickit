@@ -7,77 +7,76 @@
 <!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-content padding-y">
 
-<!-- ============================ COMPONENT REGISTER   ================================= -->
+	<!-- ============================ COMPONENT REGISTER   ================================= -->
 	<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
-      <article class="card-body">
-		<header class="mb-4"><h4 class="card-title">Sign up</h4></header>
-		<form>
+		<article class="card-body">
+			<header class="mb-4">
+				<h4 class="card-title mb-3">Sign up</h4>
+			</header>
+			<form method="POST">
+				{% csrf_token %}
 				<div class="form-row">
 					<div class="col form-group">
 						<label>First name</label>
-					  	<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="Enter the first name" name="first_name">
 					</div> <!-- form-group end.// -->
 					<div class="col form-group">
 						<label>Last name</label>
-					  	<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="Enter the last name" name="last_name">
 					</div> <!-- form-group end.// -->
 				</div> <!-- form-row end.// -->
 				<div class="form-group">
 					<label>Email</label>
-					<input type="email" class="form-control" placeholder="">
-					<small class="form-text text-muted">We'll never share your email with anyone else.</small>
+					<input type="email" class="form-control" placeholder="Enter the email address" name="email">
+					{% if 'email' in message.tags %}
+					<label class="form-group text-danger" for="message">{{message}}</label>
+					{% endif %}
 				</div> <!-- form-group end.// -->
+
 				<div class="form-group">
-					<label class="custom-control custom-radio custom-control-inline">
-					  <input class="custom-control-input" checked="" type="radio" name="gender" value="option1">
-					  <span class="custom-control-label"> Male </span>
-					</label>
-					<label class="custom-control custom-radio custom-control-inline">
-					  <input class="custom-control-input" type="radio" name="gender" value="option2">
-					  <span class="custom-control-label"> Female </span>
-					</label>
+					<label>Phone number</label>
+					<input type="text" class="form-control" placeholder="Enter the phone number" name="phone">
+					{% if 'phone' in message.tags %}
+					<label class="form-group text-danger" for="message">{{message}}</label>
+					{% endif %}
 				</div> <!-- form-group end.// -->
-				<div class="form-row">
-					<div class="form-group col-md-6">
-					  <label>City</label>
-					  <input type="text" class="form-control">
-					</div> <!-- form-group end.// -->
-					<div class="form-group col-md-6">
-					  <label>Country</label>
-					  <select id="inputState" class="form-control">
-					    <option> Choose...</option>
-					      <option>Uzbekistan</option>
-					      <option>Russia</option>
-					      <option selected="">United States</option>
-					      <option>India</option>
-					      <option>Afganistan</option>
-					  </select>
-					</div> <!-- form-group end.// -->
-				</div> <!-- form-row.// -->
+
+				<!-- <div class="form-group">
+					<label>Username</label>
+					<input type="text" class="form-control" placeholder="Enter the username" name="username">
+					{% if 'username' in message.tags %}
+					<label class="form-group text-danger" for="message">{{message}}</label>
+					{% endif %}
+				</div>  -->
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label>Create password</label>
-					    <input class="form-control" type="password">
+					    <input class="form-control" type="password" name="password">
 					</div> <!-- form-group end.// --> 
 					<div class="form-group col-md-6">
 						<label>Repeat password</label>
 					    <input class="form-control" type="password">
 					</div> <!-- form-group end.// -->  
 				</div>
-			    <div class="form-group">
-			        <button type="submit" class="btn btn-major btn-block"> Register  </button>
-			    </div> <!-- form-group// -->      
-			        
-			</form>
-		</article><!-- card-body.// -->
-    </div> <!-- card .// -->
-    <p class="text-center mt-4">Have an account? <a class="text-major" href="">Log In</a></p>
-    <br><br>
-<!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+				<div class="form-group col mt-4">
+					<button type="submit" class="btn btn-major btn-block"> Register </button>
+				</div> <!-- form-group// -->
+	</div> <!-- form-row.// -->
+	</form>
+	</article><!-- card-body.// -->
+	</div> <!-- card .// -->
+	<p class="text-center mt-4">Have an account? <a class="text-major" href="">Log In</a></p>
+	<br><br>
+	<!-- ============================ COMPONENT REGISTER  END.// ================================= -->
 
 
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 
+
+{% endblock %}
+{% block footer %}
 
 {% endblock %}

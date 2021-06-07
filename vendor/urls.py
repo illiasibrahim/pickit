@@ -32,6 +32,7 @@ urlpatterns = [
     path('edit-poster/<poster_id>', views.edit_poster, name='edit-poster'),
 
     path('user/',views.user_view, name='user'),
+    path('delete-user/<user_id>/',views.delete_user,name='delete-user'),
 
 
 

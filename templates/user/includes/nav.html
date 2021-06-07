@@ -19,19 +19,20 @@
                                 class="fas fa-search"></i></button>
                     </form>
                     <div class="d-flex flex-row">
+                        {% if user.id is None %}
                         <div class="d-flex flex-column welcome">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-link">Welcome guest!</li>
+                                <li class="text-white nav-link">Welcome guest!</li>
                             </ul>
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#">Sign in</a>
+                                    <a class="nav-link active" href="{% url 'sign-in' %}">Sign in</a>
                                 </li>
                                 <li class="nav-item pipe">
-                                    <a class="nav-link active" href="#">|</a>
+                                    <p class="nav-link text-white">|</p>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#">Sign up</a>
+                                    <a class="nav-link active" href="{% url 'sign-up' %}">Sign up</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active cart-text" href="#">Cart</a>
@@ -39,9 +40,33 @@
 
                             </ul>
                         </div>
+                        {% else %}
+                        <div class="d-flex flex-column welcome">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="text-white nav-link">Welcome {{ user.first_name }}</li>
+                            </ul>
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="">Dashboard</a>
+                                </li>
+                                <li class="nav-item pipe">
+                                    <p class="nav-link text-white">|</p>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{% url 'logout' %}">Logout</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active cart-text" href="#">Cart</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        
+                        {% endif %}
                         <div class="align-self-center cart-icon">
                             <a href="" class="widget-header pl-3 ml-3">
-                                <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
+                                <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i>
+                                </div>
                                 <span class="badge badge-pill badge-danger notify">0</span>
                             </a>
                         </div>

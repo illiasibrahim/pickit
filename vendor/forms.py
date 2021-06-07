@@ -46,7 +46,6 @@ class ProductForm(forms.ModelForm):
             'image_2',
             'image_3',
             'image_4',
-
         }
 
     def __init__(self,*args,**kwargs):

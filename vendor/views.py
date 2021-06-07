@@ -3,6 +3,8 @@ from django.shortcuts import redirect, render
 from django.utils.translation import activate
 from vendor.models import Category, Brand, Product, Banner,Poster
 from .forms import CategoryForm,BrandForm, PosterForm, ProductForm, BannerForm
+from user.models import Account
+
 
 # Create your views here.
 
@@ -251,4 +253,13 @@ def edit_poster(request, poster_id):
 # views related to users starts from here 
 
 def user_view(request):
-    return render(request, 'vendor/user.html')
+    users = Account.objects.all()
+    context = {
+        'users' : users
+    }
+    return render(request, 'vendor/user.html',context)
+
+def delete_user(request,user_id):
+    Account.objects.filter(id = user_id).delete()
+    return redirect('user')
+
