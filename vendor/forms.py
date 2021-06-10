@@ -42,6 +42,7 @@ class ProductForm(forms.ModelForm):
             'quantity',
             'brand',
             'category',
+            'description',
             'image_1',
             'image_2',
             'image_3',
@@ -55,6 +56,7 @@ class ProductForm(forms.ModelForm):
 
 class BannerForm(forms.ModelForm):
     banner = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    banner.widget.attrs['required'] = 'required'
     class Meta:
         model = Banner
         fields = {
@@ -65,6 +67,7 @@ class BannerForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(BannerForm,self).__init__(*args,**kwargs)
+        self.fields['banner_title'].widget.attrs['required'] = 'required'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
 

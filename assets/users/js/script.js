@@ -1,17 +1,4 @@
-// some scripts
-
-// jquery ready start
 $(document).ready(function() {
-	// jQuery code
-
-
-    /* ///////////////////////////////////////
-
-    THESE FOLLOWING SCRIPTS ONLY FOR BASIC USAGE, 
-    For sliders, interactions and other
-
-    */ ///////////////////////////////////////
-    
 
 	//////////////////////// Prevent closing from click inside dropdown
     $(document).on('click', '.dropdown-menu', function (e) {
@@ -50,11 +37,24 @@ $(document).ready(function() {
 	if($('[data-toggle="tooltip"]').length>0) {  // check if element exists
 		$('[data-toggle="tooltip"]').tooltip()
 	} // end if
-
-
-
-
     
-}); 
-// jquery end
+    //// To swap images in product detail page as you click on them
 
+    $('.img-block > img').click(function() {
+        let $source = $(this).attr('src');
+        $('#big-img').attr('src', $source);
+        
+    });
+
+    //// sign-up validation user
+    $('#userSignUp').click(function() {
+        let firstname = $('#firstNameInput').val();
+
+        if (firstname == ""){
+            $('#firstNameError').html('Enter first name');
+            return false
+        }
+});
+
+// jquery end
+});

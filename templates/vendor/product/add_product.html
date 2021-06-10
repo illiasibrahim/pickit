@@ -18,7 +18,6 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -57,7 +56,14 @@
                                     {{ product_form.category}}
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description*</label>
+                                    {{ product_form.description }}
+                                </div>
+                            </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="">

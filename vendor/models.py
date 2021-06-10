@@ -27,6 +27,7 @@ class Product(models.Model):
     discount        = models.IntegerField(default=0)
     discount_price  = models.IntegerField(default=0)
     quantity        = models.CharField(max_length=10)
+    description     = models.TextField(blank=True)
     brand           = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category        = models.ForeignKey(Category, on_delete=models.CASCADE)
     image_1         = models.ImageField(upload_to = 'photos/products/primary')

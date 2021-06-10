@@ -7,4 +7,9 @@ $(document).ready(function(){
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });
+
+    // admin form validations
+    $('#inputForm').validate()
+
+
 });

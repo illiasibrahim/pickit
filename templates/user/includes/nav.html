@@ -4,7 +4,7 @@
         <nav class="navbar navbar-expand-lg ">
             <div class="container-fluid	">
 
-                <h1><a class=" pickit" href="#">PiCK<span>it</span></a></h1>
+                <a class=" pickit" href="{% url 'home' %}"><h1>PiCK<span>it</span></h1></a>
                 <button class="navbar-toggler float-right" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -12,10 +12,10 @@
                 </button>
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                    <form class="d-flex nav-search search-nav ">
-                        <input class="form-control search-nav search-nav-input" type="search" placeholder="Search"
+                    <form action="{% url 'search' %}" class="d-flex nav-search search-nav ">
+                        <input name="search_key" class="form-control search-nav search-nav-input" type="search" placeholder="Search"
                             aria-label="Search">
-                        <button class="btn btn-outline-success search-nav search-nav-btn" type="submit"><i
+                        <button  class="btn btn-outline-light search-nav search-nav-btn" type="submit"><i
                                 class="fas fa-search"></i></button>
                     </form>
                     <div class="d-flex flex-row">
@@ -35,7 +35,7 @@
                                     <a class="nav-link active" href="{% url 'sign-up' %}">Sign up</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active cart-text" href="#">Cart</a>
+                                    <a class="nav-link active cart-text" href="{% url 'cart' %}">Cart</a>
                                 </li>
 
                             </ul>
@@ -56,18 +56,17 @@
                                     <a class="nav-link active" href="{% url 'logout' %}">Logout</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active cart-text" href="#">Cart</a>
+                                    <a class="nav-link active cart-text" href="{% url 'cart' %}">Cart</a>
                                 </li>
-
                             </ul>
                         </div>
                         
                         {% endif %}
-                        <div class="align-self-center cart-icon">
-                            <a href="" class="widget-header pl-3 ml-3">
-                                <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i>
-                                </div>
-                                <span class="badge badge-pill badge-danger notify">0</span>
+                        <div class="align-self-center">
+                            <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
+                                <div class=" cart icon cart-icon icon-sm"><i class="fa fa-shopping-cart"></i>
+                                </div id="cartCount">
+                                <span id="badgeCount"  class="badge badge-pill badge-danger notify">{{ cart_count }}</span>
                             </a>
                         </div>
                     </div>

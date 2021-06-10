@@ -12,7 +12,7 @@ INCLUDE STYLES AND COMPONENTS
 ===================== */
 /* ================== HELPERS  =================== */
 :root{
-  --major:#3784cb;
+  --major:#0078a3;
   --cyan-mix:#4ac0d0;
 }
 
@@ -165,6 +165,11 @@ a:hover {
 .padding-y {
   padding-top: 40px;
   padding-bottom: 40px;
+}
+
+.padding-yy{
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .padding-top {
@@ -452,9 +457,12 @@ p:last-child {
 }
 .nav-link{
   color: white;
+  padding-bottom: 0%;
+  text-decoration: none;
 }
-.navbar-main .nav-link:hover {
-  color: #666;
+.nav-item .nav-link:hover {
+  border-bottom: 1px white solid;
+  color: white;
 }
 
 .widget-header {
@@ -483,13 +491,17 @@ p:last-child {
   right: -10px;
 }
 .widget-header:hover i {
-  color: #3167eb;
+  color: #ffffff;
 }
 .pickit{
   color: white;
   font-size: 3rem;
   font-weight: bolder;
   text-decoration: none;
+}
+.pickit:hover{
+  text-decoration: none;
+  color: white;
 }
 
 
@@ -499,6 +511,7 @@ p:last-child {
   color: white;;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  border: 1px solid white;
   width: 5em;
 }
 
@@ -515,6 +528,18 @@ p:last-child {
 
 .cart-icon i{
   color: white;
+  text-decoration: none;
+}
+
+.cart-icon i:hover{
+  color: white;
+  text-decoration: none;
+  border: none;
+}
+
+.cart-icon:hover{
+  color: white;
+  text-decoration: none;
 }
 
 /* desktop only */
@@ -943,7 +968,8 @@ a[class*=card]:hover .title {
 }
 .card-product-grid .info-wrap {
   overflow: hidden;
-  padding: 18px 20px;
+  padding-left: 16px;
+  padding-bottom: 3px;
 }
 .card-product-grid .bottom-wrap {
   padding: 18px;
@@ -1001,7 +1027,7 @@ a[class*=card]:hover .title {
 
 .offer-flag-div{
   position: absolute;
-  top: 2em;
+  top: 2.1em;
   left: .5em;
   z-index: 1;
 }
@@ -1014,14 +1040,14 @@ a[class*=card]:hover .title {
 }
 
 .offer-tag p{
-  margin: .6em;
+  margin-top: .4em;
   color: white;
   font-weight: bold;
 }
 
 .offer-flag-div img{
-  width: 8em;
-  height: 2.5em;
+  width: 5em;
+  height: 2em;
 }
 
 /* LARGE LIST STYLE PRODUCT ITEM */
@@ -1462,7 +1488,7 @@ a[class*=card]:hover .title {
 /* ================== PAGES =================== */
 /* ================ PAGES HEADER ================== */
 .section-pagetop {
-  padding: 45px 0;
+  padding: 30px 0 0 0;
 }
 
 /* ================== PAGE DETAILS ==================  */
@@ -1536,6 +1562,11 @@ a[class*=card]:hover .title {
 
 /* custom functionalites */
 
+.cartI:hover{
+  background:#0078a3;
+  ;
+  
+}
 .btn-major{
   background: var(--major);
   color: white;
@@ -1560,6 +1591,28 @@ a[class*=card]:hover .title {
   font-weight: bold;
 }
 
+.error {
+  color: red;
+  background-color: #acf;
+}
+.card-image-div  .img-wrap img{
+  margin: 5px;
+  width: 9em;
+  height: 10em;
+  object-fit: contain;
+
+}
+.card-image-div .img-wrap{
+  height: 11em;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: var(--major);
+  border-color: var(--major);
+}
+
 
 /* Inorder to display different views in nav in collapse and expanded views */
 
@@ -1570,6 +1623,11 @@ a[class*=card]:hover .title {
   .cart-icon{
     display: none;
   }
+
+.badge-pill{
+  display: none;
+}
+
   h1 .pickit {
     font-size: 1em;
 
@@ -1597,4 +1655,9 @@ a[class*=card]:hover .title {
     margin: 0 3em;
   }
   
+}
+@media(max-width:1200px){
+  .intro-banner-wrap{
+    margin-top: 15px;
+  }
 }

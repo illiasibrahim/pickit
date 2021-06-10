@@ -4193,7 +4193,6 @@ input[type=button].btn-block {
   .navbar-expand-lg .navbar-collapse {
     display: flex !important;
     flex-basis: auto;
-    margin-left: 25%;
   }
   .navbar-expand-lg .navbar-toggler {
     display: none;
@@ -9963,8 +9962,7 @@ a.text-info:hover, a.text-info:focus {
 a.text-warning:hover, a.text-warning:focus {
   color: #ca6900 !important;
 }
-
-.text-danger {
+ .text-danger {
   color: #fa3434 !important;
 }
 

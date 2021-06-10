@@ -13,21 +13,21 @@
 			<div class="row no-gutters">
 				<aside class="col-md-6 justify-content-between">
 					<article class="gallery-wrap d-flex flex-column justify-content-around">
-						<div class="img-big-wrap">
-							<a href="#"><img src="{{ product.image_1.url }}"></a>
+						<div class="img-big-wrap" id="img-big">
+							<a href="#"><img id="big-img" src="{{ product.image_1.url }}"></a>
 						</div>
 						<div class=" d-flex justify-content-center">
 							<div class="img-block">
 								<img src="{{ product.image_1.url }}" alt="">
 							</div>
 							<div class="img-block">
-								<img src="{{ product.image_1.url }}" alt="">
+								<img src="{{ product.image_2.url }}" alt="">
 							</div>
 							<div class="img-block">
-								<img src="{{ product.image_1.url }}" alt="">
+								<img src="{{ product.image_3.url }}" alt="">
 							</div>
 							<div class="img-block">
-								<img src="{{ product.image_1.url }}" alt="">
+								<img src="{{ product.image_4.url }}" alt="">
 							</div>
 
 						</div>
@@ -48,6 +48,27 @@
 							<p>You save ₹ {{ product.discount }}.00</p>
 						</div>
 						<hr>
+						<!-- {% if in_cart %}
+						<div class="col">
+							<div class="input-group input-spinner">
+								<div class="input-group-prepend">
+									<button onclick="removeFromCart('{{product.id}}')" class="btn btn-major remove-from-cart-btn" type="button" id="button-minus"> <i
+											class="fa fa-minus"></i> </a>
+								</div>
+								<input type="text" class="form-control" value="{{ cart_item.quantity }}" disabled>
+								<div class="input-group-append">
+									<button onclick="addToCart('{{product.id}}')" class="btn btn-major add-to-cart-btn" type="button" id="button-plus"> <i
+											class="fa fa-plus"></i> </button>
+								</div>
+							</div> 
+						</div> 
+
+						{% else %} -->
+						<input type="hidden" class="product-id" value="{{ product.id }}">
+						<button onclick="addToCart('{{product.id}}')"  class="btn  btn-major add-to-cart-btn"> <span class="text">Add to cart</span>
+							<i  class="fas fa-shopping-cart " ></i> </button>
+						<!-- {% endif %} -->
+						<hr>
 						<div class="row">
 							<div class="item-option-select">
 								<span class="fa fa-star checked"></span>
@@ -56,11 +77,7 @@
 								<span class="fa fa-star"></span>
 								<span class="fa fa-star"></span>
 								
-								<p>Virgil Abloh’s Off-White is a streetwear-inspired collection that continues to break
-									away
-									from the conventions of mainstream fashion. Made in Italy, these black and brown
-									Odsy-1000
-									low-top sneakers.</p>
+								<p>{{ product.description }}</p>
 							</div>
 						</div> <!-- row.// -->
 						<div class="row">
@@ -68,9 +85,8 @@
 
 							</div>
 						</div> <!-- row.// -->
-						<hr>
-						<a href="./product-detail.html" class="btn  btn-major"> <span class="text">Add to cart</span>
-							<i class="fas fa-shopping-cart"></i> </a>
+					
+						
 					</article> <!-- product-info-aside .// -->
 				</main> <!-- col.// -->
 			</div> <!-- row.// -->

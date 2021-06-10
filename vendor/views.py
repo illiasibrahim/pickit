@@ -7,6 +7,7 @@ from .forms import CategoryForm,BrandForm, PosterForm, ProductForm, BannerForm
 from user.models import Account
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required
+from math import ceil,floor
 
 
 # Create your views here.
@@ -179,16 +180,17 @@ def product_view(request):
 
 
 def add_product(request):
-    if request.session.has['key']:
+    if request.session.has_key('admin'):
         if request.method == 'POST':
             product_form = ProductForm(request.POST, request.FILES)
             if product_form.is_valid():
                 product_form.save()
                 mrp = product_form.cleaned_data.get("mrp")
                 offer = product_form.cleaned_data.get("offer")
-                discount = mrp * (offer/100)
-                discount_price = mrp - discount
-                product = Product.objects.get(offer = offer)
+                discount = floor(mrp * (offer/100))
+                discount_price = ceil(mrp - discount)
+                product_name = product_form.cleaned_data.get('product_name')
+                product = Product.objects.get(product_name = product_name)
                 product.discount = discount
                 product.discount_price = discount_price
                 product.save()
@@ -202,13 +204,11 @@ def add_product(request):
     return redirect('admin-sign-in')
 
 
-
 def delete_product(request,product_id):
     if request.session.has_key('admin'):
         Product.objects.filter(id=product_id).delete()
         return redirect('product')
     return redirect('admin-sign-in')
-
 
 
 def edit_product(request,product_id):
@@ -220,8 +220,8 @@ def edit_product(request,product_id):
                 product_form.save()
                 mrp = product_form.cleaned_data.get("mrp")
                 offer = product_form.cleaned_data.get("offer")
-                discount = mrp * (offer/100)
-                discount_price = mrp - discount
+                discount = floor(mrp * (offer/100))
+                discount_price = ceil(mrp - discount)
                 product.discount = discount
                 product.discount_price = discount_price
                 product.save()

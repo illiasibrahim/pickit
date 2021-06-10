@@ -450,8 +450,14 @@ p:last-child {
   font-weight: 500;
   color: #1c1c1c;
 }
-.navbar-main .nav-link:hover {
-  color: #666;
+.nav-link{
+  color: white;
+  padding-bottom: 0%;
+  text-decoration: none;
+}
+.nav-item .nav-link:hover {
+  
+  color: #a0a0a0;
 }
 
 .widget-header {
@@ -483,34 +489,31 @@ p:last-child {
   color: #3167eb;
 }
 .pickit{
-  color: var(--cyan-mix);
+  color: white;
   font-size: 3rem;
   font-weight: bolder;
   text-decoration: none;
 }
 .pickit:hover{
-  color: var(--cyan-mix);
+  text-decoration: none;
+  color: white;
 }
-.pickit span{
-  color: var(--major);
-}
+
+
 
 .search-nav-btn{
   background: var(--major);
-  color: white;
-  border: .3px solid var(--major);
+  color: white;;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   width: 5em;
 }
 
 .search-nav-btn:hover{
-  background: var(--major);
   opacity: 0.9;
 }
 
 .search-nav-input{
-  border: .3px solid var(--major);
   width: 24em;
   height: 2.6em;
   border-top-right-radius: 0px;
@@ -518,7 +521,18 @@ p:last-child {
 }
 
 .cart-icon i{
-  color: var(--major);
+  color: white;
+  text-decoration: none;
+}
+
+.cart-icon i:hover{
+  color: white;
+  text-decoration: none;
+}
+
+.cart-icon:hover{
+  color: white;
+  text-decoration: none;
 }
 
 /* desktop only */
@@ -558,6 +572,10 @@ p:last-child {
 .footer-copyright {
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.nav-container{
+  background: var(--major);
 }
 
 /* ================== COMPONENTS =================== */
@@ -727,8 +745,19 @@ a.itemside {
 
 .cat-card{
   border: none;
+  align-items: center;
 }
 
+.cat-card .card-body{
+  display: flex;
+  flex-direction: column;
+}
+
+.cat-card .card-body p{
+  align-self: center;
+  font-size: large;
+
+}
 
 
 
@@ -1189,6 +1218,14 @@ a[class*=card]:hover .title {
   border-bottom: 0;
 }
 
+
+
+.img-block img{
+  width: 5em;
+  height: 5em;
+  margin: 1em;
+}
+
 /* ====================== block ==================== */
 .box {
   padding: 18px;
@@ -1535,6 +1572,10 @@ a[class*=card]:hover .title {
 .text-major:hover{
   color: var(--major);
   text-decoration: underline;
+}
+
+.product-title{
+  font-weight: bold;
 }
 
 
