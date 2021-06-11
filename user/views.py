@@ -3,7 +3,7 @@ from django.core import paginator
 from django.http.response import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, resolve_url
 from vendor.models import Banner,Category,Poster,Product
-from .models import Account,CartItem, Cart
+from .models import Account,CartItem, Cart, DeliveryAddress
 from django.contrib import messages,auth
 import random
 from django.contrib.auth.models import User
@@ -15,6 +15,12 @@ from django.db.models import Q
 import json
 
 # Create your views here.
+
+def _cart_id(request):
+    cart = request.session.session_key
+    if not cart:
+        cart = request.session.create()
+    return cart   
 
 def home(request):
     banners = Banner.objects.filter(status = True)
@@ -28,7 +34,6 @@ def home(request):
         'products' : products,
     }
     return render(request,'user/index.html',context)
-
 
 
 def sign_up(request):
@@ -68,6 +73,7 @@ def sign_up(request):
                 return redirect('verify-signup')
 
         return render(request,'user/register.html')
+
 
 def verify_signup(request):
     if request.user.is_authenticated:
@@ -126,6 +132,7 @@ def sign_in(request):
                 messages.info(request,'This number is not registerd in pickit !')
         return render(request,'user/signin.html')
 
+
 def verify_signin(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -141,7 +148,7 @@ def verify_signin(request):
         
 
 
-# this is to automatically login the user who just signed up 
+# this is to login a verified user either signed up or signed in
 
 def verified_user(request):
     if request.user.is_authenticated:
@@ -152,6 +159,28 @@ def verified_user(request):
             password = '1'
             user = auth.authenticate(phone=phone,password=password)
             del request.session['phone']
+            try:
+                cart = Cart.objects.get(cart_id = _cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                is_user_cart_exists = CartItem.objects.filter(user=user).exists()
+                if is_cart_item_exists:
+                    cart_item = CartItem.objects.filter(cart = cart)
+                    if is_user_cart_exists:
+                        user_cart = CartItem.objects.filter(user=user)
+                        for item in cart_item:
+                            for user_item in user_cart:
+                                if item.product == user_item.product:
+                                    user_item.quantity += item.quantity
+                                    user_item.save()
+                                else:
+                                    item.user = user
+                                    item.save()
+                    else:
+                        for item in cart_item:
+                            item.user = user 
+                            item.save()
+            except:
+                pass
             auth.login(request, user)
             return redirect('/')
         return redirect('sign-in')
@@ -162,6 +191,7 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
+
 def store(request):
     categories = Category.objects.all()
     products = Product.objects.all()
@@ -171,6 +201,7 @@ def store(request):
     paged_products = paginator.get_page(page)
     context = {'products':paged_products, 'product_count':product_count,'categories':categories}
     return render(request,'user/store.html',context)
+
 
 def product_detail(request,product_id):
     product = Product.objects.get(id= product_id)
@@ -183,6 +214,7 @@ def product_detail(request,product_id):
         'cart_item':cart_item,
     }
     return render(request, 'user/product_detail.html',context)
+
 
 def search(request):
     categories = Category.objects.all()
@@ -199,6 +231,7 @@ def search(request):
     context = {'products':paged_products ,'product_count':product_count, 'categories':categories,'search_key':search_key}
     return render(request, 'user/search_result.html', context)
 
+
 def category_view(request, category_id):
     categories = Category.objects.all()
     category = Category.objects.get(id=category_id)
@@ -210,83 +243,137 @@ def category_view(request, category_id):
     context = {'products':paged_products, 'category':category,'product_count':product_count,'categories':categories}
     return render(request,'user/category.html',context)
 
-def _cart_id(request):
-    cart = request.session.session_key
-    if not cart:
-        cart = request.session.create()
-    return cart    
-
-def cart(request,total=0, quantity=0,cart_item=None):
+ 
+def cart(request):
     try:
         total = 0
         quantity =0
         cart_items = None
-        cart = Cart.objects.get(cart_id=_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart,is_active=True)
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(user=request.user,is_active=True)
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart,is_active=True)
         for cart_item in cart_items:
             total += (cart_item.product.discount_price * cart_item.quantity)
             quantity += cart_item.quantity
-    except ObjectDoesNotExist:
+    except :
         pass
     context = {
         'total':total,
         'quantity':quantity,
-        'cart_items':cart_items
+        'cart_items':cart_items,
     }
     return render(request,'user/cart.html',context)
 
 
 
 def add_cart(request):
+    cart_items = None
     product_id = request.GET['product_id']
     product = Product.objects.get(id=product_id)
     try:
-        cart = Cart.objects.get(cart_id = _cart_id(request))
-    except ObjectDoesNotExist:
-        cart = Cart.objects.create(
-            cart_id = _cart_id(request)
-        )
-        cart.save()
-
-    try:
-        cart_item = CartItem.objects.get(product=product, cart=cart)
+        if request.user.is_authenticated:
+            cart_item = CartItem.objects.get(product=product,user = request.user)
+        else:
+            try:
+                cart = Cart.objects.get(cart_id = _cart_id(request))
+            except:
+                cart = Cart.objects.create(
+                    cart_id = _cart_id(request)
+                )
+            cart.save()
+            cart_item = CartItem.objects.get(product=product, cart=cart)
         cart_item.quantity += 1 
         cart_item.save()
-    except ObjectDoesNotExist:
-        cart_item = CartItem.objects.create(
-            product = product,
-            quantity =1,
-            cart = cart,
-        )
+    except :
+        if request.user.is_authenticated:
+            cart_item = CartItem.objects.create(
+                product=product,
+                quantity=1,
+                user=request.user
+            )
+        else:
+            cart_item = CartItem.objects.create(
+                product = product,
+                quantity =1,
+                cart = cart,
+            )
         cart_item.save()
     cart_count = 0
-    cart_items = CartItem.objects.all().filter(cart=cart)
-    for cart_item in cart_items:
-        cart_count += int(cart_item.quantity)
+    if request.user.is_authenticated:
+        cart_items = CartItem.objects.all().filter(user=request.user)
+    else:
+        cart_items = CartItem.objects.all().filter(cart=cart)
+    for cart_ite in cart_items: #inorder to avoid conflict with same name cartite
+        cart_count += int(cart_ite.quantity)
+        print('working')
     ind_count = cart_item.quantity
     return JsonResponse({'data':cart_count,'ind_count':ind_count})
     
 
-def remove_cart(request):
+def remove_cart(request): # to remove single quantity of a purticular cart item
+    rem = False
     product_id = request.GET['product_id']
-    cart = Cart.objects.get(cart_id=_cart_id(request))
+    
     product = get_object_or_404(Product, id=product_id)
-    cart_item = CartItem.objects.get(product=product,cart=cart)
+    if request.user.is_authenticated:
+        cart_item = CartItem.objects.get(product=product,user=request.user)
+        cart_items = CartItem.objects.all().filter(user=request.user)
+    else:
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_item = CartItem.objects.get(product=product,cart=cart)
+        cart_items = CartItem.objects.all().filter(cart=cart)
+    
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         cart_item.save()
     else:
         cart_item.delete()
+        rem = True # to remove the item from cart without reloading
     cart_count = 0
-    cart_items = CartItem.objects.all().filter(cart=cart)
-    for cart_item in cart_items:
-        cart_count += int(cart_item.quantity)
+    for cart_ite in cart_items: #inorder to avoid conflict with same name cartitem and cartite
+        cart_count += int(cart_ite.quantity)
     ind_count = cart_item.quantity
-    return JsonResponse({'data':cart_count,'ind_count':ind_count})
+    return JsonResponse({'data':cart_count,'ind_count':ind_count,'rem':rem})
 
-def remove_cart_item(request,product_id):
-    cart = Cart.objects.get(cart_id=_cart_id(request))
+def remove_cart_item(request,product_id): # to remove the entire quantity of a purticular cart item
     product = get_object_or_404(Product, id=product_id)
-    cart_item = CartItem.objects.get(product=product,cart=cart)
+    if request.user.is_authenticated:
+        cart_item = CartItem.objects.get(product=product,user=request.user)
+    else:
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_item = CartItem.objects.get(product=product,cart=cart)
     cart_item.delete()
     return redirect('cart')
+
+@login_required(login_url='sign-in')
+def checkout(request):
+    try:
+        total = 0
+        quantity =0
+        discount = 0
+        total_mrp =0
+        cart_items = None
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(user=request.user,is_active=True)
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart,is_active=True)
+        for cart_item in cart_items:
+            total_mrp += (cart_item.product.mrp * cart_item.quantity)
+            total += (cart_item.product.discount_price * cart_item.quantity)
+            discount += (cart_item.product.discount * cart_item.quantity)
+            quantity += cart_item.quantity
+    except:
+        pass
+    delivery_addresses = DeliveryAddress.objects.filter(user=request.user)
+    context = {
+        'total':total,
+        'quantity':quantity,
+        'cart_items':cart_items,
+        'discount':discount,
+        'total_mrp':total_mrp,
+        'delivery_addresses':delivery_addresses,
+    }
+    return render(request,'user/place_order.html',context)

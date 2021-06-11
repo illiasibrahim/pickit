@@ -583,6 +583,15 @@ p:last-child {
 
 .nav-container{
   background: var(--major);
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  margin: 0;
+  z-index: 4;
+}
+.spacing{
+  margin-top: 8em;
 }
 
 /* ================== COMPONENTS =================== */
@@ -1612,6 +1621,7 @@ a[class*=card]:hover .title {
   background-color: var(--major);
   border-color: var(--major);
 }
+
 
 
 /* Inorder to display different views in nav in collapse and expanded views */
