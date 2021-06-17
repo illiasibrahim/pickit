@@ -13,7 +13,7 @@
 			<div class="row no-gutters">
 				<aside class="col-md-6 justify-content-between">
 					<article class="gallery-wrap d-flex flex-column justify-content-around">
-						<div class="img-big-wrap" id="img-big">
+						<!-- <div class="img-big-wrap" id="img-big">
 							<a href="#"><img id="big-img" src="{{ product.image_1.url }}"></a>
 						</div>
 						<div class=" d-flex justify-content-center">
@@ -30,6 +30,20 @@
 								<img src="{{ product.image_4.url }}" alt="">
 							</div>
 
+						</div> -->
+						<div class="exzoom" id="exzoom">
+							<!-- Images -->
+							<div class="exzoom_img_box">
+								<ul class='exzoom_img_ul'>
+									<li><img src="{{ product.image_1.url }}" /></li>
+									<li><img src="{{ product.image_2.url }}" /></li>
+									<li><img src="{{ product.image_3.url }}" /></li>
+									<li><img src="{{ product.image_4.url }}" /></li>
+								</ul>
+							</div>
+							<!-- <a href="https://www.jqueryscript.net/tags.php?/Thumbnail/">Thumbnail</a> Nav-->
+							<div class="exzoom_nav"></div>
+							
 						</div>
 
 
@@ -65,8 +79,9 @@
 
 						{% else %} -->
 						<input type="hidden" class="product-id" value="{{ product.id }}">
-						<button onclick="addToCart('{{product.id}}')"  class="btn  btn-major add-to-cart-btn"> <span class="text">Add to cart</span>
-							<i  class="fas fa-shopping-cart " ></i> </button>
+						<button onclick="addToCart('{{product.id}}')" class="btn  btn-major add-to-cart-btn"> <span
+								class="text">Add to cart</span>
+							<i class="fas fa-shopping-cart "></i> </button>
 						<!-- {% endif %} -->
 						<hr>
 						<div class="row">
@@ -76,7 +91,7 @@
 								<span class="fa fa-star checked"></span>
 								<span class="fa fa-star"></span>
 								<span class="fa fa-star"></span>
-								
+
 								<p>{{ product.description }}</p>
 							</div>
 						</div> <!-- row.// -->
@@ -85,8 +100,8 @@
 
 							</div>
 						</div> <!-- row.// -->
-					
-						
+
+
 					</article> <!-- product-info-aside .// -->
 				</main> <!-- col.// -->
 			</div> <!-- row.// -->

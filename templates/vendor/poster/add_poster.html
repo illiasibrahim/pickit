@@ -34,10 +34,23 @@
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="">
-                                    <label>Poster*</label>
-                                    {{ poster_form.poster }}
-                                </div>
+                                    <div id="image-box" class="mb-3 not-visible">
+    
+                                    </div>
+                                    <div id="imagePreview">
+                                        <img src="" id="cropped" width="500px">
+                                    </div>
+                                    
+                                    <div class="">
+                                        <label>Poster*</label>
+                                        {{ poster_form.poster }}
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <p class="btn btn-round btn-sm btn-outline-success mt-3 not-visible"
+                                            id="confirm-btn"> Select</p>
+                                    </div>
+                                
+    
                             </div>
 
                         </div>

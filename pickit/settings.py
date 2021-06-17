@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'pickit.wsgi.application'
 AUTH_USER_MODEL = 'user.Account'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
-    'user.backends.CustomModelBackend'
+    'user.backends.CustomModelBackend',
 )
 
 

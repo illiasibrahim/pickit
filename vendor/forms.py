@@ -12,6 +12,9 @@ class CategoryForm(forms.ModelForm):
         ]
     def __init__(self,*args,**kwargs):
         super(CategoryForm,self).__init__(*args,**kwargs)
+        self.fields['category_name'].widget.attrs['required'] = 'required'
+        self.fields['cat_image'].widget.attrs['id'] = 'id_image'
+        self.fields['cat_image'].widget.attrs['required'] = 'required'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
 
@@ -51,12 +54,15 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(ProductForm,self).__init__(*args,**kwargs)
+        self.fields['image_1'].widget.attrs['id'] = 'id_image_1'
+        self.fields['image_2'].widget.attrs['id'] = 'id_image_2'
+        self.fields['image_3'].widget.attrs['id'] = 'id_image_3'
+        self.fields['image_4'].widget.attrs['id'] = 'id_image_4'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
 
 class BannerForm(forms.ModelForm):
     banner = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
-    banner.widget.attrs['required'] = 'required'
     class Meta:
         model = Banner
         fields = {
@@ -68,6 +74,8 @@ class BannerForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         super(BannerForm,self).__init__(*args,**kwargs)
         self.fields['banner_title'].widget.attrs['required'] = 'required'
+        self.fields['banner'].widget.attrs['required'] = 'required'
+        self.fields['banner'].widget.attrs['id'] = 'id_image'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
 
@@ -83,5 +91,8 @@ class PosterForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(PosterForm,self).__init__(*args,**kwargs)
+        self.fields['poster_name'].widget.attrs['required'] = 'required'
+        self.fields['poster'].widget.attrs['id'] = 'id_image'
+        self.fields['poster'].widget.attrs['required'] = 'required'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'

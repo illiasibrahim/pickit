@@ -25,9 +25,19 @@
 	<!-- Font awesome 5 -->
 	<link href="{% static 'users/fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
 
+
+	  <!-- cropper -->
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css"
+	  integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig=="
+	  crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- ex-zoom -->
+	<link rel="stylesheet" href="{% static 'users/css/jquery.exzoom.css' %}" type="text/css" rel="stylesheet">
+
 	<!-- custom style -->
 	<link href="{% static 'users/css/ui.css' %}" rel="stylesheet" type="text/css" />
 	<link href="{% static 'users/css/responsive.css' %}" rel="stylesheet" media="only screen and (max-width: 1200px)" />
+
 
 </head>
 
@@ -59,6 +69,14 @@
 <!-- jquery validation -->
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js" type="text/javascript"></script>
 
+<!-- cropper -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"
+  integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- ex-zoom jquery -->
+<script src="{% static 'users/js/jquery.exzoom.js' %}"></script>
 
 <!-- custom javascript -->
 <script src="{% static 'users/js/script.js' %}" type="text/javascript"></script>

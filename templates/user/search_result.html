@@ -22,11 +22,11 @@
 					<article class="filter-group">
 						<header class="card-header">
 							<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
-								<i class="icon-control fa fa-chevron-down"></i>
-								<h6 class="title">Categories</h6>
+								<i class="icon-control fa fa-chevron-down text-major"></i>
+								<h6 class="title text-major">Categories</h6>
 							</a>
 						</header>
-						<div class="filter-content collapse show" id="collapse_1" style="">
+						<div class="filter-content collapse show" id="collapse_1" >
 							<div class="card-body">
 
 								<ul class="list-menu">
@@ -42,11 +42,11 @@
 					<article class="filter-group">
 						<header class="card-header">
 							<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
-								<i class="icon-control fa fa-chevron-down"></i>
-								<h6 class="title">Price range </h6>
+								<i class="icon-control fa fa-chevron-down text-major"></i>
+								<h6 class="title text-major">Price range </h6>
 							</a>
 						</header>
-						<div class="filter-content collapse show" id="collapse_3" style="">
+						<div class="filter-content collapse show" id="collapse_3" >
 							<div class="card-body">
 
 								<div class="form-row">
@@ -76,7 +76,7 @@
 										</select>
 									</div>
 								</div> <!-- form-row.// -->
-								<button class="btn btn-block btn-primary">Apply</button>
+								<button class="btn btn-block btn-major">Apply</button>
 							</div><!-- card-body.// -->
 						</div>
 					</article> <!-- filter-group .// -->
@@ -106,7 +106,7 @@
 										src="{{ product.image_1.url }}"> </a>
 							</div>
 							<figcaption class="info-wrap">
-								<h5 class="title">{{ product.product_name }} {{ product.quantity }}</h5>
+								<p class="title">{{ product.product_name }} {{ product.quantity }}</p>
 								<h4 class="price mt-1 text-success">₹ {{ product.discount_price }}.00</h4>
 								<p class="">₹ <s>{{ product.mrp }}.00</s></p>
 							</figcaption>

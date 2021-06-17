@@ -1,0 +1,141 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+	<div class="container">
+		<div class="row">
+			<aside class="col-md-3">
+				<!--   SIDEBAR   -->
+				<ul class="list-group">
+					<a class="list-group-item " href="{% url 'account' %}"> Order history </a>
+					<a class="list-group-item" href="#"> Transactions </a>
+					<a class="list-group-item" href="#"> Return and refunds </a>
+					<a class="list-group-item activate" href="#">Profile</a>
+					<a class="list-group-item " href="{% url 'change-password' %}">Change password</a>
+					<a class="list-group-item" href="{% url 'saved-address' %}">Saved addresses</a>
+				</ul>
+				<br>
+				<a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log
+						out</span> </a>
+				<!--   SIDEBAR .//END   -->
+			</aside>
+			<main class="col-md-9">
+				<article class="card">
+					<header class="card-header d-flex justify-content-center">
+						<figure class="hover-img">
+							{% if profile.display_picture %}
+							<img src="{{ profile.display_picture.url }}" class="profile-pic"  alt="">
+							{% else %}
+							<img src="{% static 'users/images/profile.jpg' %}" class="profile-pic"  alt="">
+							{% endif %}
+							<figcaption>
+								<!-- Button trigger modal -->
+								<button type="button" class="btn btn-major" data-toggle="modal"
+									data-target="#exampleModalCenter">
+									Edit
+								</button>
+							</figcaption>
+						</figure>
+
+
+
+						<!-- Modal -->
+						<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+							aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLongTitle">Change profile picture</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form action="{% url 'change-dp' %}" method="POST" enctype="multipart/form-data">
+											{% csrf_token %}
+											<div id="image-box" class="mb-3 not-visible">
+
+											</div>
+											<div class="d-flex flex-column align-content-center imagePreview">
+												{% if profile.display_picture %}
+												<img src="{{ profile.display_picture.url }}" id="cropped" alt="">
+												{% else %}
+												<img src="{% static 'users/images/profile.jpg' %}" id="cropped" alt="">
+												{% endif %}
+											</div>
+											<div class="d-flex justify-content-center">
+												<p id="confirm-btn"
+													class="btn btn-outline-success not-visible mb-2 mt-2">crop</p>
+											</div>
+											<div>
+												{{ profile_form.display_picture }}
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Close</button>
+												<button type="submit" id="update-dp"
+													class="btn btn-major not-visible">Update</button>
+											</div>
+										</form>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</header>
+					<div class="card-body">
+						<form method="POST" id="editProfileForm">
+							{% csrf_token %}
+							<div class="form-row">
+								<div class="col-md-6 form-group">
+									<label>First name</label>
+									<input type="text" class="form-control" value="{{user.first_name}}"
+										autocomplete="off" disabled name="first_name" required>
+								</div>
+								<div class="col-md-6 form-group">
+									<label>Last name</label>
+									<input type="text" class="form-control" value="{{user.last_name}}" name="last_name"
+										disabled required>
+								</div>
+								<div class="col-md-6 form-group">
+									<label>Username</label>
+									<input type="text" class="form-control" autocomplete="off" value="{{user.username}}"
+										name="username" disabled required>
+								</div>
+
+								<div class="col-md-6 form-group">
+									<label>Phone</label>
+									<input type="text" class="form-control" value="{{user.phone}}" disabled name="phone"
+										required>
+								</div>
+								<div class="col-md-12 form-group">
+									<label>Email</label>
+									<input type="text" class="form-control" value="{{user.email}}" disabled name="email"
+										required>
+								</div>
+								<div class="form-group col mt-4 d-flex justify-content-center">
+									<a id="enable-edit" style="color: white;" class="btn btn-major"> Edit profile </a>
+									<button id="edit-profile" style="display: none;" type="submit"
+										class="btn btn-major">Save changes</button>
+								</div>
+							</div>
+						</form>
+					</div> <!-- card-body .// -->
+
+				</article> <!-- order-group.// -->
+			</main>
+		</div> <!-- row.// -->
+	</div>
+
+
+</section>
+
+{% endblock %}
+
+{% block footer %}
+
+
+{% endblock %}

@@ -9,17 +9,36 @@
       <div class="card-body">
       <h4 class="card-title mb-4">Sign in</h4>
       <form method="POST" id="signInForm">
-          {% csrf_token %}
-          <div class="form-group">
-			 <input type="text" class="form-control" placeholder="Phone number" name="phone">
-          </div> <!-- form-group// -->
-          {% for message in messages %}
-          <label class="text-danger" for="message">{{ message }}</label>
-          {% endfor %}
-          <div class="form-group">
-              <button type="submit" class="btn btn-major btn-block m"> Generate OTP  </button>
-          </div> <!-- form-group// -->    
-      </form>
+        {% csrf_token %}
+        <div class="form-group">
+           <input type="text" class="form-control" placeholder="Phone number" name="phone">
+        </div> <!-- form-group// -->
+        {% for message in messages %}
+        <label class="text-danger" for="message">{{ message }}</label>
+        {% endfor %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-major btn-block m"> Generate OTP  </button>
+            <p class="btn btn-outline-major btn-block" id="loginWithPassword">Login with password</p>
+        </div> <!-- form-group// -->    
+      
+    </form>
+    <form action="{% url 'signin-password' %}" style="display: none;" method="POST" id="signInFormPassword">
+        {% csrf_token %}
+        <div class="form-group">
+           <input type="text" class="form-control" placeholder="Phone number" name="phone">
+        </div> <!-- form-group// -->
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+         </div> <!-- form-group// -->
+        {% for message in messages %}
+        <label class="text-danger" for="message">{{ message }}</label>
+        {% endfor %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-major btn-block m"> Login  </button>
+            <p class="btn btn-outline-major btn-block" id="loginWithOTP">Login with OTP</p>
+        </div> <!-- form-group// -->    
+      
+    </form>
       </div> <!-- card-body.// -->
     </div> <!-- card .// -->
 

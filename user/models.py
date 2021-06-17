@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
+from django.db.models.deletion import CASCADE
 from django.db.models.expressions import F
 from django.db.models.fields import EmailField
 from django.db.models.query_utils import check_rel_lookup_compatibility, select_related_descend
@@ -9,7 +10,7 @@ from vendor.models import Product
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self,first_name,last_name,phone,email,username,password=None):
+    def create_user(self,first_name,last_name,phone,email,username,password):
         if not phone:
             raise ValueError('User must have a phone number')
         if not email:
@@ -80,6 +81,13 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, add_label):
         return True
 
+class Profile(models.Model):
+    user            = models.OneToOneField(Account,on_delete=CASCADE)
+    display_picture = models.ImageField(blank=True,upload_to = 'photos/user/profile')
+
+    def __str__(self):
+        return str(self.user.first_name)
+
 
 class Cart(models.Model):
     cart_id         = models.CharField(max_length=250,blank=True)
@@ -120,3 +128,10 @@ class DeliveryAddress(models.Model):
 
     def __str__(self):
         return self.first_name
+
+class DefaultAddress(models.Model):
+    user            = models.OneToOneField(Account,on_delete=models.CASCADE)
+    default_address = models.ForeignKey(DeliveryAddress,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user.phone)

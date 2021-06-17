@@ -1,17 +1,22 @@
-from django.contrib.auth import backends
+from django.contrib.auth import SESSION_KEY, backends
 from django.core import paginator
+from django.db.models.query import RawQuerySet
 from django.http.response import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, resolve_url
 from vendor.models import Banner,Category,Poster,Product
-from .models import Account,CartItem, Cart, DeliveryAddress
+from .models import Account,CartItem, Cart, DeliveryAddress,DefaultAddress, Profile
+from .forms import AddressForm,ProfileForm
 from django.contrib import messages,auth
 import random
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from twilio.rest import Client
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.contrib import sessions
+
+
 import json
 
 # Create your views here.
@@ -26,7 +31,7 @@ def home(request):
     banners = Banner.objects.filter(status = True)
     categories = Category.objects.all()
     posters = Poster.objects.filter(status = True)
-    products = Product.objects.all().order_by('-offer')
+    products = Product.objects.all().order_by('-offer')[0:12]
     context = {
         'banners' : banners,
         'categories' : categories,
@@ -46,6 +51,8 @@ def sign_up(request):
             email = request.POST['email']
             phone = request.POST['phone']
             username = email.split('@')[0]
+            password = request.POST['password']
+            print(password)
             
             if Account.objects.filter(email = email):
                 messages.info(request,'This email address is already been used', extra_tags='email')
@@ -57,6 +64,7 @@ def sign_up(request):
                 request.session['email'] = email
                 request.session['phone'] = phone
                 request.session['username'] = username
+                request.session['password'] = password
 
                 otp = random.randint(1000,9999)
                 request.session['otp'] = otp
@@ -88,6 +96,8 @@ def verify_signup(request):
                 first_name = request.session['first_name']
                 last_name = request.session['last_name']
                 username = request.session['username']
+                password = request.session['password']
+                print(password)
 
                 del request.session['otp']
                 del request.session['email']
@@ -95,7 +105,7 @@ def verify_signup(request):
                 del request.session['last_name']
                 del request.session['username']
 
-                user = Account.objects.create_user(phone=phone, email=email, first_name=first_name, last_name=last_name,username=username,password='1')
+                user = Account.objects.create_user(phone=phone, email=email, first_name=first_name, last_name=last_name,username=username,password=password)
                 user.save()
                 return redirect('verified-user')
             else:
@@ -111,7 +121,8 @@ def sign_in(request):
         if request.method == 'POST':
             phone = request.POST['phone']
             request.session['phone']=phone
-            user = auth.authenticate(phone=phone, password='1')
+            user = Account.objects.get(phone=phone)
+            print(user)
             if user is not None:
                 if user.has_access:
                     otp = random.randint(1000,9999)
@@ -141,14 +152,35 @@ def verify_signin(request):
             otp = str(request.session['otp'])
             entered_otp = str(request.POST['otp'])
             if otp == entered_otp:
-                return redirect('verified-user')
+                phone = request.session['phone']
+                user = auth.authenticate(phone=phone)
+                auth.login(request,user)
+                return redirect('home')
             else:
                 messages.info(request,'The OTP you entered is wrong please try again',extra_tags='wrong otp')
         return render(request,'user/verify_otp.html')
-        
 
+
+def signin_password(request):
+    if request.user.is_authenticated:
+        return redirect(home)
+    else:
+        if request.method == 'POST':
+            phone = request.POST['phone']
+            password = request.POST['password']
+            user = auth.authenticate(phone = phone, password = password)
+            if user is not None:
+                if user.has_access:
+                    auth.login(request,user)
+                    return redirect('home')
+                else:
+                    messages.info(request,'This account is been blocked')
+            else:
+                messages.info(request,'Invalid login credentials')
+        return redirect('sign-in')
 
 # this is to login a verified user either signed up or signed in
+
 
 def verified_user(request):
     if request.user.is_authenticated:
@@ -156,9 +188,10 @@ def verified_user(request):
     else:
         if request.session.has_key('phone'):
             phone = request.session['phone']
-            password = '1'
+            password = request.session['password']
             user = auth.authenticate(phone=phone,password=password)
             del request.session['phone']
+            del request.session['password']
             try:
                 cart = Cart.objects.get(cart_id = _cart_id(request))
                 is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
@@ -196,7 +229,7 @@ def store(request):
     categories = Category.objects.all()
     products = Product.objects.all()
     product_count = products.count()
-    paginator = Paginator(products,4)
+    paginator = Paginator(products,8)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
     context = {'products':paged_products, 'product_count':product_count,'categories':categories}
@@ -225,7 +258,7 @@ def search(request):
     else:
         results = Product.objects.filter(Q(product_name__icontains=search_key) | Q(brand__brand_name__icontains=search_key) |Q(category__category_name__icontains=search_key))
         product_count = results.count() 
-        paginator = Paginator(results,1)
+        paginator = Paginator(results,4)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
     context = {'products':paged_products ,'product_count':product_count, 'categories':categories,'search_key':search_key}
@@ -237,7 +270,7 @@ def category_view(request, category_id):
     category = Category.objects.get(id=category_id)
     products = Product.objects.filter(category_id = category_id)  
     product_count = products.count() 
-    paginator = Paginator(products,3)
+    paginator = Paginator(products,4)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
     context = {'products':paged_products, 'category':category,'product_count':product_count,'categories':categories}
@@ -368,6 +401,8 @@ def checkout(request):
     except:
         pass
     delivery_addresses = DeliveryAddress.objects.filter(user=request.user)
+    is_default = DefaultAddress.objects.filter(user=request.user).exists()
+    address_form = AddressForm()
     context = {
         'total':total,
         'quantity':quantity,
@@ -375,5 +410,149 @@ def checkout(request):
         'discount':discount,
         'total_mrp':total_mrp,
         'delivery_addresses':delivery_addresses,
+        'address_form':address_form,
     }
+    if is_default:
+        default_address = DefaultAddress.objects.get(user=request.user)
+        context['default_address']=default_address
     return render(request,'user/place_order.html',context)
+
+
+
+@login_required(login_url='sign-in')
+def add_address(request):
+    if request.method == 'POST':
+        address_form = AddressForm(request.POST)
+        is_default = DefaultAddress.objects.filter(user=request.user).exists()
+        if address_form.is_valid:
+            new_address = address_form.save(commit=False)
+            new_address.user = request.user
+            new_address.save()
+            if is_default:
+                default_address = DefaultAddress.objects.get(user=request.user)
+                default_address.default_address = new_address
+                default_address.save()
+            else:
+                default_address = DefaultAddress.objects.create(user=request.user, default_address=new_address)
+                default_address.save()
+            return redirect('checkout')
+    return redirect('checkout')
+
+@login_required(login_url='sign-in')       
+def account(request):
+    context = {
+
+    }
+    return render(request,'user/dashboard.html',context)
+
+def profile(request):
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        user_id = request.user.id
+        user = Account.objects.get(id=user_id)
+
+        if username != user.username:
+            if Account.objects.filter(username=username).exists():
+                messages.info(request,'Sorry, this username is already been taken',extra_tags='username')
+            else:
+                user.username = username
+        if email != user.email:
+            if Account.objects.filter(email = email).exists():
+                messages.info(request,'This email address is already been registered with another account',extra_tags='email')
+            else:
+                user.email = email
+        if phone != user.phone:
+            if Account.objects.filter(phone=phone):
+                messages.info(request,'This mobile number is already been registered in pickit')
+            else:
+                user.phone = phone
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+    else:
+        user = request.user
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except:
+            profile = Profile.objects.create(user=request.user)
+            profile.dispaly_picture = None
+            profile.save()
+    profile_form = ProfileForm()
+    context = {
+        'user':user,
+        'profile':profile,
+        'profile_form':profile_form
+        }
+    return render(request,'user/profile.html',context)
+
+def change_dp(request):
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST,request.FILES)
+        if profile_form.is_valid():
+            display = profile_form.cleaned_data.get('display_picture')
+            print(display)
+            try:
+                profile = Profile.objects.get(user=request.user)
+            except:
+                profile = Profile.objects.create(user=request.user)
+            profile.display_picture = display
+            profile.save()
+            return redirect('profile')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        user = request.user
+        if user.check_password(current_password):
+            user.set_password(new_password)
+            messages.info(request,'Your password has been updated successfully',extra_tags='success')
+        else:
+            messages.info(request,'You entered a wrong password',extra_tags='fail')
+    return render(request,'user/change_password.html')
+
+
+def saved_address(request):
+    addresses = DeliveryAddress.objects.all().filter(user=request.user)
+    is_default = default = DefaultAddress.objects.filter(user=request.user).exists()
+    if is_default:
+        default = DefaultAddress.objects.get(user = request.user)
+    address_form = AddressForm()
+    context = {
+        'addresses' : addresses,
+        'default': default,
+        'is_default':is_default,
+        'address_form':address_form,
+    }
+    return render(request,'user/addresses.html',context)
+
+@login_required(login_url='sign-in')
+def new_address(request):
+    if request.method == 'POST':
+        address_form = AddressForm(request.POST)
+        if address_form.is_valid:
+            new_address = address_form.save(commit=False)
+            new_address.user = request.user
+            new_address.save()
+            return redirect('saved-address')
+    return redirect('saved-address')
+
+def delete_address(request,address_id):
+    DeliveryAddress.objects.filter(user=request.user,id=address_id).delete()
+    return redirect('saved-address')
+
+def make_default(request,address_id):
+    address = DeliveryAddress.objects.get(id=address_id)
+    is_default = default = DefaultAddress.objects.filter(user=request.user).exists()
+    if is_default:
+        default = DefaultAddress.objects.get(user = request.user)
+        default.default_address = address
+    else:
+        default = DefaultAddress.objects.create(user=request.user, default_address=address)
+    default.save()
+    return redirect('saved-address')

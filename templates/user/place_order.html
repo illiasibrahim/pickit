@@ -34,7 +34,7 @@
 						</div> <!-- row.// -->
 					</div> <!-- card-body.// -->
 				</article> <!-- card.// -->
-				
+
 
 				<main class="col-md-12">
 					<article class="accordion" id="accordion_pay">
@@ -43,16 +43,18 @@
 						<div class="card">
 							<header class="card-header">
 								<label class="form-check" data-toggle="collapse"
-									data-target="#{{delivery_address.first_name}}">
-									<input class="form-check-input " name="payment-option" checked type="radio"
-										value="option2">
+									data-target="#{{ delivery_address.first_name }}">
+									<input class="form-check-input" name="payment-option" {% if default_address.default_address == delivery_address %} checked
+									{% endif %} type="radio"
+										value="{{ delivery_address }}">
 									<h6 class="form-check-label">
 										{{delivery_address.first_name}}, {{delivery_address.city}}
 									</h6>
 								</label>
 							</header>
-							<div id="{{delivery_address.first_name}}" class="collapse show"
-								data-parent="#accordion_pay">
+							<div id="{{delivery_address.first_name}}" class="collapse
+							{% if default_address.default_address == delivery_address %} show
+							{% endif %}" data-parent="#accordion_pay">
 								<div class="card-body">
 									<p>{{delivery_address.first_name}} {{delivery_address.last_name}}
 										<br>{{delivery_address.street}}
@@ -75,63 +77,60 @@
 							<div id="pay_payme" class="collapse" data-parent="#accordion_pay">
 								<div class="card-body">
 
-									<form action="">
+									<form action="/add-address/" method="POST">
+										{% csrf_token %}
 										<div class="row">
 											<h4 class="card-title mb-4">Contact info</h4>
 											<div class="form-group col-sm-6">
 												<label>Frst name</label>
-												<input type="text" placeholder="Type here" class="form-control">
+												{{address_form.first_name}}
 											</div>
 											<div class="form-group col-sm-6">
 												<label>Last name</label>
-												<input type="text" placeholder="Type here" class="form-control">
+												{{address_form.last_name}}
 											</div>
 											<div class="form-group col-sm-6">
 												<label>Phone</label>
-												<input type="text" value="+998" class="form-control">
+												{{address_form.phone}}
 											</div>
 											<div class="form-group col-sm-6">
 												<label>Email</label>
-												<input type="email" placeholder="example@gmail.com"
-													class="form-control">
+												{{address_form.email}}
 											</div>
 										</div> <!-- row.// -->
 										<div class="row">
 											<h4 class="card-title mb-4">Delivery info</h4>
 											<div class="form-group col-sm-8">
 												<label>Street*</label>
-												<input type="text" placeholder="Type here" class="form-control">
+												{{address_form.street}}
 											</div>
 											<div class="form-group col-sm-4">
-												<label>Building</label>
-												<input type="text" placeholder="" class="form-control">
+												<label>House/Building</label>
+												{{address_form.building}}
 											</div>
 											<div class="form-group col-sm-4">
-												<label>House</label>
-												<input type="text" placeholder="Type here" class="form-control">
+												<label>City/Town</label>
+												{{address_form.city}}
 											</div>
 											<div class="form-group col-sm-8">
 												<label>Landmark</label>
-												<input type="text" placeholder="" class="form-control">
+												{{address_form.landmark}}
 											</div>
 											<div class="form-group col-sm-4">
 												<label>State*</label>
-												<input type="text" placeholder="Type here" class="form-control">
+												{{address_form.state}}
 											</div>
 											<div class="form-group col-sm-4">
 												<label>Country*</label>
-												<select name="" class="form-control">
-													<option value="">India</option>
-													<option value="">United States</option>
-													<option value="">France</option>
-													<option value="">Italy</option>
-												</select>
+												{{address_form.country}}
 											</div>
 											<div class="form-group col-sm-4">
 												<label>Postal code</label>
-												<input type="text" placeholder="" class="form-control">
+												{{address_form.pin}}
 											</div>
 
+											<button type="submit" class="btn btn-major add-address-btn">Deliver to this
+												address</button>
 										</div> <!-- row.// -->
 									</form>
 
@@ -167,7 +166,7 @@
 
 					</div> <!-- card-body.// -->
 				</div> <!-- card.// -->
-			</aside> 
+			</aside>
 		</div> <!-- row.// -->
 
 	</div> <!-- container .//  -->

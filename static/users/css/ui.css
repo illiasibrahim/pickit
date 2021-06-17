@@ -591,7 +591,14 @@ p:last-child {
   z-index: 4;
 }
 .spacing{
-  margin-top: 8em;
+  margin-top: 6em;
+}
+
+.add-address-btn{
+  width: 17em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: .5em;
 }
 
 /* ================== COMPONENTS =================== */
@@ -1340,7 +1347,7 @@ a[class*=card]:hover .title {
   margin-top: 7px;
 }
 .tracking-wrap .step.active .icon {
-  background: #3167eb;
+  background: var(--major);
   color: #fff;
 }
 .tracking-wrap .step.active .text {
@@ -1457,8 +1464,8 @@ a[class*=card]:hover .title {
   opacity: 0;
 }
 .btn-check input:checked ~ .btn {
-  border-color: #3167eb;
-  background-color: #3167eb;
+  border-color: var(--major);
+  background-color: var(--major);
   color: #fff;
 }
 .btn-check:hover:not(.active) {
@@ -1477,7 +1484,7 @@ a[class*=card]:hover .title {
   left: 18px;
 }
 .js-check.active {
-  border-color: #3167eb;
+  border-color: var(--major);
 }
 .js-check:hover:not(.active) {
   border-color: #ccc;
@@ -1622,7 +1629,104 @@ a[class*=card]:hover .title {
   border-color: var(--major);
 }
 
+.activate{
+  background-color: var(--major);
+  border-color: var(--major);
+  color: white;
+}
+.activate:hover{
+  color: white;
+}
 
+.btn-outline-major{
+  border-color: var(--major);
+  color: var(--major);
+  background-color: white;
+}
+
+.profile-pic{
+  width: 10em;  
+  border-radius: 50%;
+}
+
+
+/* profile pic overlay */
+.hover-img {
+  color: #fff;
+  display: inline-block;
+  margin: 8px;
+  max-width: 320px;
+  min-width: 240px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.hover-img * {
+  box-sizing: border-box;
+  transition: all 0.45s ease;
+}
+
+.hover-img:before,
+.hover-img:after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: '';
+  transition: all 0.3s ease;
+  z-index: 1;
+  opacity: 0;
+  transform: scaleY(2);
+}
+
+.hover-img img {
+  vertical-align: top;
+  max-width: 100%;
+  backface-visibility: hidden;
+}
+
+.hover-img figcaption {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.1em;
+  opacity: 0;
+  z-index: 2;
+  transition-delay: 0.1s;
+  font-size: 24px;
+  font-family: sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.hover-img img:hover:before,
+.hover-img img:hover:after {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.hover-img:hover > img {
+  opacity: 0.7;
+}
+
+.hover-img:hover figcaption {
+  opacity: 1;
+}
+
+.not-visible{
+  display: none;
+}
 
 /* Inorder to display different views in nav in collapse and expanded views */
 
@@ -1640,7 +1744,6 @@ a[class*=card]:hover .title {
 
   h1 .pickit {
     font-size: 1em;
-
   }
   .cat-name{
     display: none;

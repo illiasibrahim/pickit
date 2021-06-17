@@ -24,3 +24,32 @@
     background-color: #eee;
     width: 80px;
   }
+
+.not-visible{
+    display: none;
+}
+
+.banner-container{
+    max-width: 400px;
+
+}
+.banner-container img{
+    object-fit: contain;
+}
+
+.poster-container{
+    max-width: 400px;
+}
+
+.poster-container img{
+    object-fit: contain;
+}
+
+.category-container{
+    max-width: 120px;
+}
+
+.category-container img{
+    object-fit: contain;
+}
+

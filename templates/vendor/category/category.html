@@ -58,7 +58,9 @@
                                         {{ category.category_name }}
                                     </td>
                                     <td>
-                                        <img src="{{ category.cat_image.url }}" >
+                                        <div class="category-container">
+                                            <img src="{{ category.cat_image.url }}">
+                                        </div>
                                     </td>
                                     <td>
                                         {{ category.time_added }}
@@ -67,12 +69,12 @@
                                     <td class="text-right">
                                         <a href="{% url 'edit-category' category.id %}"><i
                                                 class="fas fa-edit mr-4 text-success"></i></a>
-                                                <a href="{% url 'delete-category' category.id %}"
-                                                onclick="return confirm('Are you sure you want to delete this item?')"><i
-                                                    class="far fa-trash-alt text-danger"></i></a>
+                                        <a href="{% url 'delete-category' category.id %}"
+                                            onclick="return confirm('Are you sure you want to delete this item?')"><i
+                                                class="far fa-trash-alt text-danger"></i></a>
                                     </td>
                                 </tr>
-                                
+
                                 {% endfor %}
 
                             </tbody>

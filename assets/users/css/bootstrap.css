@@ -9,6 +9,8 @@ Bootstrap with custom variables
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 :root {
+  --major:#0078a3;
+  --cyan-mix:#4ac0d0;
   --blue: #3167eb;
   --indigo: #6610f2;
   --purple: #6f42c1;
@@ -5141,8 +5143,8 @@ a.badge-gray-light:focus, a.badge-gray-light.focus {
 .list-group-item.active {
   z-index: 2;
   color: #fff;
-  background-color: #3167eb;
-  border-color: #3167eb;
+  background-color: var(--major);
+  border-color: var(--major);
 }
 
 .list-group-horizontal {

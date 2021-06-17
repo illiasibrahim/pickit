@@ -88,7 +88,7 @@
 					<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}"> </a>
 				</div  >
 					<figcaption class="info-wrap">
-						<h5 class="title">{{ product.product_name }} {{ product.quantity }}</h5>
+						<p class="title">{{ product.product_name }} {{ product.quantity }}</p>
 						<h4 class="price mt-1 text-success">₹ {{ product.discount_price }}.00</h4>
 						<p class="">₹ <s>{{ product.mrp }}.00</s></p>
 					</figcaption>
@@ -97,7 +97,11 @@
 			</div> <!-- col.// -->
 			{% endfor %}
 		</div> <!-- row.// -->
-
+		<div class="row d-flex justify-content-end">
+			<div class="mb-3">
+		<a class="text-major float-right" href="{% url 'store' %}">See more >></a>
+	</div>
+	</div>
 	</div><!-- container // -->
 </section>
 <!-- ========================= SECTION top deals  END// ========================= -->

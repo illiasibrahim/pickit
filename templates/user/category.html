@@ -23,8 +23,8 @@
 					<article class="filter-group">
 						<header class="card-header">
 							<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
-								<i class="icon-control fa fa-chevron-down"></i>
-								<h6 class="title">Categories</h6>
+								<i class="icon-control fa fa-chevron-down text-major"></i>
+								<h6 class="title text-major">Categories</h6>
 							</a>
 						</header>
 						<div class="filter-content collapse show" id="collapse_1" style="">
@@ -43,8 +43,8 @@
 					<article class="filter-group">
 						<header class="card-header">
 							<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
-								<i class="icon-control fa fa-chevron-down"></i>
-								<h6 class="title">Price range </h6>
+								<i class="icon-control fa fa-chevron-down text-major"></i>
+								<h6 class="title text-major">Price range </h6>
 							</a>
 						</header>
 						<div class="filter-content collapse show" id="collapse_3">
@@ -107,7 +107,7 @@
 										src="{{ product.image_1.url }}"> </a>
 							</div>
 							<figcaption class="info-wrap">
-								<h5 class="title">{{ product.product_name }} {{ product.quantity }}</h5>
+								<p class="title">{{ product.product_name }} {{ product.quantity }}</p>
 								<h4 class="price mt-1 text-success">₹ {{ product.discount_price }}.00</h4>
 								<p class="">₹ <s>{{ product.mrp }}.00</s></p>
 							</figcaption>
@@ -120,13 +120,27 @@
 
 
 				<nav class="mt-4" aria-label="Page navigation sample">
-					<ul class="pagination">
-						<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-						<li class="page-item active"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">Next</a></li>
-					</ul>
+					{% if products.has_other_pages %}
+                    <ul class="pagination">
+                        {% if products.has_previous %}
+                        <li class="page-item"><a class="page-link text-major" href="?page={{ products.previous_page_number }}">Previous</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link " >Previous</a></li>
+                        {% endif %}
+                        {% for i in products.paginator.page_range %}
+                        {% if products.number == i %}
+                        <li class="page-item active disabled"><a class="page-link" >{{i}}</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link text-major " href="?page={{i}}">{{i}}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                        <li class="page-item "><a class="page-link text-major" href="?page={{ products.next_page_number }}">Next</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link text-major" >Next</a></li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
 				</nav>
 
 			</main> <!-- col.// -->
