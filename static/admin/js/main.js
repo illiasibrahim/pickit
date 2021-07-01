@@ -1,4 +1,4 @@
-  $(document).ready(function () {
+$(document).ready(function () {
   $("#search-input").on("keyup", function () {
     var value = $(this).val().toLowerCase();
     $("#data-table tbody tr").filter(function () {
@@ -14,7 +14,7 @@
 
   // cropping and validating images on uploading banners 
 
-  if (path.includes('add-banner') || path.includes('add-poster') || path.includes('add-category')) {
+  if (path.includes('add-banner') || path.includes('edit-banner') || path.includes('add-poster') || path.includes('edit-poster') || path.includes('add-category') || path.includes('edit-category')) {
     var imageBox = document.getElementById('image-box')
     var confirmBtn = document.getElementById('confirm-btn')
     var input = document.getElementById('id_image')
@@ -45,10 +45,19 @@
         if (path.includes('add-banner')) {
           aspect_ratio = 21 / 4;
         }
+        else if (path.includes('edit-banner')) {
+          aspect_ratio = 21 / 4;
+        }
         else if (path.includes('add-poster')) {
           aspect_ratio = 12 / 7;
         }
+        else if (path.includes('edit-poster')) {
+          aspect_ratio = 12 / 7;
+        }
         else if (path.includes('add-category')) {
+          aspect_ratio = 1 / 1;
+        }
+        else if (path.includes('edit-category')) {
           aspect_ratio = 1 / 1;
         }
 
@@ -89,7 +98,7 @@
       }
     })
   }
-  else if (path.includes('add-product')) {
+  else if (path.includes('add-product') || path.includes('edit-product')) {
     // // cropping and validating images on uploading products
 
     var imageBox = document.getElementById('image-box')
@@ -337,4 +346,112 @@
       }
     })
   }
+
 });
+
+// change order status
+
+function approve(order_id) {
+  dat = { 'order_id': order_id }
+  $.ajax({
+    url: '/admin/approve/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+      document.getElementById(order_id).innerHTML = res.status
+      document.getElementById(order_id).classList.remove('text-danger')
+
+    }
+  })
+}
+function dispatch(order_id) {
+  dat = { 'order_id': order_id }
+  $.ajax({
+    url: '/admin/dispatch/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+      document.getElementById(order_id).innerHTML = res.status
+      document.getElementById(order_id).classList.remove('text-danger')
+
+    }
+  })
+}
+function deliver(order_id) {
+  dat = { 'order_id': order_id }
+  $.ajax({
+    url: '/admin/deliver/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+      document.getElementById(order_id).innerHTML = res.status
+      document.getElementById(order_id).classList.remove('text-danger')
+    }
+  })
+}
+function reject(order_id) {
+  dat = { 'order_id': order_id }
+  $.ajax({
+    url: '/admin/reject/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+      document.getElementById(order_id).innerHTML = res.status
+      document.getElementById(order_id).classList.add('text-danger')
+
+    }
+  })
+}
+
+function openUpdateCategoryOffer(cat_offer, cat_id) {
+  document.getElementById('catOffer').value = cat_offer
+  console.log(cat_offer)
+  document.getElementById('catId').value = cat_id
+  console.log(cat_id)
+}
+
+function updateCategoryOffer() {
+  cat_offer = document.getElementById('catOffer').value
+  cat_id = document.getElementById('catId').value
+  console.log(cat_offer)
+  console.log(cat_id)
+  dat = {
+    'cat_id': cat_id,
+    'cat_offer': cat_offer,
+  }
+  $.ajax({
+    url: '/admin/update-category-offer/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+      document.getElementById(cat_id).innerHTML = res.cat_offer + '%'
+      if (res.cat_offer != 0) {
+        document.getElementById(cat_id + cat_id).classList.remove('not-visible')
+      }
+    }
+  })
+}
+
+function deleteCategoryOffer(cat_id) {
+  dat = {
+    'cat_id': cat_id,
+  }
+  choice = confirm('Are you sure you want to remove this offer?')
+  if (choice) {
+    $.ajax({
+      url: '/admin/delete-category-offer/',
+      type: 'GET',
+      data: dat,
+      dataType: 'json',
+      success: function (res) {
+        document.getElementById(cat_id).innerHTML = '0%'
+        document.getElementById(cat_id + cat_id).classList.add('not-visible')
+      }
+    })
+  }
+}

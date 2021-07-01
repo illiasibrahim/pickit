@@ -88,9 +88,15 @@
             </a>
           </li>
           <li class="{% block order %} {% endblock %}">
-            <a href="{% url 'dashboard' %}">
+            <a href="{% url 'order' %}">
               <i class="fas fa-shopping-cart"></i>
               <p>Order management</p>
+            </a>
+          </li>
+          <li class="{% block coupon %} {% endblock %}">
+            <a href="{% url 'coupon' %}">
+              <i class="fab fa-cuttlefish"></i>
+              <p>Offer management</p>
             </a>
           </li>
           <li>

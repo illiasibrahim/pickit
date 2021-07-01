@@ -25,31 +25,37 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
-                                <img src="{{ category.cat_image.url }}" alt="">
+                            <div class="col-md-3">
+                                <div id="image-box" class="mb-3 not-visible">
+
+                                </div>
+                                <div id="imagePreview">
+                                    <img src="{{category.cat_image.url}}" id="cropped" width="500px">
+                                </div>
+
+                                <div class="">
+                                    <label>Image*</label>
+                                    {{ form.cat_image }}
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <p class="btn btn-round btn-sm btn-outline-success mt-3 not-visible"
+                                        id="confirm-btn"> Select</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-
-                                <label for="">Category image</label>
-                                {{ form.cat_image }}
-
-                            </div>
-                        </div>
-                        </div>
-
-                        <div class="update ml-4 mt-3">
-                            <button href="edit-category" type="submit" class="btn btn-primary btn-round">Save
-                                Changes</button>
-                            <a href="{% url 'category' %}" class="btn btn-secondary btn-round">Cancel</a>
-                        </div>
-
-                    </form>
                 </div>
+
+                <div class="update ml-4 mt-3">
+                    <button href="edit-category" type="submit" class="btn btn-primary btn-round">Save
+                        Changes</button>
+                    <a href="{% url 'category' %}" class="btn btn-secondary btn-round">Cancel</a>
+                </div>
+
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 </div>

@@ -29,11 +29,22 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-4">
-                                <img src="{{ banner.banner.url }}" alt="">
-                                <label for="">Banner</label>
-                                {{ banner_form.banner }}
-                        
+                            <div class="col-md-3">
+                                <div id="image-box" class="mb-3 not-visible">
+
+                                </div>
+                                <div id="imagePreview">
+                                    <img src="{{ banner.banner.url }}   " id="cropped" width="500px">
+                                </div>
+                                
+                                <div class="">
+                                    <label>Banner*</label>
+                                    {{ banner_form.banner }}
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <p class="btn btn-round btn-sm btn-outline-success mt-3 not-visible"
+                                        id="confirm-btn"> Select</p>
+                                </div>
                             </div>
                         </div>
                         <div class="row">

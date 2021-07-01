@@ -1,5 +1,7 @@
+from functools import total_ordering
+from typing import OrderedDict
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser,BaseUserManager, User
 from django.db.models.deletion import CASCADE
 from django.db.models.expressions import F
 from django.db.models.fields import EmailField
@@ -105,7 +107,7 @@ class CartItem(models.Model):
     is_active       = models.BooleanField(default=True)
 
     def sub_total(self):
-        return self.product.discount_price * self.quantity
+        return self.product.selling_price() * self.quantity
 
 
     def __str__(self):
@@ -135,3 +137,83 @@ class DefaultAddress(models.Model):
 
     def __str__(self):
         return str(self.user.phone)
+
+class Coupon(models.Model):
+    code            = models.CharField(max_length=40,unique=True)
+    discount        = models.CharField(max_length=10)
+    status          = models.BooleanField(default=True)
+    created_at      = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.code)
+
+
+class Payment(models.Model):
+    user            = models.ForeignKey(Account,on_delete=models.CASCADE)
+    payment_id      = models.CharField(max_length=100)
+    payment_method  = models.CharField(max_length=100)
+    amount_paid     = models.CharField(max_length=100)
+    status          = models.CharField(max_length=100)
+    created_at      = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.payment_id
+
+class Order(models.Model):
+    STATUS ={
+        ('Pending', 'Pending'),
+        ('Rejected','Rejected'),
+        ('Accepted', 'Accepted'),
+        ('Dispatched', 'Dispatched'),
+        ('Delivered','Delivered'),
+        ('Cancelled', 'Cancelled'),
+    }
+
+    user            = models.ForeignKey(Account,on_delete=models.SET_NULL,null=True)
+    payment         = models.ForeignKey(Payment,on_delete=models.SET_NULL,null=True,blank=True)
+    order_number    = models.CharField(max_length=20)
+    first_name      = models.CharField(max_length=50)
+    last_name       = models.CharField(max_length=50)
+    phone           = models.CharField(max_length=15)
+    email           = models.EmailField(max_length=100)
+    country         = models.CharField(max_length=30)
+    state           = models.CharField(max_length=30)
+    street          = models.CharField(max_length=100)
+    city            = models.CharField(max_length=50)
+    pin             = models.CharField(max_length=10)
+    building        = models.CharField(max_length=50, blank=True)
+    landmark        = models.CharField(max_length=50,blank=True)
+    coupon          = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True)
+    order_total     = models.FloatField()
+    order_discount  = models.FloatField()
+    total           = models.FloatField(blank=True,null=True)
+    status          = models.CharField(max_length=20,choices=STATUS,default='Pending')
+    ip              = models.CharField(max_length=20,blank=True)
+    is_ordered      = models.BooleanField(default=False)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.order_number
+
+class OrderProduct(models.Model):
+    order           = models.ForeignKey(Order,on_delete=models.CASCADE)
+    payment         = models.ForeignKey(Payment,on_delete=models.SET_NULL,blank=True,null=True)
+    user            = models.ForeignKey(Account,on_delete=models.CASCADE)
+    product         = models.ForeignKey(Product,on_delete=models.CASCADE)
+    quantity        = models.IntegerField()
+    product_price   = models.FloatField()
+    ordered         = models.BooleanField(default=False)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.product.product_name
+    
+    def sub_total(self):
+        return self.product_price * self.quantity
+    
+    def total_mrp(self):
+        return self.product.mrp * self.quantity
+
+

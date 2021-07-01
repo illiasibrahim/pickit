@@ -1,12 +1,14 @@
 
 # from vendor.views import brand_view, category_view
 from django.db import models
+from math import ceil,floor
 
 # Create your models here.
 
 class Category(models.Model):
     category_name   = models.CharField(max_length=50,unique=True)
     cat_image       = models.ImageField(upload_to = 'photos/categories')
+    cat_offer       = models.IntegerField(default=0)
     time_added      = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -36,6 +38,21 @@ class Product(models.Model):
     image_4         = models.ImageField(upload_to = 'photos/products/secondary', blank = True)
     added_at        = models.DateTimeField(auto_now_add=True)
     modified_at     = models.DateTimeField(auto_now=True)
+
+    def selling_price(self):
+        if (self.category.cat_offer > self.offer):
+            selling_price = self.mrp * (1-(int(self.category.cat_offer)/100))
+        else:
+            selling_price = self.mrp * (1-(int(self.offer)/100))
+        return ceil(selling_price)
+    
+    def discount_amount(self):
+        if (self.category.cat_offer > self.offer):
+            discount_amount = self.mrp * ((int(self.category.cat_offer)/100))
+        else:
+            discount_amount = self.mrp * ((int(self.offer)/100))
+        return floor(discount_amount)
+
 
     def __str__(self):
         return self.product_name

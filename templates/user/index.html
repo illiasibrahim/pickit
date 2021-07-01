@@ -43,7 +43,8 @@
 			{% for category in categories %}
 			<div class="card col-4 col-sm-4 col-md-2 col-lg-2 col-lg-2 cat-card">
 				<div class="card-body">
-					<a href="{% url 'category' category.id %}"><img src="{{ category.cat_image.url }}" class="card-img-top mx-auto" alt="..."></a>
+					<a href="{% url 'category' category.id %}"><img src="{{ category.cat_image.url }}"
+							class="card-img-top mx-auto" alt="..."></a>
 					<p class="cat-name">{{ category.category_name }}</p>
 				</div>
 
@@ -81,27 +82,39 @@
 		<div class="row">
 			{% for product in products %}
 			<div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2 card-outer">
+				{% if product.offer > 0  or product.category.cat_offer > 0 %}
+				
 				<div class="offer-flag-div"><img src="{% static 'users/images/offer-flag.png' %}" alt=""></div>
-				<div class="offer-tag"><p>{{ product.offer }}% off</p></div>
+				<div class="offer-tag">
+					{% if product.offer > product.category.cat_offer %}
+					<p>{{ product.offer }}% off</p>
+					{% else %}
+					<p>{{ product.category.cat_offer }}% off</p>
+					{% endif %}
+				</div>
+				{% endif %}
 				<div class="card card-product-grid">
 					<div class="card-image-div">
-					<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}"> </a>
-				</div  >
+						<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}">
+						</a>
+					</div>
 					<figcaption class="info-wrap">
 						<p class="title">{{ product.product_name }} {{ product.quantity }}</p>
-						<h4 class="price mt-1 text-success">₹ {{ product.discount_price }}.00</h4>
+						<h4 class="price mt-1 text-success">₹ {{ product.selling_price }}.00</h4>
+
 						<p class="">₹ <s>{{ product.mrp }}.00</s></p>
 					</figcaption>
-					<button onclick="addToCart('{{product.id}}')"  class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn">Add to cart</button>
+					<button onclick="addToCart('{{product.id}}')"
+						class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn" id="{{ product.id }}{{ product.id }}">Add to cart</button>
 				</div>
 			</div> <!-- col.// -->
 			{% endfor %}
 		</div> <!-- row.// -->
 		<div class="row d-flex justify-content-end">
 			<div class="mb-3">
-		<a class="text-major float-right" href="{% url 'store' %}">See more >></a>
-	</div>
-	</div>
+				<a class="text-major float-right" href="{% url 'store' %}">See more >></a>
+			</div>
+		</div>
 	</div><!-- container // -->
 </section>
 <!-- ========================= SECTION top deals  END// ========================= -->

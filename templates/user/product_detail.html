@@ -57,9 +57,9 @@
 						<p style="text-transform: uppercase; color:#3b3b3b;">{{ product.brand.brand_name }}</p>
 
 						<div class="mb-3">
-							<var class="price h4 text-success">₹ {{ product.discount_price }}.00</var>
+							<var class="price h4 text-success">₹ {{ product.selling_price }}.00</var>
 							<p>M.R.P <s>{{ product.mrp }}.00</s></p>
-							<p>You save ₹ {{ product.discount }}.00</p>
+							<p>You save ₹ {{ product.discount_amount }}.00</p>
 						</div>
 						<hr>
 						<!-- {% if in_cart %}
@@ -79,7 +79,7 @@
 
 						{% else %} -->
 						<input type="hidden" class="product-id" value="{{ product.id }}">
-						<button onclick="addToCart('{{product.id}}')" class="btn  btn-major add-to-cart-btn"> <span
+						<button onclick="addToCart('{{product.id}}')" class="btn  btn-major add-to-cart-btn" id="{{ product.id }}{{ product.id }}"> <span
 								class="text">Add to cart</span>
 							<i class="fas fa-shopping-cart "></i> </button>
 						<!-- {% endif %} -->

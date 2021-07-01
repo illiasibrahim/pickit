@@ -1,0 +1,61 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block coupon %} active {% endblock %}
+{% block nav-brand %} Coupon management {% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Edit coupon</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" >
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Coupon code*</label>
+                                    {{ coupon_form.code }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Discount %*</label>
+                                    {{ coupon_form.discount }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status*</label>
+                                    {{ coupon_form.status }}
+                                </div>
+                            </div>
+                            
+                        </div>
+
+
+
+                        <div class="update ml-auto mr-auto">
+                            <button type="submit" class="btn btn-primary btn-round">Save
+                                Changes</button>
+                            <a href="{% url 'coupon' %}" class="btn btn-secondary btn-round">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+{% endblock %}

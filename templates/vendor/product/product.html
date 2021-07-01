@@ -50,10 +50,10 @@
                                 <th>
                                     MRP
                                 </th>
-                                <th>
-                                    Offer
+                                <th class="text-center">
+                                    Offer price
                                 </th>
-                                <th class="text-right">
+                                <th class="text-center">
                                     Actions
                                 </th>
                             </thead>
@@ -76,12 +76,12 @@
                                         {{ product.category.category_name }}
                                     </td>
                                     <td>
-                                        {{ product.mrp }}
+                                        {{ product.mrp }}.00
                                     </td>
-                                    <td>
-                                        {{ product.offer }}%
+                                    <td class="text-center">
+                                        {{ product.selling_price }}.00  
                                     </td>
-                                    <td class="text-right">
+                                    <td class="text-center">
                                         <a href="{% url 'edit-product' product.id %}"><i
                                                 class="fas fa-edit mr-4 text-success"></i></a>
                                         <a href="{% url 'delete-product' product.id %}" onclick="return confirm('Are you sure you want to delete this item?')"><i class="far fa-trash-alt text-danger"></i></a>    
@@ -93,6 +93,29 @@
                             </tbody>
                         </table>
                     </div>
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        {% if products.has_other_pages %}
+                        <ul class="pagination">
+                            {% if products.has_previous %}
+                            <li class="page-item"><a class="page-link text-major" href="?page={{ products.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link " >Previous</a></li>
+                            {% endif %}
+                            {% for i in products.paginator.page_range %}
+                            {% if products.number == i %}
+                            <li class="page-item active disabled"><a class="page-link" >{{i}}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link text-major " href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if products.has_next %}
+                            <li class="page-item "><a class="page-link text-major" href="?page={{ products.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link text-major" >Next</a></li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </nav>
                 </div>
             </div>
         </div>

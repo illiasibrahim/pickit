@@ -80,6 +80,29 @@
                             </tbody>
                         </table>
                     </div>
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        {% if categories.has_other_pages %}
+                        <ul class="pagination">
+                            {% if categories.has_previous %}
+                            <li class="page-item"><a class="page-link text-major" href="?page={{ categories.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link " >Previous</a></li>
+                            {% endif %}
+                            {% for i in categories.paginator.page_range %}
+                            {% if categories.number == i %}
+                            <li class="page-item active disabled"><a class="page-link" >{{i}}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link text-major " href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if categories.has_next %}
+                            <li class="page-item "><a class="page-link text-major" href="?page={{ categories.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link text-major" >Next</a></li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </nav>
                 </div>
             </div>
         </div>

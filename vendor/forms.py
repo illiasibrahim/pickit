@@ -1,3 +1,4 @@
+from user.models import Coupon
 from django import forms
 from django.db.models import fields
 from .models import Category,Brand, Poster,Product, Banner
@@ -96,3 +97,19 @@ class PosterForm(forms.ModelForm):
         self.fields['poster'].widget.attrs['required'] = 'required'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
+
+
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = {
+            'code',
+            'discount',
+            'status',
+        }
+    def __init__(self,*args,**kwargs):
+        super(CouponForm,self).__init__(*args,**kwargs)
+        self.fields['code'].widget.attrs['required'] = 'required'
+        self.fields['discount'].widget.attrs['required'] = 'required'
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'

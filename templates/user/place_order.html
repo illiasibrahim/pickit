@@ -4,177 +4,264 @@
 
 {% block content %}
 <section class="section-content padding-y bg">
-	<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <article class="card mb-4 col-md-12">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Review products</h4>
+                        <div class="row">
+                            {% for cart_item in cart_items %}
+                            <div class="col-lg-6">
+                                <figure class="itemside  mb-4">
+                                    <div class="aside"><img src="{{ cart_item.product.image_1.url }}"
+                                            class="border img-sm">
+                                    </div>
+                                    <figcaption class="info">
+                                        <p><b>{{ cart_item.product.product_name }}
+                                                {{ cart_item.product.quantity }}</b>
+                                        </p>
+                                        <p class="text-secondary">Brand: {{ cart_item.product.brand.brand_name }}
+                                        </p>
+                                        <span class="text-muted">{{ cart_item.quantity }}x =
+                                            ₹{{cart_item.sub_total}}.00
+                                        </span>
+                                    </figcaption>
+                                </figure>
+                            </div> <!-- col.// -->
+                            {% endfor %}
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body.// -->
+                </article> <!-- card.// -->
+
+                <article class="card mb-4 col-md-12">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Shipping address</h4>
+                        <div class="row">
+                            <p>{{order.first_name}} {{order.last_name}}
+                                <br>{{order.street}}
+                                <br>{{order.city}}, {{order.state}}
+                                {{order.pin}}
+                                <br>{{order.country}}
+                                <br>phone: {{order.phone}}
+                            </p>
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body.// -->
+                </article> <!-- card.// -->
+            </div>
+            <aside class="col-lg-4 float-right">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-4">Complete payment</h4>
+                        <dl class="dlist-align">
+                            <dt>Cart value:</dt>
+                            <dd class="text-right">₹ {{ total_mrp }}.00</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Savings:</dt>
+                            <dd class="text-right">₹ {{ discount }}.00 </dd>
+                        </dl>
+                        {% if order.coupon %}
+                        <dl id="code" class="dlist-align ">
+                            <dt>Applied coupon:</dt>
+                            <dd id="coupon" class="text-right text-success">{{order.coupon.code}}</dd>
+                        </dl>
+                        <dl id="couponDiscount" class="dlist-align ">
+                            <dt>Coupon discount:</dt>
+                            <dd id="discount"  class="text-right text-success">₹ {{coupon_discount}}.00</dd>
+                        </dl>
+                        {% endif %}
+                        <dl id="code" class="dlist-align not-visible ">
+                            <dt>Applied coupon:</dt>
+                            <dd id="coupon" class="text-right text-success"></dd>
+                        </dl>
+                        <dl id="couponDiscount" class="dlist-align not-visible">
+                            <dt>Coupon discount:</dt>
+                            <dd id="discount" class="text-right text-success"></dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Total payable:</dt>
+                            <dd id="total" class="text-right text-dark b"><strong>₹ {{ order.total }}0</strong></dd>
+                        </dl>
+                        <hr>
+                        <h5>Apply coupon</h5>
+							<div class="mb-2 mt-3 d-flex ">
+								<input style="width: 75%; height:2.5em;" type="text" name="coupon" id="couponCode" placeholder="Enter the coupon code here"><button style="width: 25%; height:2.5em;" type="button" onclick="applyCoupon('{{order.id}}')" class="btn btn-major">Apply</button>
+                                
+							</div>
+                            <label class="text-danger" id="couponError" for=""></label>
+
+                        <main class="col-md-12">
+                            <article class="accordion" id="accordion_pay">
+                                <!-- for loop start -->
+                                <div class="card">
+                                    <header class="card-header">
+                                        <label class="form-check" data-toggle="collapse"
+                                            data-target="#payWithPaypal">
+                                            Pay with paypal
+                                        </label>
+                                    </header>
+                                    <div id="payWithPaypal" class="collapse show" data-parent="#accordion_pay">
+                                        <div class="card-body">
+                                            <div id="paypal-button-container"></div>
+                                        </div> <!-- card body .// -->
+                                    </div> <!-- collapse .// -->
+                                </div> <!-- card.// -->
+                                <div class="card">
+                                    <header class="card-header">
+                                        <label class="form-check" data-toggle="collapse"
+                                            data-target="#payWithRazorpay">
+                                            Pay with razorpay
+                                        </label>
+                                    </header>
+                                    <div id="payWithRazorpay" class="collapse" data-parent="#accordion_pay">
+                                        <div class="card-body">
+                                            <form action="{% url 'razor' %}" method="POST">
+                                                {% csrf_token %}
+                                            <script src="https://checkout.razorpay.com/v1/checkout.js" 
+                                            data-key="rzp_test_jjMwguJFthIdMi"
+                                            data-amount="{{ total }}"
+                                            data-currency="INR" 
+                                            data-order_id="{{ payment.id }}"
+                                            data-buttontext="Pay with Razorpay" 
+                                            data-name="Pickit India ltd."
+                                            data-description="Sit back and enjoy the comfort of home"
+                                            data-image="" 
+                                            data-prefill.name="{{ order.first_name }}"
+                                            data-prefill.email="{{order.email }}" 
+                                            data-theme.color="#F37254"></script>
+                                            <input type="hidden" custom="Hidden Element" name="hidden">
+                                            </form>
+                                        </div> <!-- card body .// -->
+                                    </div> <!-- collapse .// -->
+                                </div> <!-- card.// -->
+                                <div class="card">
+                                    <header class="card-header">
+                                        <label class="form-check" data-toggle="collapse"
+                                            data-target="#cashOnDelivery">
+                                            Cash on delivery
+                                        </label>
+                                    </header>
+                                    <div id="cashOnDelivery" class="collapse" data-parent="#accordion_pay">
+                                        <div class="card-body">
+                                            <button type="submit" class="btn btn-outline-major btn-block"> Cash on delivery </button>
+                                        </div> <!-- card body .// -->
+                                    </div> <!-- collapse .// -->
+                                </div> <!-- card.// -->
+    
+                            </article>
+                            <!-- accordion end.// -->
+    
+                        </main>
+                        <!-- <p class="text-center mb-3">
+                            <img src="{% static 'users/images/payments.png' %}" height="26">
+                        </p> -->
+                        
 
 
-
-		<!-- ============================ COMPONENT 2 ================================= -->
-		<div class="row">
-			<div class="col-lg-8">
-				<article class="card mb-4 col-md-12">
-					<div class="card-body">
-						<h4 class="card-title mb-4">Review cart</h4>
-						<div class="row">
-							{% for cart_item in cart_items %}
-							<div class="col-md-6">
-								<figure class="itemside  mb-4">
-									<div class="aside"><img src="{{ cart_item.product.image_1.url }}"
-											class="border img-sm">
-									</div>
-									<figcaption class="info">
-										<p><b>{{ cart_item.product.product_name }} {{ cart_item.product.quantity }}</b>
-										</p>
-										<p class="text-secondary">Brand: {{ cart_item.product.brand.brand_name }}</p>
-										<span class="text-muted">{{ cart_item.quantity }}x = ₹{{cart_item.sub_total}}.00
-										</span>
-									</figcaption>
-								</figure>
-							</div> <!-- col.// -->
-							{% endfor %}
-						</div> <!-- row.// -->
-					</div> <!-- card-body.// -->
-				</article> <!-- card.// -->
+                       
+                        
 
 
-				<main class="col-md-12">
-					<article class="accordion" id="accordion_pay">
-						{% for delivery_address in delivery_addresses %}
-						<!-- for loop start -->
-						<div class="card">
-							<header class="card-header">
-								<label class="form-check" data-toggle="collapse"
-									data-target="#{{ delivery_address.first_name }}">
-									<input class="form-check-input" name="payment-option" {% if default_address.default_address == delivery_address %} checked
-									{% endif %} type="radio"
-										value="{{ delivery_address }}">
-									<h6 class="form-check-label">
-										{{delivery_address.first_name}}, {{delivery_address.city}}
-									</h6>
-								</label>
-							</header>
-							<div id="{{delivery_address.first_name}}" class="collapse
-							{% if default_address.default_address == delivery_address %} show
-							{% endif %}" data-parent="#accordion_pay">
-								<div class="card-body">
-									<p>{{delivery_address.first_name}} {{delivery_address.last_name}}
-										<br>{{delivery_address.street}}
-										<br>{{delivery_address.city}}, {{delivery_address.state}}
-										{{delivery_address.pin}}
-										<br>{{delivery_address.country}}
-										<br>phone: {{delivery_address.phone}}
-									</p>
-								</div> <!-- card body .// -->
-							</div> <!-- collapse .// -->
-						</div> <!-- card.// -->
-						{% endfor %}
-						<!-- for loop end -->
-						<div class="card">
-							<header class="card-header">
-								<label class="form-check" data-toggle="collapse" data-target="#pay_payme">
-									<h6 class="form-check-label"> Add a new address </h6>
-								</label>
-							</header>
-							<div id="pay_payme" class="collapse" data-parent="#accordion_pay">
-								<div class="card-body">
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+            </aside>
 
-									<form action="/add-address/" method="POST">
-										{% csrf_token %}
-										<div class="row">
-											<h4 class="card-title mb-4">Contact info</h4>
-											<div class="form-group col-sm-6">
-												<label>Frst name</label>
-												{{address_form.first_name}}
-											</div>
-											<div class="form-group col-sm-6">
-												<label>Last name</label>
-												{{address_form.last_name}}
-											</div>
-											<div class="form-group col-sm-6">
-												<label>Phone</label>
-												{{address_form.phone}}
-											</div>
-											<div class="form-group col-sm-6">
-												<label>Email</label>
-												{{address_form.email}}
-											</div>
-										</div> <!-- row.// -->
-										<div class="row">
-											<h4 class="card-title mb-4">Delivery info</h4>
-											<div class="form-group col-sm-8">
-												<label>Street*</label>
-												{{address_form.street}}
-											</div>
-											<div class="form-group col-sm-4">
-												<label>House/Building</label>
-												{{address_form.building}}
-											</div>
-											<div class="form-group col-sm-4">
-												<label>City/Town</label>
-												{{address_form.city}}
-											</div>
-											<div class="form-group col-sm-8">
-												<label>Landmark</label>
-												{{address_form.landmark}}
-											</div>
-											<div class="form-group col-sm-4">
-												<label>State*</label>
-												{{address_form.state}}
-											</div>
-											<div class="form-group col-sm-4">
-												<label>Country*</label>
-												{{address_form.country}}
-											</div>
-											<div class="form-group col-sm-4">
-												<label>Postal code</label>
-												{{address_form.pin}}
-											</div>
-
-											<button type="submit" class="btn btn-major add-address-btn">Deliver to this
-												address</button>
-										</div> <!-- row.// -->
-									</form>
-
-								</div> <!-- card-body.// -->
-							</div> <!-- collapse .// -->
-						</div> <!-- card.// -->
-
-					</article>
-					<!-- accordion end.// -->
-
-				</main> <!-- col.// -->
-			</div>
-			<aside class="col-lg-4 float-right">
-				<div class="card">
-					<div class="card-body">
-						<dl class="dlist-align">
-							<dt>Cart value:</dt>
-							<dd class="text-right">₹ {{ total_mrp }}.00</dd>
-						</dl>
-						<dl class="dlist-align">
-							<dt>Savings:</dt>
-							<dd class="text-right">₹ {{ discount }}.00 </dd>
-						</dl>
-						<dl class="dlist-align">
-							<dt>Total payable:</dt>
-							<dd class="text-right text-dark b"><strong>₹{{ total }}.00</strong></dd>
-						</dl>
-						<hr>
-						<p class="text-center mb-3">
-							<img src="{% static 'users/images/payments.png' %}" height="26">
-						</p>
-						<a href="" class="btn btn-major btn-block"> Place Order </a>
-
-					</div> <!-- card-body.// -->
-				</div> <!-- card.// -->
-			</aside>
-		</div> <!-- row.// -->
-
-	</div> <!-- container .//  -->
+        </div> <!-- row.// -->
+    </div> <!-- container .//  -->
 </section>
+
+
 
 
 {% endblock %}
 
 {% block footer %}
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    var amount = '{{order.total}}'
+    var url = '{% url "paypal" %}'
+    var csrftoken = getCookie('csrftoken');
+    var orderID = '{{ order.order_number }}'
+    var payment_method = 'Paypal'
+    var redirect_url = "{% url 'order-complete' %}"
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+
+
+
+        style: {
+            color: 'blue',
+            shape: 'rect',
+            label: 'pay',
+            height: 36
+        },
+
+        // Set up the transaction
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: amount
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+                // Show a success message to the buyer
+                console.log(details)
+                sendData();
+                function sendData() {
+                    fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                            "X-CSRFToken": csrftoken
+                        },
+                        body: JSON.stringify({
+                            orderID: orderID,
+                            transactionID: details.id,
+                            payment_method: payment_method,
+                            status: details.status,
+                        }),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.href = redirect_url;
+                        });
+
+                }
+            });
+        }
+
+
+    }).render('#paypal-button-container');
+</script>
+
 
 {% endblock %}

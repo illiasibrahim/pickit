@@ -29,12 +29,25 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-4">
-                                <img src="{{ poster.poster.url }}" alt="">
-                                <label for="">Poster</label>
-                                {{ poster_form.poster }}
-                        
-                            </div>
+                            <div class="col-md-3">
+                                <div id="image-box" class="mb-3 not-visible">
+
+                                </div>
+                                <div id="imagePreview">
+                                    <img src="{{ poster.poster.url}}" id="cropped" width="500px">
+                                </div>
+                                
+                                <div class="">
+                                    <label>Poster*</label>
+                                    {{ poster_form.poster }}
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <p class="btn btn-round btn-sm btn-outline-success mt-3 not-visible"
+                                        id="confirm-btn"> Select</p>
+                                </div>
+                            
+
+                        </div>
                         </div>
 
                         <div class="update ml-auto mr-auto">

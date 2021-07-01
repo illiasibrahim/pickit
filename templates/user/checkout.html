@@ -1,0 +1,203 @@
+{% extends 'user/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<section class="section-content padding-y bg">
+	<div class="container">
+
+
+
+		<!-- ============================ COMPONENT 2 ================================= -->
+		<form novalidate action="" method="POST" id="addressForm">
+			{% csrf_token %}
+		<div class="row">
+			
+				<div class="col-lg-8">
+					<article class="card mb-4 col-md-12">
+						<div class="card-body">
+							<h4 class="card-title mb-4">Review cart</h4>
+							<div class="row">
+								{% for cart_item in cart_items %}
+								<div class="col-lg-6">
+									<figure class="itemside  mb-4">
+										<div class="aside"><img src="{{ cart_item.product.image_1.url }}"
+												class="border img-sm">
+										</div>
+										<figcaption class="info">
+											<p><b>{{ cart_item.product.product_name }} 
+												{{ cart_item.product.quantity }}</b>
+											</p>
+											<p class="text-secondary">Brand: {{ cart_item.product.brand.brand_name }}
+											</p>
+											<span class="text-muted">{{ cart_item.quantity }}x =
+												₹{{cart_item.sub_total}}.00
+											</span>
+										</figcaption>
+									</figure>
+								</div> <!-- col.// -->
+								{% endfor %}
+							</div> <!-- row.// -->
+						</div> <!-- card-body.// -->
+					</article> <!-- card.// -->
+					
+
+					<main class="col-md-12">
+						<h4 class="mb-3">Select a shipping address </h4>
+						<article class="accordion" id="accordion_pay">
+							{% for delivery_address in delivery_addresses %}
+							<!-- for loop start -->
+							<div class="card">
+								<header class="card-header">
+									<label class="form-check" data-toggle="collapse"
+										data-target="#{{ delivery_address.first_name }}">
+										<input class="form-check-input delivery-address" name="delivery-address" 
+										{% if default_address.default_address == delivery_address %}
+										 checked 
+										 {% endif %}
+											type="radio" value="{{ delivery_address.id }}">
+										<h6 class="form-check-label">
+											{{delivery_address.first_name}}, {{delivery_address.city}}
+										</h6>
+									</label>
+								</header>
+								<div id="{{delivery_address.first_name}}" class="collapse
+							{% if default_address.default_address == delivery_address %}
+							 show
+							{% endif %}" data-parent="#accordion_pay">
+									<div class="card-body">
+										<p>{{delivery_address.first_name}} {{delivery_address.last_name}}
+											<br>{{delivery_address.street}}
+											<br>{{delivery_address.city}}, {{delivery_address.state}}
+											{{delivery_address.pin}}
+											<br>{{delivery_address.country}}
+											<br>phone: {{delivery_address.phone}}
+										</p>
+									</div> <!-- card body .// -->
+								</div> <!-- collapse .// -->
+							</div> <!-- card.// -->
+							{% endfor %}
+							<!-- for loop end -->
+							<div class="card">
+								<header class="card-header">
+
+									<label class="form-check" data-toggle="collapse" data-target="#pay_payme">
+										<input {% if not default_address  %}
+										 checked
+										  {% endif %} class="form-check-input delivery-address"  name="delivery-address" type="radio"
+											value="add_new">
+										<h6 class="form-check-label"> Deliver to another address </h6>
+									</label>
+								</header>
+								<div id="pay_payme" class="collapse {% if not default_address %}
+								show
+								 {% endif %}" data-parent="#accordion_pay">
+									<div class="card-body">
+
+
+										<div class="row">
+											<h4 class="card-title mb-4">Contact info</h4>
+											<div class="form-group col-sm-6">
+												<label>Frst name</label>
+												{{address_form.first_name}}
+											</div>
+											<div class="form-group col-sm-6">
+												<label>Last name</label>
+												{{address_form.last_name}}
+											</div>
+											<div class="form-group col-sm-6">
+												<label>Phone</label>
+												{{address_form.phone}}
+											</div>
+											<div class="form-group col-sm-6">
+												<label>Email</label>
+												{{address_form.email}}
+											</div>
+										</div> <!-- row.// -->
+										<div class="row">
+											<h4 class="card-title mb-4">Delivery info</h4>
+											<div class="form-group col-sm-8">
+												<label>Street*</label>
+												{{address_form.street}}
+											</div>
+											<div class="form-group col-sm-4">
+												<label>House/Building</label>
+												{{address_form.building}}
+											</div>
+											<div class="form-group col-sm-4">
+												<label>City/Town</label>
+												{{address_form.city}}
+											</div>
+											<div class="form-group col-sm-8">
+												<label>Landmark</label>
+												{{address_form.landmark}}
+											</div>
+											<div class="form-group col-sm-4">
+												<label>State*</label>
+												{{address_form.state}}
+											</div>
+											<div class="form-group col-sm-4">
+												<label>Country*</label>
+												{{address_form.country}}
+											</div>
+											<div class="form-group col-sm-4">
+												<label>Postal code</label>
+												{{address_form.pin}}
+											</div>
+											<div class="form-check col-sm-4 ml-3">
+												<input class="form-check-input" type="checkbox" name="save_address" value="save"
+													id="flexCheckChecked" checked>
+												<label class="form-check-label" for="flexCheckChecked">
+													Save this address
+												</label>
+											</div>
+										</div> <!-- row.// -->
+
+
+									</div> <!-- card-body.// -->
+								</div> <!-- collapse .// -->
+							</div> <!-- card.// -->
+
+						</article>
+						<!-- accordion end.// -->
+
+					</main> <!-- col.// -->
+				</div>
+				<aside class="col-lg-4 float-right">
+					<div class="card">
+						<div class="card-body">
+							<dl class="dlist-align">
+								<dt>Cart value:</dt>
+								<dd class="text-right">₹ {{ total_mrp }}.00</dd>
+							</dl>
+							<dl class="dlist-align">
+								<dt>Savings:</dt>
+								<dd class="text-right">₹ {{ discount }}.00 </dd>
+							</dl>
+							<dl class="dlist-align">
+								<dt>Total payable:</dt>
+								<dd class="text-right text-dark b"><strong>₹{{ total }}.00</strong></dd>
+							</dl>
+							<hr>
+							
+						</div>
+							<p class="text-center mb-3">
+								<img src="{% static 'users/images/payments.png' %}" height="26">
+							</p>
+							<button type="submit" class="btn btn-major btn-block"> Place Order </button>
+
+						</div> <!-- card-body.// -->
+					</div> <!-- card.// -->
+				</aside>
+			
+		</div> <!-- row.// -->
+	</form>
+	</div> <!-- container .//  -->
+</section>
+
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

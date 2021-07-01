@@ -19,6 +19,12 @@ urlpatterns = [
     path('remove-cart/',views.remove_cart, name='remove-cart'),
     path('remove-cart-item/<int:product_id>/',views.remove_cart_item,name='remove-cart-item'),
     path('checkout/',views.checkout,name="checkout"),
+    path('apply-coupon/',views.apply_coupon,name='apply-coupon'),
+    path('place-order/',views.place_order,name="place-order"),
+    path('paypal/',views.paypal,name='paypal'),
+    path('razor/',views.razor,name='razor'),
+    path('order-complete/',views.order_complete,name='order-complete'),
+    path('cancel-order/<order_id>',views.cancel_order,name='cancel-order'),
     path('add-address/',views.add_address,name="add-address"),
     path('account/',views.account,name="account"),
     path('profile/',views.profile,name='profile'),
@@ -28,6 +34,7 @@ urlpatterns = [
     path('delete-address/<address_id>/',views.delete_address,name='delete-address'),
     path('make-default/<address_id>/',views.make_default,name='make-default'),
     path('new-address/',views.new_address,name='new-address'),
+    path('edit-address/',views.edit_address,name='edit-address'),    
     
 
 

@@ -1,3 +1,5 @@
+
+
 var path = window.location.href;
 
 $(document).ready(function () {
@@ -165,9 +167,11 @@ $(document).ready(function () {
 // Add to cart ajax
 
 function addToCart(product_id, product_name = null) {
-    var btn = $('.add-to-cart-btn');
+    // var btn = $('.add-to-cart-btn');
+    var id = product_id+product_id
+    var btn = $('#'+id)
+    // var btn = document.getElementById(product_id+product_id)
     var dat = {};
-    console.log(product_name)
     dat['product_id'] = product_id
     $.ajax({
         url: '/add-cart/',
@@ -182,6 +186,9 @@ function addToCart(product_id, product_name = null) {
             btn.attr('disabled', false)
             if (product_name != null) {
                 document.getElementById(product_name).innerHTML = res.ind_count;
+                document.getElementById('cartValue').innerHTML = '₹'+res.cart_value+'.00';
+                document.getElementById(product_name+product_id).innerHTML = '₹ '+res.ind_price+'.00';
+                
             }
 
         }
@@ -189,6 +196,38 @@ function addToCart(product_id, product_name = null) {
 }
 
 function removeFromCart(product_id, product_name) {
+    var count = document.getElementById(product_name).innerHTML
+    if (count == 1) {
+        var confirm_delete = confirm('Are you sure you want to delete this item from cart?')
+        if (confirm_delete) {
+            var btn = $('.remove-from-cart-btn');
+            var dat = {};
+            console.log(product_name)
+            dat['product_id'] = product_id
+            $.ajax({
+                url: '/remove-cart/',
+                type: 'GET',
+                data: dat,
+                dataType: 'json',
+                beforeSend: function () {
+                    btn.attr('disabled', true)
+                },
+                success: function (res) {
+                    $('#badgeCount').html(res.data)
+                    if (res.rem == true) {
+                        document.getElementById(product_id).remove()
+                        location.reload()
+                    }
+                    else {
+                        document.getElementById(product_name).innerHTML = res.ind_count;
+                        
+                        btn.attr('disabled', false)
+                    }
+                }
+            })
+        }
+    }
+    else{
     var btn = $('.remove-from-cart-btn');
     var dat = {};
     console.log(product_name)
@@ -209,88 +248,176 @@ function removeFromCart(product_id, product_name) {
             }
             else {
                 document.getElementById(product_name).innerHTML = res.ind_count;
+                document.getElementById('cartValue').innerHTML = '₹'+res.cart_value+'.00';
+                document.getElementById(product_name+product_id).innerHTML = '₹ '+res.ind_price+'.00';
                 btn.attr('disabled', false)
             }
         }
     })
+}
+}
 
+function editAddress(address_id){
+    console.log('edit address')
+    var section = document.getElementById('editAddress')
+    var dat = {};
+    dat['address_id'] = address_id
+    $.ajax({
+        url: '/edit-address/',
+        type: 'GET',
+        data: dat,
+        dataType: 'json',
+        beforeSend: function () {
+            section.classList.remove('not-visible')
+
+        },
+        success: function (data) {
+            console.log(data.first_name)
+            document.getElementById('firstName').value = data.first_name
+            document.getElementById('lastName').value = data.last_name
+            document.getElementById('phone').value = data.phone
+            document.getElementById('email').value = data.email
+            document.getElementById('street').value = data.street
+            document.getElementById('house').value = data.building
+            document.getElementById('city').value = data.city
+            document.getElementById('landMark').value = data.landmark
+            document.getElementById('state').value = data.state
+            document.getElementById('country').value = data.country
+            document.getElementById('pin').value = data.pin
+            document.getElementById('ID').value = data.id
+            
+        }
+    })
+}
+
+// Makes sure that validation is done when a customer chooses a new address and 
+// avoids validation when customer selects an existing addresss
+if (path.includes('checkout')){
+    var selected = $('input[name="delivery-address"]:checked').val();
+    if (selected == 'add_new'){
+        $('#addressForm').removeAttr('novalidate')
+    }
+    var radio = $('input[name="delivery-address"]')
+    console.log(radio)
+    radio.change(function(){
+        console.log('changed')
+        selected = $('input[name="delivery-address"]:checked').val();
+        console.log(selected)
+        if (selected != 'add_new'){
+            $('#addressForm').attr('novalidate',true)
+        }
+        else{
+            $('#addressForm').removeAttr('novalidate')
+        }
+    })
+    console.log(selected)
+ 
+}
+
+function applyCoupon(order_id){
+    var coupon_code = $('#couponCode').val()
+    console.log(order_id)
+    code = {'coupon_code':coupon_code,'order_id':order_id}
+    $.ajax({
+        url: '/apply-coupon/',
+        type: 'GET',
+        data: code,
+        dataType: 'json',
+        success: function (res) {
+            if ('expired' in res){  
+                document.getElementById('couponError').innerHTML = "The coupon code you entered has been expired"
+            }
+            else if('none' in res) {
+                document.getElementById('couponError').innerHTML = "The coupon code you entered does not exist"
+            }
+            else{
+            document.getElementById('couponError').innerHTML = ""
+            document.getElementById('total').innerHTML = '₹ '+res.order_total+'.00';
+            document.getElementById('code').classList.remove('not-visible');
+            document.getElementById('coupon').innerHTML = res.coupon_code;
+            document.getElementById('couponDiscount').classList.remove('not-visible');
+            document.getElementById('discount').innerHTML = '₹ '+res.coupon_discount+'.00';
+            location.reload()
+        }
+        }
+    })
 }
 
 
 // crop profile picture
-if (path.includes('profile')){
-var imageBox = document.getElementById('image-box')
-var confirmBtn = document.getElementById('confirm-btn')
-var input = document.getElementById('id_image')
-var cropped = document.getElementById('cropped')
-var updateBtn = document.getElementById('update-dp')
-var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+if (path.includes('profile')) {
+    var imageBox = document.getElementById('image-box')
+    var confirmBtn = document.getElementById('confirm-btn')
+    var input = document.getElementById('id_image')
+    var cropped = document.getElementById('cropped')
+    var updateBtn = document.getElementById('update-dp')
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 
 
-input.addEventListener('change', () => {
-    if (!allowedExtensions.exec(input.value)) {
-        alert('Invalid file type');
-        input.value = '';
-        cropped.src = '';
-        confirmBtn.classList.add('not-visible')
-        imageBox.classList.add('not-visible')
-        updateBtn.classList.add('not-visible')
+    input.addEventListener('change', () => {
+        if (!allowedExtensions.exec(input.value)) {
+            alert('Invalid file type');
+            input.value = '';
+            cropped.src = '';
+            confirmBtn.classList.add('not-visible')
+            imageBox.classList.add('not-visible')
+            updateBtn.classList.add('not-visible')
 
-    }
-    else {
+        }
+        else {
 
-        confirmBtn.classList.remove('not-visible')
-        imageBox.classList.remove('not-visible')
-        cropped.src = ''
-        updateBtn.classList.add('not-visible')
+            confirmBtn.classList.remove('not-visible')
+            imageBox.classList.remove('not-visible')
+            cropped.src = ''
+            updateBtn.classList.add('not-visible')
 
-        var img_data = input.files[0]
-        var url = URL.createObjectURL(img_data)
-        imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
+            var img_data = input.files[0]
+            var url = URL.createObjectURL(img_data)
+            imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
 
-        var $image = $('#image');
+            var $image = $('#image');
 
 
 
-        $image.cropper({
-            aspectRatio: 1 / 1,
-            crop: function (event) {
-                console.log(event.detail.x);
-                console.log(event.detail.y);
-                console.log(event.detail.width);
-                console.log(event.detail.height);
-                console.log(event.detail.rotate);
-                console.log(event.detail.scaleX);
-                console.log(event.detail.scaleY);
-            }
-        });
-
-        // Get the Cropper.js instance after initialized
-        var cropper = $image.data('cropper');
-
-        confirmBtn.addEventListener('click', () => {
-            cropper.getCroppedCanvas().toBlob((blob) => {
-                let fileInputElement = document.getElementById('id_image');
-                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
-                let container = new DataTransfer();
-                container.items.add(file);
-                fileInputElement.files = container.files;
-
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    cropped.src = e.target.result
+            $image.cropper({
+                aspectRatio: 1 / 1,
+                crop: function (event) {
+                    console.log(event.detail.x);
+                    console.log(event.detail.y);
+                    console.log(event.detail.width);
+                    console.log(event.detail.height);
+                    console.log(event.detail.rotate);
+                    console.log(event.detail.scaleX);
+                    console.log(event.detail.scaleY);
                 }
-                reader.readAsDataURL(input.files[0]);
-                imageBox.classList.add('not-visible');
-                $('#image').attr("src", "");
-                confirmBtn.classList.add('not-visible');
-                updateBtn.classList.remove('not-visible')
+            });
+
+            // Get the Cropper.js instance after initialized
+            var cropper = $image.data('cropper');
+
+            confirmBtn.addEventListener('click', () => {
+                cropper.getCroppedCanvas().toBlob((blob) => {
+                    let fileInputElement = document.getElementById('id_image');
+                    let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                    let container = new DataTransfer();
+                    container.items.add(file);
+                    fileInputElement.files = container.files;
+
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        cropped.src = e.target.result
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                    imageBox.classList.add('not-visible');
+                    $('#image').attr("src", "");
+                    confirmBtn.classList.add('not-visible');
+                    updateBtn.classList.remove('not-visible')
 
 
+                })
             })
-        })
-    }
-})
+        }
+    })
 }
 
 // validate password update form

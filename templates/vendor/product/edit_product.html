@@ -64,31 +64,49 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="crop-container" class="row d-flex flex-column align-content-center" >
+                            <div id="image-box" class="mb-3 not-visible">
+
+                            </div>
+                            <div class="d-flex justify-content-center ">
+                                <p class="btn btn-round btn-sm btn-outline-success mt-3 not-visible"
+                                    id="confirm-btn"> Select</p>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="">
                                     <label>Image 1*</label>
-                                    
+                                    <div class="imagePreview">
+                                        <img src="{{ product.image_1.url}}" id="cropped1" width="500px">
+                                    </div>
+
                                     <div class="image-container">
-                                        <img src="{{ product.image_1.url }}" alt="">
                                         {{ product_form.image_1}}
                                     </div>
+
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="">
                                     <label>Image 2*</label>
+                                    <div class="imagePreview">
+                                        <img src="{{ product.image_2.url}}" id="cropped2" width="500px">
+                                    </div>
+
                                     <div class="image-container">
-                                        <img src="{{ product.image_2.url }}" alt="">
                                         {{ product_form.image_2}}
                                     </div>
+
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="">
                                     <label>Image 3</label>
+                                    <div class="imagePreview">
+                                        <img src="{{ product.image_3.url}}" id="cropped3" width="500px">
+                                    </div>
                                     <div class="image-container">
-                                        <img src="{{ product.image_3.url }}" alt="">
                                         {{ product_form.image_3}}
                                     </div>
 
@@ -97,8 +115,10 @@
                             <div class="col-md-3">
                                 <div class="">
                                     <label>Image 4</label>
+                                    <div class="imagePreview">
+                                        <img src="{{ product.image_4.url}}" id="cropped4" width="500px">
+                                    </div>
                                     <div class="image-container">
-                                        <img src="{{ product.image_4.url }}" alt="">
                                         {{ product_form.image_4}}
                                     </div>
 

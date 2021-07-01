@@ -48,7 +48,7 @@
                                 <th>
                                     Total order value
                                 </th>
-                                <th class="text-right">
+                                <th class="text-center">
                                     Actions
                                 </th>
                             </thead>
@@ -75,16 +75,17 @@
                                         ₹104.00
                                     </td>
                                     
-                                    <td class="text-right"><a href=""><i class="fas fa-eye mr-4"></i></a>
+                                    <td class="text-center">
+                                        <!--  <a href=""><i class="fas fa-eye mr-4"></i></a> -->
                                        {% if user.has_access %} 
                                        <a onclick="return confirm('Are you sure you want to block this user?')" href="{% url 'block-user' user.id %}"><i class="fas fa-ban text-danger"></i></i></a>
                                        {% else %}
                                        <a onclick="return confirm('Are you sure you want to unblock this user?')" href="{% url 'unblock-user' user.id %}"><i class="fas fa-ban text-secondary"></i></i></a>
                                        {% endif %}
 
-                                        <a href="{% url 'delete-user' user.id %}"
+                                        <!-- <a href="{% url 'delete-user' user.id %}"
                                             onclick="return confirm('Are you sure you want to delete this item?')"><i
-                                                class="far fa-trash-alt text-danger"></i></a>
+                                                class="far fa-trash-alt text-danger"></i></a> -->
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -93,6 +94,29 @@
                             </tbody>
                         </table>
                     </div>
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        {% if users.has_other_pages %}
+                        <ul class="pagination">
+                            {% if users.has_previous %}
+                            <li class="page-item"><a class="page-link text-major" href="?page={{ users.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link " >Previous</a></li>
+                            {% endif %}
+                            {% for i in users.paginator.page_range %}
+                            {% if users.number == i %}
+                            <li class="page-item active disabled"><a class="page-link" >{{i}}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link text-major " href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if users.has_next %}
+                            <li class="page-item "><a class="page-link text-major" href="?page={{ users.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link text-major" >Next</a></li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </nav>
                 </div>
             </div>
         </div>

@@ -5,93 +5,110 @@
 <!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-conten padding-y bg">
 
-<div class="container">
-	<div class="row">
-	<aside class="col-md-3">
-		<!--   SIDEBAR   -->
-		<ul class="list-group">
-			<a class="list-group-item activate" href=""> Order history </a>
-			<a class="list-group-item" href="#"> Transactions </a>
-			<a class="list-group-item" href="#"> Return and refunds </a>
-			<a class="list-group-item" href="{% url 'profile' %}">Profile</a>
-			<a class="list-group-item " href="{% url 'change-password' %}">Change password</a>
-			<a class="list-group-item" href="{% url 'saved-address' %}">Saved addresses</a>
-				
-		</ul>
-		<br>
-		<a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
-		<!--   SIDEBAR .//END   -->
-	</aside>
-	<main class="col-md-9">
-		<article class="card">
-		<header class="card-header">
-			<strong class="d-inline-block mr-3">Order ID: 6123456789</strong>
-			<span>Order Date: 16 December 2018</span>
-		</header>
-		<div class="card-body">
-			<div class="row"> 
-				<div class="col-md-8">
-					<h6 class="text-muted">Delivery to</h6>
-					<p>Michael Jackson <br>  
-					Phone +1234567890 Email: myname@pixsellz.com <br>
-			    	Location: Home number, Building name, Street 123,  Tashkent, UZB <br> 
-			    	P.O. Box: 100123
-			 		</p>
+	<div class="container">
+		<div class="row">
+			<aside class="col-md-3">
+				<!--   SIDEBAR   -->
+				<ul class="list-group">
+					<a class="list-group-item activate" href=""> Order history </a>
+					<!-- <a class="list-group-item" href="#"> Transactions </a>
+					<a class="list-group-item" href="#"> Return and refunds </a> -->
+					<a class="list-group-item" href="{% url 'profile' %}">Profile</a>
+					<a class="list-group-item " href="{% url 'change-password' %}">Change password</a>
+					<a class="list-group-item" href="{% url 'saved-address' %}">Saved addresses</a>
+
+				</ul>
+				<br>
+				<a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log
+						out</span> </a>
+				<!--   SIDEBAR .//END   -->
+			</aside>
+
+			<main class="col-md-9">
+				{% if not orders %}
+				<div class="d-flex  justify-content-center">
+				<div>
+				<h4>You don't have any orders yet</h4>
+				<a class="btn btn-outline-major" href="{% url 'store' %}">Continue shopping</a>
 				</div>
-				<div class="col-md-4">
-					<h6 class="text-muted">Payment</h6>
-					<span class="text-success">
-						<i class="fab fa-lg fa-cc-visa"></i>
-					    Visa  **** 4216  
-					</span>
-					<p>Subtotal: $356 <br>
-					 Shipping fee:  $56 <br> 
-					 <span class="b">Total:  $456 </span>
-					</p>
 				</div>
-			</div> <!-- row.// -->
-		</div> <!-- card-body .// -->
-		<div class="table-responsive">
-		<table class="table table-hover">
-			<tr>
-				<td width="65">
-					<img src="../images/items/1.jpg" class="img-xs border">
-				</td>
-				<td> 
-					<p class="title mb-0">Product name goes here </p>
-					<var class="price text-muted">USD 145</var>
-				</td>
-				<td> Seller <br> Nike clothing </td>
-				<td width="250"> <a href="#" class="btn btn-outline-primary">Track order</a> <a href="#" class="btn btn-light"> Details </a> </td>
-			</tr>
-			<tr>
-				<td>
-					<img src="../images/items/2.jpg" class="img-xs border">
-				</td>
-				<td> 
-					<p class="title mb-0">Another name goes here </p>
-					<var class="price text-muted">USD 15</var>
-				</td>
-				<td> Seller <br> ABC shop </td>
-				<td> <a href="#" class="btn btn-outline-primary">Track order</a> <a href="#" class="btn btn-light"> Details </a> </td>
-			</tr>
-			<tr>
-				<td>
-					<img src="../images/items/3.jpg" class="img-xs border">
-				</td>
-				<td> 
-					<p class="title mb-0">The name of the product  goes here </p>
-					<var class="price text-muted">USD 145</var>
-				</td>
-				<td> Seller <br> Wallmart </td>
-				<td> <a href="#" class="btn btn-outline-major">Track order</a> <a href="#" class="btn btn-light"> Details </a> </td>
-			</tr>
-		</table>
-		</div> <!-- table-responsive .end// -->
-		</article> <!-- order-group.// --> 
-	</main>
-</div> <!-- row.// -->
-</div>
+				{% else %}
+				{% for order in orders %}
+				<div class="col-md-12 mb-4">
+					<article class="card">
+						<header class="card-header">
+							<strong class="d-inline-block mr-3">Order ID: {{ order.order_number }}</strong>
+							<span>Order Date: {{ order.created_at }}</span>
+						</header>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-8">
+									<h6 class="text-muted">Delivery to</h6>
+									<p style="margin: 0; padding: 0;">{{order.first_name}} {{order.last_name}}
+										<br>{{order.street}}
+										<br>{{order.city}}, {{order.state}}
+										{{order.pin}}
+										<br>{{order.country}}
+										<br>phone: {{order.phone}}
+									</p>
+								</div>
+								<div class="col-md-4">
+									<h6 class="text-muted">Payment</h6>
+									<span class="">
+										{{ order.payment.payment_method}}
+									</span>
+									<p>TransID : {{ order.payment.payment_id }} <br>
+										
+										<span class="b">Total: ₹ {{ order.payment.amount_paid }}0 </span>
+									</p>
+								</div>
+							</div> <!-- row.// -->
+							
+						</div> <!-- card-body .// -->
+						<div class="table-responsive">
+							<table class="table table-hover">
+								{% for order_product in order_products %}
+								{% if order == order_product.order %}
+								<tr>
+									<td width="65">
+										<img src="{{ order_product.product.image_1.url }}" class="img-xs border">
+									</td>
+									<td>
+										<p class="title mb-0">{{ order_product.product.product_name }}</p>
+										<var class=" text-muted">x {{ order_product.quantity }}</var>
+									</td>
+									<td> Brand<br> <span class="text-secondary">{{order_product.product.brand.brand_name}} </span></td>
+									<td width="250"> <a href="{% url 'product' order_product.product.id %}" class="btn btn-outline-major">Details</a> </td>
+								</tr>
+								{% endif %}
+								{% endfor %}
+							</table>
+							
+						</div> <!-- table-responsive .end// -->
+						<div class="row d-flex justify-content-around mb-3 ml-3">
+							<div>Order status : <span {% if order.status == 'Pending' %}
+								class="text-secondary"
+								{% elif order.status == 'Cancelled' or order.status == 'Rejected' %}
+								class="text-danger"
+								{% else %}
+								class="text-success"
+								{% endif %}
+								>{{order.status}}</span>
+							</div>
+							<div>
+								{% if order.status != 'Cancelled'%}
+								<a href="{% url 'cancel-order' order.id %}" style="width: 10em;" class="btn btn-danger">Cancel order</a>
+								{% endif %}
+							</div>
+						</div>
+					</article> <!-- order-group.// -->
+				</div>
+				{% endfor %}
+				{% endif %}
+			</main>
+
+		</div> <!-- row.// -->
+	</div>
 
 
 </section>

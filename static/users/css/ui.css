@@ -1644,6 +1644,11 @@ a[class*=card]:hover .title {
   background-color: white;
 }
 
+.btn-outline-major:hover{
+  color: white;
+  background: var(--major);
+}
+
 .profile-pic{
   width: 10em;  
   border-radius: 50%;
@@ -1726,6 +1731,20 @@ a[class*=card]:hover .title {
 
 .not-visible{
   display: none;
+}
+
+.invoice-logo h1{
+  font-size: 40px;
+  font-weight: bolder;
+  color: var(--major);
+}
+
+.razorpay-payment-button{
+  color: white;
+  background: var(--major);
+  border: 1px solid var(--major);
+  height: 36px;
+  width: 100%;
 }
 
 /* Inorder to display different views in nav in collapse and expanded views */

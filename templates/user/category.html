@@ -77,7 +77,7 @@
 										</select>
 									</div>
 								</div> <!-- form-row.// -->
-								<button class="btn btn-block btn-primary">Apply</button>
+								<button class="btn btn-block btn-major">Apply</button>
 							</div><!-- card-body.// -->
 						</div>
 					</article> <!-- filter-group .// -->
@@ -97,10 +97,16 @@
 				<div class="row">
 					{% for product in products %}
 					<div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 card-outer">
+						{% if product.offer > 0 or product.category.cat_offer > 0 %}
 						<div class="offer-flag-div"><img src="{% static 'users/images/offer-flag.png' %}" alt=""></div>
 						<div class="offer-tag">
+							{% if product.offer > product.category.cat_offer %}
 							<p>{{ product.offer }}% off</p>
+							{% else %}
+							<p>{{ product.category.cat_offer }}% off</p>
+							{% endif %}
 						</div>
+						{% endif %}
 						<div class="card card-product-grid">
 							<div class="card-image-div">
 								<a href="{% url 'product' product.id %}" class="img-wrap"> <img
@@ -108,10 +114,10 @@
 							</div>
 							<figcaption class="info-wrap">
 								<p class="title">{{ product.product_name }} {{ product.quantity }}</p>
-								<h4 class="price mt-1 text-success">₹ {{ product.discount_price }}.00</h4>
+								<h4 class="price mt-1 text-success">₹ {{ product.selling_price }}.00</h4>
 								<p class="">₹ <s>{{ product.mrp }}.00</s></p>
 							</figcaption>
-							<button onclick="addToCart('{{product.id}}')" class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn">Add to
+							<button onclick="addToCart('{{product.id}}')" class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn" id="{{ product.id }}{{ product.id }}">Add to
 								cart</button>
 						</div>
 					</div> <!-- col.// -->

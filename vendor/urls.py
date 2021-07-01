@@ -35,8 +35,20 @@ urlpatterns = [
     path('user/',views.user_view, name='user'),
     path('delete-user/<user_id>/',views.delete_user,name='delete-user'),
     path('block-user/<user_id>',views.block_user, name='block-user'),
-    path('unblock-user/<user_id>',views.unblock_user, name='unblock-user')
+    path('unblock-user/<user_id>',views.unblock_user, name='unblock-user'),
 
+    path('order/',views.order_view,name='order'),
+    path('approve/',views.approve,name='approve'),
+    path('dispatch/',views.dispatch,name='dispatch'),
+    path('deliver/',views.deliver,name='deliver'),
+    path('reject/',views.reject,name='reject'),
+
+    path('coupon/',views.coupon_view,name='coupon'),
+    path('add-coupon/',views.add_coupon,name='add-coupon'),
+    path('delete-coupon/<coupon_id>/',views.delete_coupon,name='delete-coupon'),
+    path('edit-coupon/<coupon_id>/',views.edit_coupon,name='edit-coupon'),
+    path('update-category-offer/',views.update_cat_offer,name='update-category-offer'),
+    path('delete-category-offer/',views.delete_cat_offer,name='delete-category-offer'),
 
 
    
