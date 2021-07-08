@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+
+    <style>
+        @page{
+            size:"A4";
+            margin:2.5cm 1.5cm 3.5cm 1.5cm;
+        }
+    </style>
+</head>
+<body>
+    <h2>Orders</h2>
+    <p style="margin: 0%;">from: {{ from }}</p>
+    <p style="margin-top: 0%;">to&nbsp;&nbsp;&nbsp;&nbsp;: {{ to }}</p>
+    <table class="table">
+        <thead class=" text-secondary">
+            <th style="width: 3em;">
+                No.
+            </th>
+            <th style="width: 8em;">
+                Order id
+            </th>
+            <!-- <th>
+                items
+            </th> -->
+            <th style="width: 7em;">
+                Customer
+            </th>
+            <th style="width: 8em;">
+                Order value
+            </th>
+            <th style="width: 8em;">
+                Order time
+            </th>
+            <th style="width: 8em;">
+                Status
+            </th>
+
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>
+                    {{ forloop.counter }}
+                </td>
+                <td>
+                    {{ order.order_number }}
+                </td>
+                <!-- <td>
+                    <table>
+                        <tbody>
+                            {% for order_product in order_products %}
+                            {% if order == order_product.order %}
+                            <tr>
+                                <td>{{ order_product.product.product_name }}</td>
+                                <td>{{ order_product.product.quantity }}</td>
+                                <td>{{ order_product.quantity }}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </td> -->
+                <td>
+                    {{ order.user.first_name}}
+                </td>
+                <td>
+                    {{ order.total}}0
+                </td>
+                <td>
+                    {{ order.order_date }}
+                </td>
+                <td id="{{order.id}}" {% if order.status == "Cancelled" or order.status == 'Rejected' %}
+                    class="text-danger" {% endif %}>
+                    {{ order.status }}
+                </td>
+
+                
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</body>
+</html>

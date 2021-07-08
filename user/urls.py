@@ -11,6 +11,7 @@ urlpatterns = [
     path('verified-user/',views.verified_user,name='verified-user'),
     path('logout/',views.logout,name='logout'),
     path('product/<product_id>/',views.product_detail, name='product'),
+    path('submit-review/<product_id>',views.submit_review,name='submit-review'),
     path('store/',views.store,name='store'),
     path('search/',views.search,name='search'),
     path('category/<category_id>/',views.category_view,name='category'),

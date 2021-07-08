@@ -16,7 +16,7 @@
                     <h5 class="card-title">Edit product</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" id="productForm" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         <div class="row">
@@ -30,12 +30,6 @@
                                 <div class="form-group">
                                     <label>MRP*</label>
                                     {{ product_form.mrp }}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Offer%*</label>
-                                    {{ product_form.offer }}
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -82,7 +76,7 @@
                                     </div>
 
                                     <div class="image-container">
-                                        {{ product_form.image_1}}
+                                        {{product_form.image_1}}
                                     </div>
 
                                 </div>
@@ -95,7 +89,7 @@
                                     </div>
 
                                     <div class="image-container">
-                                        {{ product_form.image_2}}
+                                        {{product_form.image_2}}
                                     </div>
 
                                 </div>
@@ -107,7 +101,7 @@
                                         <img src="{{ product.image_3.url}}" id="cropped3" width="500px">
                                     </div>
                                     <div class="image-container">
-                                        {{ product_form.image_3}}
+                                        {{product_form.image_3}}
                                     </div>
 
                                 </div>
@@ -119,7 +113,7 @@
                                         <img src="{{ product.image_4.url}}" id="cropped4" width="500px">
                                     </div>
                                     <div class="image-container">
-                                        {{ product_form.image_4}}
+                                        {{product_form.image_4}}
                                     </div>
 
 

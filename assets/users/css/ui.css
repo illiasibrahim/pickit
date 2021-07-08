@@ -12,7 +12,7 @@ INCLUDE STYLES AND COMPONENTS
 ===================== */
 /* ================== HELPERS  =================== */
 :root{
-  --major:#3784cb;
+  --major:#0078a3;
   --cyan-mix:#4ac0d0;
 }
 
@@ -165,6 +165,11 @@ a:hover {
 .padding-y {
   padding-top: 40px;
   padding-bottom: 40px;
+}
+
+.padding-yy{
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .padding-top {
@@ -456,8 +461,8 @@ p:last-child {
   text-decoration: none;
 }
 .nav-item .nav-link:hover {
-  
-  color: #a0a0a0;
+  border-bottom: 1px white solid;
+  color: white;
 }
 
 .widget-header {
@@ -486,7 +491,7 @@ p:last-child {
   right: -10px;
 }
 .widget-header:hover i {
-  color: #3167eb;
+  color: #ffffff;
 }
 .pickit{
   color: white;
@@ -506,6 +511,7 @@ p:last-child {
   color: white;;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  border: 1px solid white;
   width: 5em;
 }
 
@@ -528,6 +534,7 @@ p:last-child {
 .cart-icon i:hover{
   color: white;
   text-decoration: none;
+  border: none;
 }
 
 .cart-icon:hover{
@@ -576,6 +583,22 @@ p:last-child {
 
 .nav-container{
   background: var(--major);
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  margin: 0;
+  z-index: 4;
+}
+.spacing{
+  margin-top: 6em;
+}
+
+.add-address-btn{
+  width: 17em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: .5em;
 }
 
 /* ================== COMPONENTS =================== */
@@ -961,7 +984,8 @@ a[class*=card]:hover .title {
 }
 .card-product-grid .info-wrap {
   overflow: hidden;
-  padding: 18px 20px;
+  padding-left: 16px;
+  padding-bottom: 3px;
 }
 .card-product-grid .bottom-wrap {
   padding: 18px;
@@ -1019,7 +1043,7 @@ a[class*=card]:hover .title {
 
 .offer-flag-div{
   position: absolute;
-  top: 2em;
+  top: 2.1em;
   left: .5em;
   z-index: 1;
 }
@@ -1032,14 +1056,14 @@ a[class*=card]:hover .title {
 }
 
 .offer-tag p{
-  margin: .6em;
+  margin-top: .4em;
   color: white;
   font-weight: bold;
 }
 
 .offer-flag-div img{
-  width: 8em;
-  height: 2.5em;
+  width: 5em;
+  height: 2em;
 }
 
 /* LARGE LIST STYLE PRODUCT ITEM */
@@ -1323,7 +1347,7 @@ a[class*=card]:hover .title {
   margin-top: 7px;
 }
 .tracking-wrap .step.active .icon {
-  background: #3167eb;
+  background: var(--major);
   color: #fff;
 }
 .tracking-wrap .step.active .text {
@@ -1440,8 +1464,8 @@ a[class*=card]:hover .title {
   opacity: 0;
 }
 .btn-check input:checked ~ .btn {
-  border-color: #3167eb;
-  background-color: #3167eb;
+  border-color: var(--major);
+  background-color: var(--major);
   color: #fff;
 }
 .btn-check:hover:not(.active) {
@@ -1460,7 +1484,7 @@ a[class*=card]:hover .title {
   left: 18px;
 }
 .js-check.active {
-  border-color: #3167eb;
+  border-color: var(--major);
 }
 .js-check:hover:not(.active) {
   border-color: #ccc;
@@ -1480,7 +1504,7 @@ a[class*=card]:hover .title {
 /* ================== PAGES =================== */
 /* ================ PAGES HEADER ================== */
 .section-pagetop {
-  padding: 45px 0;
+  padding: 30px 0 0 0;
 }
 
 /* ================== PAGE DETAILS ==================  */
@@ -1554,6 +1578,11 @@ a[class*=card]:hover .title {
 
 /* custom functionalites */
 
+.cartI:hover{
+  background:#0078a3;
+  ;
+  
+}
 .btn-major{
   background: var(--major);
   color: white;
@@ -1578,7 +1607,145 @@ a[class*=card]:hover .title {
   font-weight: bold;
 }
 
+.error {
+  color: red;
+  background-color: #acf;
+}
+.card-image-div  .img-wrap img{
+  margin: 5px;
+  width: 9em;
+  height: 10em;
+  object-fit: contain;
 
+}
+.card-image-div .img-wrap{
+  height: 11em;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: var(--major);
+  border-color: var(--major);
+}
+
+.activate{
+  background-color: var(--major);
+  border-color: var(--major);
+  color: white;
+}
+.activate:hover{
+  color: white;
+}
+
+.btn-outline-major{
+  border-color: var(--major);
+  color: var(--major);
+  background-color: white;
+}
+
+.btn-outline-major:hover{
+  color: white;
+  background: var(--major);
+}
+
+.profile-pic{
+  width: 10em;  
+  border-radius: 50%;
+}
+
+
+/* profile pic overlay */
+.hover-img {
+  color: #fff;
+  display: inline-block;
+  margin: 8px;
+  max-width: 320px;
+  min-width: 240px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.hover-img * {
+  box-sizing: border-box;
+  transition: all 0.45s ease;
+}
+
+.hover-img:before,
+.hover-img:after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: '';
+  transition: all 0.3s ease;
+  z-index: 1;
+  opacity: 0;
+  transform: scaleY(2);
+}
+
+.hover-img img {
+  vertical-align: top;
+  max-width: 100%;
+  backface-visibility: hidden;
+}
+
+.hover-img figcaption {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.1em;
+  opacity: 0;
+  z-index: 2;
+  transition-delay: 0.1s;
+  font-size: 24px;
+  font-family: sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.hover-img img:hover:before,
+.hover-img img:hover:after {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.hover-img:hover > img {
+  opacity: 0.7;
+}
+
+.hover-img:hover figcaption {
+  opacity: 1;
+}
+
+.not-visible{
+  display: none;
+}
+
+.invoice-logo h1{
+  font-size: 40px;
+  font-weight: bolder;
+  color: var(--major);
+}
+
+.razorpay-payment-button{
+  color: white;
+  background: var(--major);
+  border: 1px solid var(--major);
+  height: 36px;
+  width: 100%;
+}
 
 /* Inorder to display different views in nav in collapse and expanded views */
 
@@ -1589,9 +1756,13 @@ a[class*=card]:hover .title {
   .cart-icon{
     display: none;
   }
+
+.badge-pill{
+  display: none;
+}
+
   h1 .pickit {
     font-size: 1em;
-
   }
   .cat-name{
     display: none;
@@ -1603,7 +1774,15 @@ a[class*=card]:hover .title {
   /* .search-nav{
     display: none;
   } */
+  
+  .filter{
+    display: none;
   }
+  .section-pagetop{
+    display: none;
+  }
+}
+
 @media (min-width:992px){
   .cart-text{
     display: none;
@@ -1615,5 +1794,13 @@ a[class*=card]:hover .title {
   .welcome{
     margin: 0 3em;
   }
+  .small-section-pagetop {
+    display: none;
+  }
   
+}
+@media(max-width:1200px){
+  .intro-banner-wrap{
+    margin-top: 15px;
+  }
 }

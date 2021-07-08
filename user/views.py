@@ -1,12 +1,12 @@
 import builtins
-from django.contrib.auth import SESSION_KEY, backends
+from django.contrib.auth import SESSION_KEY, backends, login
 from django.core import paginator
 from django.db.models.query import RawQuerySet
 from django.http.response import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, resolve_url
 from vendor.models import Banner,Category,Poster,Product
-from .models import Account,CartItem, Cart, DeliveryAddress,DefaultAddress, Profile,Order,Payment,OrderProduct,Coupon
-from .forms import AddressForm,ProfileForm
+from .models import Account,CartItem, Cart, DeliveryAddress,DefaultAddress, Profile,Order,Payment,OrderProduct,Coupon, ReviewRating
+from .forms import AddressForm,ProfileForm, ReviewRatingForm
 from django.contrib import messages,auth
 import random
 from django.contrib.auth.models import User
@@ -23,6 +23,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 import razorpay
 from twilio.rest import Client
+from google_currency import convert
 
 # Create your views here.
 
@@ -131,7 +132,10 @@ def sign_in(request):
         if request.method == 'POST':
             phone = request.POST['phone']
             request.session['phone']=phone
-            user = Account.objects.get(phone=phone)
+            try:
+                user = Account.objects.get(phone=phone)
+            except:
+                user = None
             if user is not None:
                 if user.has_access:
                     account_sid = 'ACebf98e0fff644ccb36708cc0984af114'
@@ -145,9 +149,9 @@ def sign_in(request):
 
                     return redirect('verify-signin')
                 else:
-                    messages.info(request,'This account is been blocked')
+                    messages.info(request,'This account is been blocked',extra_tags='blocked')
             else:
-                messages.info(request,'This number is not registerd in pickit !')
+                messages.info(request,'This number is not registerd in pickit !',extra_tags='not-registered')
         return render(request,'user/signin.html')
 
 
@@ -169,8 +173,29 @@ def verify_signin(request):
                            .create(to=f'+91{phone}', code=entered_otp)
 
             if verification_check.status == 'approved':
-                
                 user = auth.authenticate(phone=phone)
+                try:
+                    cart = Cart.objects.get(cart_id = _cart_id(request))
+                    is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                    is_user_cart_exists = CartItem.objects.filter(user=user).exists()
+                    if is_cart_item_exists:
+                        cart_item = CartItem.objects.filter(cart = cart)
+                        if is_user_cart_exists:
+                            for item in cart_item:
+                                is_item_exists = CartItem.objects.filter(user=user,product=item.product).exists()
+                                if is_item_exists:
+                                    user_item = CartItem.objects.get(user=user,product=item.product)
+                                    user_item.quantity += item.quantity
+                                    user_item.save()
+                                else:
+                                    item.user = user
+                                    item.save()
+                        else:
+                            for item in cart_item:
+                                item.user = user 
+                                item.save()
+                except:
+                    pass
                 auth.login(request,user)
                 return redirect('home')
             else:
@@ -188,17 +213,37 @@ def signin_password(request):
             user = auth.authenticate(phone = phone, password = password)
             if user is not None:
                 if user.has_access:
+                    try:
+                        cart = Cart.objects.get(cart_id = _cart_id(request))
+                        is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                        is_user_cart_exists = CartItem.objects.filter(user=user).exists()
+                        if is_cart_item_exists:
+                            cart_item = CartItem.objects.filter(cart = cart)
+                            if is_user_cart_exists:
+                                for item in cart_item:
+                                    is_item_exists = CartItem.objects.filter(user=user,product=item.product).exists()
+                                    if is_item_exists:
+                                        user_item = CartItem.objects.get(user=user,product=item.product)
+                                        user_item.quantity += item.quantity
+                                        user_item.save()
+                                    else:
+                                        item.user = user
+                                        item.save()
+                            else:
+                                for item in cart_item:
+                                    item.user = user 
+                                    item.save()
+                    except:
+                        pass
                     auth.login(request,user)
                     return redirect('home')
                 else:
-                    messages.info(request,'This account is been blocked')
+                    messages.info(request,'This account is been blocked','blocked')
             else:
-                messages.info(request,'Invalid login credentials')
+                messages.info(request,'Invalid login credentials','invalid')
         return redirect('sign-in')
 
 # this is to login a verified user either signed up or signed in
-
-
 def verified_user(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -212,23 +257,11 @@ def verified_user(request):
             try:
                 cart = Cart.objects.get(cart_id = _cart_id(request))
                 is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
-                is_user_cart_exists = CartItem.objects.filter(user=user).exists()
                 if is_cart_item_exists:
                     cart_item = CartItem.objects.filter(cart = cart)
-                    if is_user_cart_exists:
-                        user_cart = CartItem.objects.filter(user=user)
-                        for item in cart_item:
-                            for user_item in user_cart:
-                                if item.product == user_item.product:
-                                    user_item.quantity += item.quantity
-                                    user_item.save()
-                                else:
-                                    item.user = user
-                                    item.save()
-                    else:
-                        for item in cart_item:
-                            item.user = user 
-                            item.save()
+                    for item in cart_item:
+                        item.user = user 
+                        item.save()
             except:
                 pass
             auth.login(request, user)
@@ -257,13 +290,51 @@ def product_detail(request,product_id):
     product = Product.objects.get(id= product_id)
     in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product=product).exists()
     cart_item = CartItem.objects.filter(cart__cart_id=_cart_id(request),product=product)
-
+    try:
+        purchased = OrderProduct.objects.filter(user=request.user,product=product).exists()
+    except:
+        purchased = False
+    reviews = ReviewRating.objects.filter(product=product,status= True)
+    profiles = Profile.objects.all()
+    average_rating = 0
+    for review in reviews:
+        average_rating += review.rating
+    rating_count = reviews.count()
+    if reviews:
+        average_rating = average_rating/rating_count
     context = {
         'product' : product,
         'in_cart': in_cart,
         'cart_item':cart_item,
+        'purchased':purchased,
+        'reviews':reviews,
+        'profiles':profiles,
+        'average_rating':average_rating,
+        'rating_count':rating_count,
     }
     return render(request, 'user/product_detail.html',context)
+
+
+def submit_review(request,product_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':
+        try:
+            review = ReviewRating.objects.get(user=request.user,product__id=product_id)
+            form = ReviewRatingForm(request.POST,instance=review)
+            form.save()
+            if form.is_valid():
+                return redirect(url)
+        except:
+            form = ReviewRatingForm(request.POST)
+            if form.is_valid():
+                data = ReviewRating()
+                data.subject = form.cleaned_data['subject']
+                data.rating = form.cleaned_data['rating']
+                data.review = form.cleaned_data['review']
+                data.product_id = product_id
+                data.user_id = request.user.id
+                data.save()
+                return redirect(url)
 
 
 def search(request):
@@ -307,17 +378,15 @@ def cart(request):
         
     except :
         pass
-    for cart_item in cart_items:
-        print(cart_item.product.selling_price)
-        total += (int(cart_item.product.selling_price()) * int(cart_item.quantity))
-        quantity += cart_item.quantity
+    if cart_items:
+        for cart_item in cart_items:
+            total += (int(cart_item.product.selling_price()) * int(cart_item.quantity))
+            quantity += cart_item.quantity
     context = {
         'total':total,
         'quantity':quantity,
         'cart_items':cart_items,
     }
-    print(cart_items)
-    print(total)
     return render(request,'user/cart.html',context)
 
 
@@ -538,6 +607,11 @@ def place_order(request):
     if order.coupon is not None:
         coupon_discount = int(order.order_total)-int(order.order_discount)-int(order.total)
     total = int(order.total) * 100
+    # to convert currency from usd to inr for paypal transaction
+    converted = convert('inr', 'usd',order.total)
+    json_object = json.loads(converted)
+    converted_amount = json_object['amount']
+    
     context = {
         'order':order,
         'total':total,
@@ -545,6 +619,7 @@ def place_order(request):
         'discount':discount,
         'total_mrp':total_mrp,
         'coupon_discount':coupon_discount,
+        'converted_amount':converted_amount,
     }
     return render(request,'user/place_order.html',context)
 
@@ -558,13 +633,20 @@ def apply_coupon(request):
         coupon = None
     if coupon is not None:
         if coupon.status:
-            order = Order.objects.get(id=order_id)
-            order.coupon = coupon
-            total = ceil((int(order.order_total)-int(order.order_discount))*(1-(int(coupon.discount)/100)))
-            order.total = total
-            order.save()
-            coupon_discount = floor(((int(order.order_total)-int(order.order_discount)))*(int(coupon.discount)/100))
-            res = {'order_total':order.total,'coupon_code':coupon.code,'coupon_discount':coupon_discount}
+            try:
+                previous_order = Order.objects.get(user=request.user,coupon=coupon)
+            except:
+                previous_order = None
+            if previous_order is None:
+                order = Order.objects.get(id=order_id)
+                order.coupon = coupon
+                total = ceil((int(order.order_total)-int(order.order_discount))*(1-(int(coupon.discount)/100)))
+                order.total = total
+                order.save()
+                coupon_discount = floor(((int(order.order_total)-int(order.order_discount)))*(int(coupon.discount)/100))
+                res = {'order_total':order.total,'coupon_code':coupon.code,'coupon_discount':coupon_discount}
+            else:
+                res = {'applied':'applied'}
         else:
             res ={'expired':'expired'}
     else:
@@ -673,6 +755,8 @@ def razor(request):
     
     return redirect('order-complete')
 
+
+@login_required(login_url='sign-in')
 def order_complete(request):
     total_mrp = 0
     total = 0
@@ -694,12 +778,10 @@ def order_complete(request):
         'total':total,
         'discount':discount,
     }
-    del request.session['order_number']
     return render(request,'user/order_complete.html',context)
 
 
 # add addresss
-
 @login_required(login_url='sign-in')
 def add_address(request):
     if request.method == 'POST':

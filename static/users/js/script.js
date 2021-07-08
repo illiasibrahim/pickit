@@ -330,6 +330,9 @@ function applyCoupon(order_id){
             else if('none' in res) {
                 document.getElementById('couponError').innerHTML = "The coupon code you entered does not exist"
             }
+            else if('applied' in res) {
+                document.getElementById('couponError').innerHTML = "You have already used this coupon"
+            }
             else{
             document.getElementById('couponError').innerHTML = ""
             document.getElementById('total').innerHTML = '₹ '+res.order_total+'.00';
@@ -439,3 +442,65 @@ $('#passwordForm').validate({
         error.insertAfter(element);
     }
 });
+
+if (path.includes('product')){
+    var image = document.querySelector('#image')
+
+    image.addEventListener('mousemove', function(e){
+        let width = image.offsetWidth;
+        let height = image.offsetHeight;
+        let mouseX = e.offsetX;
+        let mouseY = e.offsetY;
+
+        let bgPosX = (mouseX / width * 100);
+        let bgPosY = (mouseY / height * 100);
+
+        image.style.backgroundPosition = `${bgPosX}% ${bgPosY}%`;
+
+    });
+
+    image.addEventListener('mouseleave',function(){
+        image.style.backgroundPosition = 'center';
+    });
+
+    var image1 = document.querySelector('#image1');
+    var image2 = document.querySelector('#image2');
+    var image3 = document.querySelector('#image3');
+    var image4 = document.querySelector('#image4');
+
+    image1.addEventListener('mouseover',function(){
+        var imgsrc = image1.src;
+        image.style.backgroundImage = `url(${imgsrc})`;
+        image1.classList.add('img-border')
+        image2.classList.remove('img-border')
+        image3.classList.remove('img-border')
+        image4.classList.remove('img-border')
+    })
+    image2.addEventListener('mouseover',function(){
+        var imgsrc = image2.src;
+        image.style.backgroundImage = `url(${imgsrc})`;
+        image1.classList.remove('img-border')
+        image2.classList.add('img-border')
+        image3.classList.remove('img-border')
+        image4.classList.remove('img-border')
+    })
+    image3.addEventListener('mouseover',function(){
+        var imgsrc = image3.src;
+        image.style.backgroundImage = `url(${imgsrc})`;
+        image1.classList.remove('img-border')
+        image2.classList.remove('img-border')
+        image3.classList.add('img-border')
+        image4.classList.remove('img-border')
+    })
+    image4.addEventListener('mouseover',function(){
+        var imgsrc = image4.src;
+        image.style.backgroundImage = `url(${imgsrc})`;
+        image1.classList.remove('img-border')
+        image2.classList.remove('img-border')
+        image3.classList.remove('img-border')
+        image4.classList.add('img-border')
+    })
+
+
+
+}

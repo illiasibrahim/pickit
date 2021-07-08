@@ -494,9 +494,10 @@ p:last-child {
   color: #ffffff;
 }
 .pickit{
+  margin-right: 2rem;
   color: white;
-  font-size: 3rem;
-  font-weight: bolder;
+  font-size: 2.5rem;
+  font-weight: bold;
   text-decoration: none;
 }
 .pickit:hover{
@@ -1245,8 +1246,8 @@ a[class*=card]:hover .title {
 
 
 .img-block img{
-  width: 5em;
-  height: 5em;
+  width: 4em;
+  height: auto;
   margin: 1em;
 }
 
@@ -1747,9 +1748,46 @@ a[class*=card]:hover .title {
   width: 100%;
 }
 
+/* product detail image borders */
+.img-border{
+  border-bottom: 5px solid var(--major);
+}
+
+.invoice{
+  width: 70%;
+  margin: 5em auto;
+  padding: 0.7em 0;
+  background: #f1f1f1;
+  margin-bottom: 50px;
+}
+
+
 /* Inorder to display different views in nav in collapse and expanded views */
+@media (max-width: 768px){
+  .payment-div{
+    margin-top: 1em;
+  }
+  .pickit{
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}
+
 
 @media (max-width: 991px){
+  .invoice{
+    width: 95%;
+    margin: 2em auto;
+    margin-top: 3em;
+    background: #f1f1f1;
+    margin-top: 5px;
+    margin-bottom: 50px;
+  }
+  .shop-btn{
+    margin-bottom: 2em;
+  }
+  
   .pipe{
     display: none;
   }
@@ -1774,9 +1812,29 @@ a[class*=card]:hover .title {
   /* .search-nav{
     display: none;
   } */
+  
+  .filter{
+    display: none;
   }
+  .section-pagetop{
+    display: none;
+  }
+  .padding-y{
+    padding-top: 0%;
+  }
+  #cartTable thead tr th:nth-child(4),
+  #cartTable tbody tr td:nth-child(4){
+    display: none;
+  }
+  #addRemove{
+    width: 50px;
+  }
+
+}
+
+
 @media (min-width:992px){
-  .cart-text{
+  .filter-text{
     display: none;
   }
   /* .search-toggle{
@@ -1786,6 +1844,10 @@ a[class*=card]:hover .title {
   .welcome{
     margin: 0 3em;
   }
+  .small-section-pagetop {
+    display: none;
+  }
+
   
 }
 @media(max-width:1200px){

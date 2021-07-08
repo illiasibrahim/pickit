@@ -16,7 +16,7 @@
                     <h5 class="card-title">Add product</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" id="productForm" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-4">
@@ -29,12 +29,6 @@
                                 <div class="form-group">
                                     <label>MRP*</label>
                                     {{ product_form.mrp }}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Offer%*</label>
-                                    {{ product_form.offer }}
                                 </div>
                             </div>
                             <div class="col-md-4">

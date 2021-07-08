@@ -7,7 +7,7 @@
 
 	<div class="container">
 		<div class="row">
-			<aside class="col-md-3">
+			<aside class="col-lg-3 filter">
 				<!--   SIDEBAR   -->
 				<ul class="list-group">
 					<a class="list-group-item activate" href=""> Order history </a>
@@ -24,7 +24,7 @@
 				<!--   SIDEBAR .//END   -->
 			</aside>
 
-			<main class="col-md-9">
+			<main class="col-lg-9">
 				{% if not orders %}
 				<div class="d-flex  justify-content-center">
 				<div>
@@ -36,9 +36,13 @@
 				{% for order in orders %}
 				<div class="col-md-12 mb-4">
 					<article class="card">
-						<header class="card-header">
-							<strong class="d-inline-block mr-3">Order ID: {{ order.order_number }}</strong>
-							<span>Order Date: {{ order.created_at }}</span>
+						<header class="card-header d-flex justify-content-between">
+							<div>
+								<strong>ID: {{ order.order_number }}</strong>
+							</div>
+							<div>
+							<p>Date: {{ order.created_at | date:"F d Y" }}</p>
+							</div>
 						</header>
 						<div class="card-body">
 							<div class="row">
@@ -52,7 +56,7 @@
 										<br>phone: {{order.phone}}
 									</p>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-4 payment-div">
 									<h6 class="text-muted">Payment</h6>
 									<span class="">
 										{{ order.payment.payment_method}}
@@ -70,15 +74,19 @@
 								{% for order_product in order_products %}
 								{% if order == order_product.order %}
 								<tr>
-									<td width="65">
-										<img src="{{ order_product.product.image_1.url }}" class="img-xs border">
+									<td width="6%">
+										{% if order_product.product.image_1 %}
+											<img src="{{ order_product.product.image_1.url }}" class="img-xs border ">
+											{% else %}
+											<img src="{% static 'users/images/image-not-found.png' %}" class="img-xs border ">
+											{% endif %}
 									</td>
-									<td>
+									<td width="50%">
 										<p class="title mb-0">{{ order_product.product.product_name }}</p>
 										<var class=" text-muted">x {{ order_product.quantity }}</var>
 									</td>
-									<td> Brand<br> <span class="text-secondary">{{order_product.product.brand.brand_name}} </span></td>
-									<td width="250"> <a href="{% url 'product' order_product.product.id %}" class="btn btn-outline-major">Details</a> </td>
+									<td width="30%"> Brand<br> <span class="text-secondary">{{order_product.product.brand.brand_name}} </span></td>
+									<td> <a href="{% url 'product' order_product.product.id %}" class="btn btn-outline-major">Details</a> </td>
 								</tr>
 								{% endif %}
 								{% endfor %}

@@ -6,6 +6,7 @@ $(document).ready(function () {
     });
   });
 
+
   // admin form validations
   $('#inputForm').validate()
 
@@ -407,10 +408,11 @@ function reject(order_id) {
   })
 }
 
-function openUpdateCategoryOffer(cat_offer, cat_id) {
+function openUpdateCategoryOffer(cat_offer, cat_id, cat_name) {
   document.getElementById('catOffer').value = cat_offer
   console.log(cat_offer)
   document.getElementById('catId').value = cat_id
+  document.getElementById('exampleModalLongTitle').innerHTML = cat_name
   console.log(cat_id)
 }
 
@@ -423,18 +425,20 @@ function updateCategoryOffer() {
     'cat_id': cat_id,
     'cat_offer': cat_offer,
   }
-  $.ajax({
-    url: '/admin/update-category-offer/',
-    type: 'GET',
-    data: dat,
-    dataType: 'json',
-    success: function (res) {
-      document.getElementById(cat_id).innerHTML = res.cat_offer + '%'
-      if (res.cat_offer != 0) {
-        document.getElementById(cat_id + cat_id).classList.remove('not-visible')
+  if (cat_offer < 100) {
+    $.ajax({
+      url: '/admin/update-category-offer/',
+      type: 'GET',
+      data: dat,
+      dataType: 'json',
+      success: function (res) {
+        document.getElementById(cat_id).innerHTML = res.cat_offer + '%'
+        if (res.cat_offer != 0) {
+          document.getElementById(cat_id + cat_id).classList.remove('not-visible')
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 function deleteCategoryOffer(cat_id) {
@@ -455,3 +459,271 @@ function deleteCategoryOffer(cat_id) {
     })
   }
 }
+
+
+function changeCouponStatus(coupon_id) {
+  console.log(coupon_id)
+  dat = {
+    'coupon_id': coupon_id,
+  }
+  $.ajax({
+    url: '/admin/update-coupon-status/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+    }
+  })
+}
+
+
+function openUpdateProductOffer(pro_offer, pro_id, pro_name) {
+  document.getElementById('productOffer').value = pro_offer;
+  document.getElementById('productId').value = pro_id
+  console.log(pro_id)
+  document.getElementById('productTitle').innerHTML = pro_name
+}
+
+function updateProductOffer() {
+  product_offer = document.getElementById('productOffer').value
+  product_id = document.getElementById('productId').value
+  dat = {
+    'product_id': product_id,
+    'product_offer': product_offer,
+  }
+  if (product_offer < 100) {
+    $.ajax({
+      url: '/admin/update-product-offer/',
+      type: 'GET',
+      data: dat,
+      dataType: 'json',
+      success: function (res) {
+        document.getElementById(product_id + product_id + product_id).innerHTML = res.product_offer + '% off'
+      }
+    })
+  }
+}
+
+function exportToLocal() {
+  from_date = document.getElementById('fromDate').value
+  to_date = document.getElementById('toDate').value
+  file_type = document.getElementById('fileType').value
+  if (from_date == "") {
+    from_date = "2021-05-01"
+  }
+  if (to_date == "") {
+    var to_date = new Date();
+    var dd = String(to_date.getDate()).padStart(2, '0');
+    var mm = String(to_date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = to_date.getFullYear();
+
+    to_date = yyyy + '-' + mm + '-' + dd;
+  }
+  console.log(from_date)
+  console.log(to_date)
+  console.log(file_type)
+  dat = {
+    'from_date': from_date,
+    'to_date': to_date,
+    'file_type': file_type,
+  }
+  $.ajax({
+    url: '/admin/export/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+      console.log('success')
+    }
+  })
+}
+
+
+// validate add product form
+$('#productForm').validate({
+  rules: {
+    product_name: {
+      minlength: 3,
+    },
+    quantity: {
+      maxlength: 7,
+    },
+    mrp: {
+      number: true,
+      digits: true,
+    },
+  },
+
+  errorPlacement: function (error, element) {
+    element.css('background', 'none');
+    error.css('background', 'none');
+    error.insertAfter(element);
+  }
+});
+
+
+// validate product offer form
+$('#productOfferForm').validate({
+  rules: {
+    offer: {
+      number: true,
+      digits: true,
+    },
+  },
+
+  errorPlacement: function (error, element) {
+    element.css('background', 'none');
+    error.css('background', 'none');
+    error.insertAfter(element);
+  }
+});
+
+// validate category offer form
+$('#catOfferForm').validate({
+  rules: {
+    offer: {
+      number: true,
+      digits: true,
+    },
+  },
+
+  errorPlacement: function (error, element) {
+    element.css('background', 'none');
+    error.css('background', 'none');
+    error.insertAfter(element);
+  }
+});
+
+
+function changeBannerStatus(banner_id) {
+  dat = {
+    'banner_id': banner_id,
+  }
+  $.ajax({
+    url: '/admin/update-banner-status/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+    }
+  })
+}
+
+function changePosterStatus(poster_id) {
+  dat = {
+    'poster_id': poster_id,
+  }
+  $.ajax({
+    url: '/admin/update-poster-status/',
+    type: 'GET',
+    data: dat,
+    dataType: 'json',
+    success: function (res) {
+    }
+  })
+}
+
+function orderFrom() {
+  from_date = document.getElementById('fromDate').value
+  to_date = document.getElementById('toDate').value
+  document.getElementById('fromError').classList.add('not-visible')
+  if (to_date == "") {
+    var to_date = new Date();
+    var dd = String(to_date.getDate()).padStart(2, '0');
+    var mm = String(to_date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = to_date.getFullYear();
+    to_date = yyyy + '-' + mm + '-' + dd;
+  }
+  if (from_date == "") {
+    from_date = "2021-05-01"
+  }
+  if (from_date > to_date) {
+    document.getElementById('fromDate').value = ""
+    from_date = ""
+    document.getElementById('fromError').classList.remove('not-visible')
+  }
+
+  dat = {
+    'from_date': from_date,
+    'to_date': to_date,
+  }
+  if (from_date != "" && to_date != "") {
+    $.ajax({
+      url: '/admin/filter-order/',
+      type: 'GET',
+      data: dat,
+      dataType: 'json',
+      success: function (res) {
+        window.location.href = '/admin/order/'
+      }
+    })
+  }
+}
+
+
+function orderTo() {
+  from_date = document.getElementById('fromDate').value
+  to_date = document.getElementById('toDate').value
+  document.getElementById('toError').classList.add('not-visible')
+  if (from_date == "") {
+    from_date = "2021-05-01"
+  }
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var yyyy = today.getFullYear();
+  today = yyyy + '-' + mm + '-' + dd;
+  if (to_date == "") {
+    document.getElementById('toError').classList.add('not-visible')
+    to_date = today
+  }
+  else {
+    if (to_date > today) {
+      document.getElementById('toDate').value = today
+      to_date = today
+    }
+    if (to_date < from_date) {
+      document.getElementById('toDate').value = ""
+      to_date = ""
+      document.getElementById('toError').classList.remove('not-visible')
+    }
+  }
+  console.log(from_date)
+  console.log(to_date)
+  dat = {
+    'from_date': from_date,
+    'to_date': to_date,
+  }
+  if (from_date != "" && to_date != "") {
+    $.ajax({
+      url: '/admin/filter-order/',
+      type: 'GET',
+      data: dat,
+      dataType: 'json',
+      success: function (res) {
+        window.location.href = '/admin/order/'
+      }
+    })
+  }
+}
+
+
+  
+function toClick(){
+    var to = document.getElementById('toDate')
+    var from = document.getElementById('fromDate').value
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+    to.setAttribute("max", today);
+    to.setAttribute("min",from)
+  }
+
+function fromClick(){
+  var to = document.getElementById('toDate').value
+  var from = document.getElementById('fromDate')
+  from.setAttribute("max", to);
+}
+

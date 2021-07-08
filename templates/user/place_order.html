@@ -14,9 +14,15 @@
                             {% for cart_item in cart_items %}
                             <div class="col-lg-6">
                                 <figure class="itemside  mb-4">
-                                    <div class="aside"><img src="{{ cart_item.product.image_1.url }}"
-                                            class="border img-sm">
-                                    </div>
+                                    <div class="aside">
+                                        {% if cart_item.product.image_1 %}
+                                        <a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1.url }}" class="img-sm border">
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'product' cart_item.product.id %}" > <img src="{% static 'users/images/image-not-found.png' %}" class="img-sm border">
+                                        </a>
+                                        {% endif %}
+                                </div>
                                     <figcaption class="info">
                                         <p><b>{{ cart_item.product.product_name }}
                                                 {{ cart_item.product.quantity }}</b>
@@ -200,7 +206,7 @@
     }
 
 
-    var amount = '{{order.total}}'
+    var amount = '{{converted_amount}}'
     var url = '{% url "paypal" %}'
     var csrftoken = getCookie('csrftoken');
     var orderID = '{{ order.order_number }}'

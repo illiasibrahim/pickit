@@ -10,6 +10,27 @@
 
     </div> <!-- container //  -->
 </section>
+<section class="container small-section-pagetop ">
+    <div class="d-flex justify-content-between">
+    <div>
+        <h4>Our store</h4>
+    </div>
+    <div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Categories
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url 'store' %}">All products</a>
+                {% for category in categories %}
+                <a class="dropdown-item" href="{% url 'category' category.id %}">{{ category.category_name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</section>
 <!-- ========================= SECTION INTRO END// ========================= -->
 
 <!-- ========================= SECTION CONTENT ========================= -->
@@ -17,7 +38,7 @@
     <div class="container">
 
         <div class="row">
-            <aside class="col-md-3">
+            <aside class="filter col-md-3">
 
                 <div class="card">
                     <article class="filter-group">
@@ -25,7 +46,7 @@
                             <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
                                 <i class="icon-control fa fa-chevron-down text-major"></i>
                                 <h6 class="title text-major">Store</h6>
-                                
+
 
                             </a>
                         </header>
@@ -42,7 +63,7 @@
                             </div> <!-- card-body.// -->
                         </div>
                     </article> <!-- filter-group  .// -->
-                    <article class="filter-group">
+                    <!-- <article class="filter-group">
                         <header class="card-header">
                             <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
                                 <i class="icon-control fa fa-chevron-down text-major"></i>
@@ -55,7 +76,6 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label>Min</label>
-                                        <!-- <input class="form-control" placeholder="$0" type="number"> -->
                                         <select class="mr-2 form-control">
                                             <option value="0">$0</option>
                                             <option value="50">$50</option>
@@ -78,16 +98,16 @@
                                             <option value="2000">$2000+</option>
                                         </select>
                                     </div>
-                                </div> <!-- form-row.// -->
+                                </div> 
                                 <button class="btn btn-block btn-major">Apply</button>
-                            </div><!-- card-body.// -->
+                            </div>
                         </div>
-                    </article> <!-- filter-group .// -->
+                    </article>  -->
 
                 </div> <!-- card.// -->
 
             </aside> <!-- col.// -->
-            <main class="col-md-9">
+            <main class="col-lg-9">
 
                 <header class="border-bottom mb-4 pb-3">
                     <div class="form-inline">
@@ -98,7 +118,7 @@
 
                 <div class="row">
                     {% for product in products %}
-                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 card-outer">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-3 card-outer">
                         {% if product.offer > 0 or product.category.cat_offer > 0 %}
                         <div class="offer-flag-div"><img src="{% static 'users/images/offer-flag.png' %}" alt=""></div>
                         <div class="offer-tag">
@@ -111,15 +131,22 @@
                         {% endif %}
                         <div class="card card-product-grid">
                             <div class="card-image-div">
-                                <a href="{% url 'product' product.id %}" class="img-wrap"> <img
-                                        src="{{ product.image_1.url }}"> </a>
-                            </div>
+								{% if product.image_1 %}
+								<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}">
+								</a>
+								{% else %}
+								<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{% static 'users/images/image-not-found.png' %}">
+								</a>
+								{% endif %}
+							</div>
                             <figcaption class="info-wrap">
                                 <p class="title">{{ product.product_name }} {{ product.quantity }}</p>
                                 <h4 class="price mt-1 text-success">₹ {{ product.selling_price }}.00</h4>
                                 <p class="">₹ <s>{{ product.mrp }}.00</s></p>
                             </figcaption>
-                            <button onclick="addToCart('{{product.id}}')" class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn" id="{{ product.id }}{{ product.id }}">Add to
+                            <button onclick="addToCart('{{product.id}}')"
+                                class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn"
+                                id="{{ product.id }}{{ product.id }}">Add to
                                 cart</button>
                         </div>
                     </div> <!-- col.// -->
@@ -131,7 +158,8 @@
                     {% if products.has_other_pages %}
                     <ul class="pagination">
                         {% if products.has_previous %}
-                        <li class="page-item"><a class="page-link text-major" href="?page={{ products.previous_page_number }}">Previous</a></li>
+                        <li class="page-item"><a class="page-link text-major"
+                                href="?page={{ products.previous_page_number }}">Previous</a></li>
                         {% else %}
                         <li class="page-item disabled"><a class="page-link " href="#">Previous</a></li>
                         {% endif %}
@@ -143,7 +171,8 @@
                         {% endif %}
                         {% endfor %}
                         {% if products.has_next %}
-                        <li class="page-item "><a class="page-link text-major" href="?page={{ products.next_page_number }}">Next</a></li>
+                        <li class="page-item "><a class="page-link text-major"
+                                href="?page={{ products.next_page_number }}">Next</a></li>
                         {% else %}
                         <li class="page-item disabled"><a class="page-link text-major" href="#">Next</a></li>
                         {% endif %}

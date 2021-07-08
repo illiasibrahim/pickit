@@ -9,13 +9,13 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="row">
-                    <div class="card-header col-md-4 ">
+                    <div class="card-header col-md-6 ">
                         <h4 class="card-title ml-3"> Orders</h4>
                     </div>
 
-                    <!-- Uncomment this if you want to add a search bar -->
+                            <!-- Uncomment this if you want to add a search bar -->
 
-                    <!-- <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                     <form class="m-4">
                                         <div class=" no-border row">
                                           <input type="text" value="" class="form-control col-md-4" placeholder="Search...">
@@ -28,16 +28,46 @@
                                       </form>
                                 </div> -->
 
-                    <!-- uncomment this if you want to add a button -->
+                            <!-- uncomment this if you want to add a button -->
 
-                    <!-- <div class="card-header col-md-2">
-                                    <button class="btn btn-warning">Add Category</button>
-                                </div> -->
+
+                    <form class="export-form col-md-5" action="{% url 'export' %}">
+                        <div class="col-md-12 d-flex justify-content-between align-content-center">
+                            <div class="card-header col-md-4 ">
+                                <label for="">From date</label>
+                                <input onclick="fromClick()" onchange="orderFrom()" value="{{f_date}}" class="form-control" type="date" name="from_date" id="fromDate">
+                                <label id="fromError" class="not-visible text-danger">Please select a valid starting date</label>
+                            </div>
+                            <div class="card-header col-md-4 ">
+                                <label for="">To date</label>
+                                <input onclick="toClick()" onchange="orderTo()" class="form-control" value="{{ t_date }}" type="date" name="to_date" id="toDate">
+                                <label id="toError" class="not-visible text-danger">Please select a valid ending date</label>
+                            </div>
+                            <div class="card-header col-md-3 ">
+                                <label for="">File Type</label>
+                                <br>
+                                <select class="form-control" style="width: 100%;" name="file_type" id="fileType">
+                                    <option value="xls">xls</option>
+                                    <option value="pdf">pdf</option>
+                                </select>
+                            </div>
+                            {% if orders %}
+                            <div class="card-header col-md-3">
+                                <button type="submit"  class="btn btn-success mt-4">Export</i></button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+
                 </div>
                 <div class="card-body">
+                    {% if orders %}
                     <div class="table-responsive">
                         <table class="table">
                             <thead class=" text-secondary">
+                                <th>
+                                    No.
+                                </th>
                                 <th>
                                     Order id
                                 </th>
@@ -56,18 +86,21 @@
                                 <th>
                                     Status
                                 </th>
-                                
+
                             </thead>
                             <tbody>
                                 {% for order in orders %}
                                 <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
                                     <td>
                                         {{ order.order_number }}
                                     </td>
                                     <td>
                                         <table>
                                             <tbody>
-                                                {%  for order_product in order_products %}
+                                                {% for order_product in order_products %}
                                                 {% if order == order_product.order %}
                                                 <tr>
                                                     <td>{{ order_product.product.product_name }}</td>
@@ -76,7 +109,7 @@
                                                 </tr>
                                                 {% endif %}
                                                 {% endfor %}
-                                                
+
                                             </tbody>
                                         </table>
                                     </td>
@@ -84,30 +117,33 @@
                                         {{ order.user.first_name}}
                                     </td>
                                     <td>
-                                        {{ order.total}}
+                                        {{ order.total}}0
                                     </td>
                                     <td>
                                         {{ order.created_at }}
                                     </td>
-                                    <td id="{{order.id}}" {% if order.status == "Cancelled" or order.status == 'Rejected' %} class="text-danger" {% endif %}>
+                                    <td id="{{order.id}}" {% if order.status == "Cancelled" or order.status == 'Rejected' %}
+                                        class="text-danger" {% endif %}>
                                         {{ order.status }}
                                     </td>
 
                                     <td class="text-right">
                                         {% if order.status != "Cancelled" %}
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Change status
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                Change status
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <a onclick="approve('{{order.id}}')" class="dropdown-item">Approve</a>
-                                              <a onclick="dispatch('{{order.id}}')" class="dropdown-item">Dispatch</a>
-                                              <a onclick="deliver('{{order.id}}')" class="dropdown-item">Delivered</a>
-                                              <a onclick="reject('{{order.id}}')" class="dropdown-item">Reject</a>
+                                                <a onclick="approve('{{order.id}}')" class="dropdown-item">Approve</a>
+                                                <a onclick="dispatch('{{order.id}}')" class="dropdown-item">Dispatch</a>
+                                                <a onclick="deliver('{{order.id}}')" class="dropdown-item">Delivered</a>
+                                                <a onclick="reject('{{order.id}}')" class="dropdown-item">Reject</a>
                                             </div>
-                                          </div>
-                                          {% endif %}
-                                          
+                                        </div>
+                                        {% endif %}
+
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -119,28 +155,66 @@
                         {% if orders.has_other_pages %}
                         <ul class="pagination">
                             {% if orders.has_previous %}
-                            <li class="page-item"><a class="page-link text-major" href="?page={{ orders.previous_page_number }}">Previous</a></li>
+                            <li class="page-item"><a class="page-link text-major"
+                                    href="?page={{ orders.previous_page_number }}">Previous</a></li>
                             {% else %}
-                            <li class="page-item disabled"><a class="page-link " >Previous</a></li>
+                            <li class="page-item disabled"><a class="page-link ">Previous</a></li>
                             {% endif %}
                             {% for i in orders.paginator.page_range %}
                             {% if orders.number == i %}
-                            <li class="page-item active disabled"><a class="page-link" >{{i}}</a></li>
+                            <li class="page-item active disabled"><a class="page-link">{{i}}</a></li>
                             {% else %}
                             <li class="page-item"><a class="page-link text-major " href="?page={{i}}">{{i}}</a></li>
                             {% endif %}
                             {% endfor %}
                             {% if orders.has_next %}
-                            <li class="page-item "><a class="page-link text-major" href="?page={{ orders.next_page_number }}">Next</a></li>
+                            <li class="page-item "><a class="page-link text-major"
+                                    href="?page={{ orders.next_page_number }}">Next</a></li>
                             {% else %}
-                            <li class="page-item disabled"><a class="page-link text-major" >Next</a></li>
+                            <li class="page-item disabled"><a class="page-link text-major">Next</a></li>
                             {% endif %}
                         </ul>
                         {% endif %}
                     </nav>
+                    {% else %}
+                    <div  class="col-md-12 d-flex align-content-center justify-content-center">
+                        <div class="mt-5 mb-5 ">
+                        <h4 class="text-danger">There are no orders in the selected date range. Please choose some other date.</h4>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
+        <!-- <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Export to local storage</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="">From date</label>
+                        <input class="form-control" type="date" name="" id="fromDate">
+                        <label for="">From date</label>
+                        <input class="form-control" type="date" name="" id="toDate">
+                        <label for="">File Type</label>
+                        <br>
+                        <select style="width: 100%;" name="file" id="fileType">
+                            <option value="xls">xls</option>
+                            <option value="pdf">pdf</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button href="{% url 'export' %}" data-dismiss="modal" class="btn btn-primary">Export</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
     </div>
 
 </div>

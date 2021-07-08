@@ -2,112 +2,300 @@
 {% load static %}
 
 {% block content %}
+<!-- zoom functionality -->
+<style>
+	*{
+		box-sizing: border-box;
+	}
+	.image-wrap{
+		max-width: 640px;
+	}
+	#image{
+		width: 100%;
+		padding-top: calc(100% / (1/1));
+		
+		background-size:100%;
+		background-position:center;
+		background-repeat:no-repeat;
+	}
+	#image:hover{
+		background-size: 175%;
+	}
+</style>
 
 
 
 <section class="section-content padding-y bg">
 	<div class="container">
+		<style>
+			/* rating and review star styling */
 
-		<!-- ============================ COMPONENT 1 ================================= -->
-		<div class="card mt-5 mb-5">
-			<div class="row no-gutters">
-				<aside class="col-md-6 justify-content-between">
-					<article class="gallery-wrap d-flex flex-column justify-content-around">
-						<!-- <div class="img-big-wrap" id="img-big">
-							<a href="#"><img id="big-img" src="{{ product.image_1.url }}"></a>
+			.rate>input {
+				display: none;
+			}
+
+			.rate {
+				display: inline-block;
+				border: 0;
+			}
+
+			.rate>label {
+				float: right;
+			}
+
+			.rate>label:before {
+				display: inline-block;
+				font-size: 1.1rem;
+				font-weight: 900;
+				font-family: 'Font Awesome\ 5 Free';
+				content: "\f005";
+				margin: 0;
+				padding: 0.3rem 0.2rem;
+				cursor: pointer;
+			}
+
+			.rate .half:before {
+				content: "\f089";
+				position: absolute;
+				padding-right: 0;
+
+			}
+
+
+			input:checked~label,
+			label:hover,
+			label:hover~label {
+				color: #ffb503;
+			}
+
+
+			input:checked+label:hover,
+			input:checked~label:hover,
+			input:checked~label:hover~label,
+			label:hover~input:checked~label {
+				color: #cc9000;
+			}
+		</style>
+		<div class="row">
+			<aside class="col-md-6 ">
+				<article class="gallery-wrap">
+					<div class="img-big-wrap" id="image-wrap">
+							{% if product.image_1 %}
+							<div style="background-image: url({{ product.image_1.url }});" id="image"></div>
+							{% else %}
+							<div style="background-image: url({% static 'users/images/image-not-found.png' %});" id="image"></div>
+							{% endif %}
 						</div>
 						<div class=" d-flex justify-content-center">
 							<div class="img-block">
-								<img src="{{ product.image_1.url }}" alt="">
+								{% if product.image_1 %}
+								<img class="img-border" id="image1" src="{{ product.image_1.url }}" alt="">
+								{% else %}
+								<img class="img-border" id="image1" src="{% static 'users/images/image-not-found.png' %}">
+								{% endif %}
+							</div>
+							<div  class="img-block">
+								{% if product.image_2 %}
+								<img id="image2" src="{{ product.image_2.url }}" alt="">
+								{% else %}
+								<img id="image2" src="{% static 'users/images/image-not-found.png' %}">
+								{% endif %}
+							</div>
+							<div  class="img-block">
+								{% if product.image_3 %}
+								<img id="image3" src="{{ product.image_3.url }}" alt="">
+								{% else %}
+								<img id="image3" src="{% static 'users/images/image-not-found.png' %}">
+								{% endif %}
 							</div>
 							<div class="img-block">
-								<img src="{{ product.image_2.url }}" alt="">
+								{% if product.image_4 %}
+								<img id="image4" src="{{ product.image_4.url }}" alt="">
+								{% else %}
+								<img id="image4" src="{% static 'users/images/image-not-found.png' %}">
+								{% endif %}
 							</div>
-							<div class="img-block">
-								<img src="{{ product.image_3.url }}" alt="">
-							</div>
-							<div class="img-block">
-								<img src="{{ product.image_4.url }}" alt="">
-							</div>
+						</div>
+					
+				</article> <!-- gallery-wrap .end// -->
+			</aside>
+			<main class="col-md-6 border-left">
+				<article class="content-body">
 
-						</div> -->
-						<div class="exzoom" id="exzoom">
-							<!-- Images -->
-							<div class="exzoom_img_box">
-								<ul class='exzoom_img_ul'>
-									<li><img src="{{ product.image_1.url }}" /></li>
-									<li><img src="{{ product.image_2.url }}" /></li>
-									<li><img src="{{ product.image_3.url }}" /></li>
-									<li><img src="{{ product.image_4.url }}" /></li>
-								</ul>
-							</div>
-							<!-- <a href="https://www.jqueryscript.net/tags.php?/Thumbnail/">Thumbnail</a> Nav-->
-							<div class="exzoom_nav"></div>
+					<h4 class="title product-title">{{ product.product_name }} {{product.quantity }}</h4>
+					<p style="text-transform: uppercase; color:#3b3b3b;">{{ product.brand.brand_name }}</p>
+
+					<div class="mb-3">
+						<var class="price h4 text-success">₹ {{ product.selling_price }}.00</var>
+						<p>M.R.P <s>{{ product.mrp }}.00</s></p>
+						<p>You save ₹ {{ product.discount_amount }}.00</p>
+					</div>
+					<hr>
+					<input type="hidden" class="product-id" value="{{ product.id }}">
+					<button onclick="addToCart('{{product.id}}')" class="btn  btn-major add-to-cart-btn"
+						id="{{ product.id }}{{ product.id }}"> <span class="text">Add to cart</span>
+						<i class="fas fa-shopping-cart "></i> </button>
+					
+					<hr>
+					<div class="row">
+						<div class="mt-1" style="position: relative;">
+							<span style="position: absolute;">
+								<i  class="fas fa-star"></i>
+								<i  class="fas fa-star"></i>
+								<i  class="fas fa-star"></i>
+								<i  class="fas fa-star"></i>
+								<i  class="fas fa-star"></i>
+							</span>
+							<span style="position: absolute; ">
+								{% if average_rating >= 0.5 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if average_rating < 1 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if average_rating >= 1.5 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if average_rating < 2 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if average_rating >= 2.5 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if average_rating < 3 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if average_rating >= 3.5 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if average_rating < 4 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if average_rating >= 4.5 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if average_rating < 5 %}-half{% endif %}"></i>
+								{% endif %}
+								
+							</span>
 							
 						</div>
-
-
-
-					</article> <!-- gallery-wrap .end// -->
-				</aside>
-				<main class="col-md-6 border-left">
-					<article class="content-body">
-
-						<h4 class="title product-title">{{ product.product_name }} {{product.quantity }}</h4>
-						<p style="text-transform: uppercase; color:#3b3b3b;">{{ product.brand.brand_name }}</p>
-
-						<div class="mb-3">
-							<var class="price h4 text-success">₹ {{ product.selling_price }}.00</var>
-							<p>M.R.P <s>{{ product.mrp }}.00</s></p>
-							<p>You save ₹ {{ product.discount_amount }}.00</p>
+						<br>
+						<span class="mt-4">( {{rating_count}} {% if rating_count == 1 %} review {% else %} reviews {% endif %})</span>
+						<div>
+							<p>{{ product.description }}</p>
 						</div>
-						<hr>
-						<!-- {% if in_cart %}
-						<div class="col">
-							<div class="input-group input-spinner">
-								<div class="input-group-prepend">
-									<button onclick="removeFromCart('{{product.id}}')" class="btn btn-major remove-from-cart-btn" type="button" id="button-minus"> <i
-											class="fa fa-minus"></i> </a>
-								</div>
-								<input type="text" class="form-control" value="{{ cart_item.quantity }}" disabled>
-								<div class="input-group-append">
-									<button onclick="addToCart('{{product.id}}')" class="btn btn-major add-to-cart-btn" type="button" id="button-plus"> <i
-											class="fa fa-plus"></i> </button>
-								</div>
-							</div> 
-						</div> 
+					</div>
+					<div class="row">
+						<div class="item-option-select">
 
-						{% else %} -->
-						<input type="hidden" class="product-id" value="{{ product.id }}">
-						<button onclick="addToCart('{{product.id}}')" class="btn  btn-major add-to-cart-btn" id="{{ product.id }}{{ product.id }}"> <span
-								class="text">Add to cart</span>
-							<i class="fas fa-shopping-cart "></i> </button>
-						<!-- {% endif %} -->
-						<hr>
-						<div class="row">
-							<div class="item-option-select">
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star"></span>
-								<span class="fa fa-star"></span>
-
-								<p>{{ product.description }}</p>
-							</div>
-						</div> <!-- row.// -->
-						<div class="row">
-							<div class="item-option-select">
-
-							</div>
-						</div> <!-- row.// -->
+						</div>
+					</div> <!-- row.// -->
 
 
-					</article> <!-- product-info-aside .// -->
-				</main> <!-- col.// -->
-			</div> <!-- row.// -->
-		</div> <!-- card.// -->
-		<!-- ============================ COMPONENT 1 END .// ================================= -->
+				</article> <!-- product-info-aside .// -->
+			</main> <!-- col.// -->
+		</div> <!-- row.// -->
+		
+		<div class="row mt-5">
+			<div class="col-md-12">
 
+				<form action="{% url 'submit-review' product.id %}" method='POST'>
+					{% csrf_token %}
+					<h5>Submit a review</h5>
+					<div>
+						<p style="margin-bottom: 0;" for="rating">How do you rate this product?</p>
+						<div class="rate">
+							<input type="radio" name="rating" id="rating10" value="5" required><label for="rating10"
+								title="5"></label>
+							<input type="radio" name="rating" id="rating9" value="4.5" required><label for="rating9"
+								title="4.5" class="half"></label>
+							<input type="radio" name="rating" id="rating8" value="4" required><label for="rating8"
+								title="4"></label>
+							<input type="radio" name="rating" id="rating7" value="3.5" required><label for="rating7"
+								title="3.5" class="half"></label>
+							<input type="radio" name="rating" id="rating6" value="3" required><label for="rating6"
+								title="3"></label>
+							<input type="radio" name="rating" id="rating5" value="2.5" required><label for="rating5"
+								title="2.5" class="half"></label>
+							<input type="radio" name="rating" id="rating4" value="2" required><label for="rating4"
+								title="2"></label>
+							<input type="radio" name="rating" id="rating3" value="1.5" required><label for="rating3"
+								title="1.5" class="half"></label>
+							<input type="radio" name="rating" id="rating2" value="1" required><label for="rating2"
+								title="1"></label>
+							<input type="radio" name="rating" id="rating1" value="0.5" required><label for="rating1"
+								title="0.5" class="half"></label>
+						</div>
+
+						<p for=""> Review Title:</p>
+						<input placeholder="Subject" type="text" class="form-control" name="subject" id="">
+						<br>
+						<textarea placeholder="Write your review here" style="width: 100%;" name="review" id=""
+							rows="4"></textarea>
+						<br>
+						{% if request.user.is_authenticated %}
+						{% if purchased %}
+						<input type="submit" class="btn btn-major mt-3 mb-3" name="" id="" value="Submit review">
+						{% else %}
+						<p style="margin-top: 1em;">You must purchase this product before submitting a review</p>
+						{% endif %}
+						{% else %}
+						<p style="margin-top: 1em;">You must be logged in to post a review, <span><a
+									style="text-decoration: none;" class="text-major" href="{% url 'sign-in' %}">Login
+									now</a></span></p>
+						{% endif %}
+					</div>
+
+				</form>
+				
+				{% if reviews %}
+				<header class="section-heading">
+					<h3>Customer Reviews </h3>
+
+				</header>
+				{% for review in reviews %}
+				<article class="box mb-3">
+					<div class="icontext">
+						{% for profile in profiles %}
+						{% if profile.user == review.user %}
+						<img src="{{ profile.display_picture.url }}" class="img-xs icon rounded-circle">
+						{% endif %}
+						{% endfor %}
+						<div class="text">
+							<span class="date text-muted float-md-right">{{ review.updated_at }} </span>
+							<h6 class="mb-1">{{ review.user.first_name}} {{ review.user.last_name }} </h6>
+						</div>
+					</div> <!-- icontext.// -->
+					
+						<div class="mt-1" style="position: relative;">
+							<span style="position: absolute;">
+								<i style="color: #ffb503;" class="far fa-star"></i>
+								<i style="color: #ffb503;" class="far fa-star"></i>
+								<i style="color: #ffb503;" class="far fa-star"></i>
+								<i style="color: #ffb503;" class="far fa-star"></i>
+								<i style="color: #ffb503;" class="far fa-star"></i>
+							</span>
+							<span style="position: absolute;">
+								{% if review.rating > 0 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if review.rating == 0.5 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if review.rating > 1 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if review.rating == 1.5 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if review.rating > 2 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if review.rating == 2.5 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if review.rating > 3 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if review.rating == 3.5 %}-half{% endif %}"></i>
+								{% endif %}
+								{% if review.rating > 4 %}
+								<i style="color: #ffb503;" class="fas fa-star{% if review.rating == 4.5 %}-half{% endif %}"></i>
+								{% endif %}
+								
+							</span>
+						</div>
+						<div class="mt-4 pt-2">
+						<h6 >{{review.subject }}</h6>
+						<p>
+							{{review.review}}
+						</p>
+					
+					</div>
+				</article>
+				{% endfor %}
+				{% endif %}
+
+
+
+			</div> <!-- col.// -->
+		</div> <!-- row.// -->
 
 
 	</div> <!-- container .//  -->

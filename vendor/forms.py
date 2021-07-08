@@ -42,7 +42,6 @@ class ProductForm(forms.ModelForm):
         fields = {
             'product_name',
             'mrp',
-            'offer',
             'quantity',
             'brand',
             'category',
@@ -55,12 +54,53 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(ProductForm,self).__init__(*args,**kwargs)
+        self.fields['mrp'].widget.attrs['name']='mrp'
         self.fields['image_1'].widget.attrs['id'] = 'id_image_1'
         self.fields['image_2'].widget.attrs['id'] = 'id_image_2'
         self.fields['image_3'].widget.attrs['id'] = 'id_image_3'
         self.fields['image_4'].widget.attrs['id'] = 'id_image_4'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
+            self.fields[field].widget.attrs['required'] = 'required'
+
+class EditProductForm(forms.ModelForm):
+    image_1 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    image_2 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    image_3 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    image_4 = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    class Meta:
+        model = Product
+        fields = {
+            'product_name',
+            'mrp',
+            'quantity',
+            'brand',
+            'category',
+            'description',
+            'image_1',
+            'image_2',
+            'image_3',
+            'image_4',
+        }
+
+    def __init__(self,*args,**kwargs):
+        super(EditProductForm,self).__init__(*args,**kwargs)
+        self.fields['mrp'].widget.attrs['name']='mrp'
+        self.fields['image_1'].widget.attrs['id'] = 'id_image_1'
+        self.fields['image_2'].widget.attrs['id'] = 'id_image_2'
+        self.fields['image_3'].widget.attrs['id'] = 'id_image_3'
+        self.fields['image_4'].widget.attrs['id'] = 'id_image_4'
+        self.fields['product_name'].widget.attrs['required'] = 'required'
+        self.fields['mrp'].widget.attrs['required'] = 'required'
+        self.fields['quantity'].widget.attrs['required'] = 'required'
+        self.fields['brand'].widget.attrs['required'] = 'required'
+        self.fields['category'].widget.attrs['required'] = 'required'
+        self.fields['description'].widget.attrs['required'] = 'required'
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+
+
+
 
 class BannerForm(forms.ModelForm):
     banner = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account, Cart, CartItem, Coupon, DefaultAddress, DeliveryAddress, Profile
+from .models import Account, Cart, CartItem, Coupon, DefaultAddress, DeliveryAddress, Profile, ReviewRating
 from .models import Payment,Order,OrderProduct
 from django.utils.html import format_html
 
@@ -32,3 +32,5 @@ admin.site.register(Order)
 admin.site.register(OrderProduct)
 
 admin.site.register(Coupon)
+
+admin.site.register(ReviewRating)

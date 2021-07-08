@@ -4,184 +4,276 @@
 {% block dashboard %} active {% endblock %}
 {% block nav-brand %} Dashboard {% endblock %}
 {% block content %}
-      <!-- End Navbar -->
-      <div class="content">
-        <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="fas fa-rupee-sign text-danger"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Total sales</p>
-                      <p class="card-title">{{sale}}.00<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Updated moments ago
-                </div>
+<!-- End Navbar -->
+<div class="content">
+  <div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fas fa-rupee-sign text-primary"></i>
               </div>
             </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="fas fa-user-friends text-danger"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Total users</p>
-                      <p class="card-title">{{ user_count }}<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Updated moments ago
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="fas fa-cubes text-danger"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Total products</p>
-                      <p class="card-title">{{ product_count }}<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Updated moments ago
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="fas fa-rupee-sign text-danger"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Today's sales</p>
-                      <p class="card-title">{{to_sale}}.00<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Updated moments ago
-                </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Total sales</p>
+                <p class="card-title">{{total_sale}}.00
+                <p>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Users Behavior</h5>
-                <p class="card-category">24 Hours performance</p>
-              </div>
-              <div class="card-body ">
-                <canvas id=chartHours width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-history"></i> Updated 3 minutes ago
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Email Statistics</h5>
-                <p class="card-category">Last Campaign Performance</p>
-              </div>
-              <div class="card-body ">
-                <canvas id="chartEmail"></canvas>
-              </div>
-              <div class="card-footer ">
-                <div class="legend">
-                  <i class="fa fa-circle text-primary"></i> Opened
-                  <i class="fa fa-circle text-warning"></i> Read
-                  <i class="fa fa-circle text-danger"></i> Deleted
-                  <i class="fa fa-circle text-gray"></i> Unopened
-                </div>
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar"></i> Number of emails sent
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">NASDAQ: AAPL</h5>
-                <p class="card-category">Line Chart with Points</p>
-              </div>
-              <div class="card-body">
-                <canvas id="speedChart" width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer">
-                <div class="chart-legend">
-                  <i class="fa fa-circle text-info"></i> Tesla Model S
-                  <i class="fa fa-circle text-warning"></i> BMW 5 Series
-                </div>
-                <hr />
-                <div class="card-stats">
-                  <i class="fa fa-check"></i> Data information certified
-                </div>
-              </div>
-            </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-refresh"></i>
+            Updated moments ago
           </div>
         </div>
       </div>
-      
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fas fa-user-friends text-success"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Total users</p>
+                <p class="card-title">{{ user_count }}
+                <p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-refresh"></i>
+            Updated moments ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fas fa-cubes text-info"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Total products</p>
+                <p class="card-title">{{ product_count }}
+                <p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-refresh"></i>
+            Updated moments ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fas fa-rupee-sign text-danger"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Today's sales</p>
+                <p class="card-title">{{to_sale}}.00
+                <p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-refresh"></i>
+            Updated moments ago
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card ">
+        <div class="card-header ">
+          <h3 class="card-title">
+            Sales per month
+          </h3>
+          <p class="card-category"></p>
+        </div>
+        <div class="card-body ">
+          <canvas id="salesChart" width="400" height="100"></canvas>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-history"></i> Updated : Moments ago
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div style="height:29.8em;" class="card ">
+        <div class="card-header ">
+          <h3 class="card-title">Category sales</h3>
+          <p class="card-category"></p>
+        </div>
+        <div class="card-body ">
+          <canvas id="catChart" width="400" height="200"></canvas>
+        </div>
+        <div class="card-footer ">
+          <div class="legend">
+          </div>
+          <hr>
+          <div class="stats">
+            <i class="fa fa-history"></i> Updated : Moments ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div  class="card card-chart">
+        <div class="card-header">
+          <h3 class="card-title">User registration per month</h3>
+          <p class="card-category"></p>
+        </div>
+        <div class="card-body">
+          <canvas id="usersChart" width="400" height="100"></canvas>
+        </div>
+        <div class="card-footer">
+          <div class="chart-legend">
+          </div>
+          <hr />
+          <div class="card-stats">
+            <i class="fa fa-history"></i> Updated : Moments ago
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+</div>
+</div>
+<script>
+  window.onload = function (Charts) {
+    $.ajax({
+      url: window.location.pathname,
+      success: function (response) {
+        SalesCountChart(response['sales_count'])
+        CategoryCountChart(response['category_count'])
+        UsersCountChart(response['users_count'])
+      },
+      complete: function(){
+        setTimeout(Charts,3000)
+      }
+    })
+  };
+  function SalesCountChart(data) {
+    var ctx = document.getElementById('salesChart')
+    var BarChart1 = new Chart(ctx, {
+      type: 'line',
+      data: data,
+
+      options: {
+        legend: {
+          display: false,
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            }
+          }]
+        },
+      }
+    })
+
+  };
+  function UsersCountChart(data) {
+    var users_chart = document.getElementById('usersChart')
+    var BarChart1 = new Chart(users_chart, {
+      type: 'line',
+      data: data,
+
+      options: {
+        legend: {
+          display: false,
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            }
+          }]
+        },
+      }
+    })
+
+  };
+  function CategoryCountChart(data) {
+    var catChart = document.getElementById('catChart')
+    var piechart1 = new Chart(catChart, {
+      type: 'pie',
+      data: data,
+      options: {
+        legend: {
+          layout: 'vertical',
+          position:'right',
+        },
+        scales: {
+          yAxes: [{
+            gridLines: {
+              drawBorder: false,
+              display: false,
+
+            },
+            ticks: {
+              display: false,
+              beginAtZero: true,
+            }
+          }],
+          xAxes: [{
+            gridLines: {
+              drawBorder: false,
+              display: false
+            },
+            ticks: {
+              display: false,
+              beginAtZero: true,
+            }
+          }],
+        },
+      }
+    })
+  };
+</script>
 
 
 {% endblock %}

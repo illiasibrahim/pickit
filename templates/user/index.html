@@ -95,8 +95,13 @@
 				{% endif %}
 				<div class="card card-product-grid">
 					<div class="card-image-div">
+						{% if product.image_1 %}
 						<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}">
 						</a>
+						{% else %}
+						<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{% static 'users/images/image-not-found.png' %}">
+						</a>
+						{% endif %}
 					</div>
 					<figcaption class="info-wrap">
 						<p class="title">{{ product.product_name }} {{ product.quantity }}</p>

@@ -3,6 +3,11 @@
 {% load static %}
 
 {% block content %}
+<style>
+	.exzoom_zoom_outer{
+		width: 100%;
+	}
+</style>
 <section class="section-content padding-y bg">
 	<div class="container">
 
@@ -17,13 +22,13 @@
 		<div class="row">
 			<aside class="col-lg-9">
 				<div class="card">
-					<table class="table table-borderless table-shopping-cart">
+					<table id="cartTable" class="table table-borderless table-shopping-cart">
 						<thead class="text-muted">
 							<tr class="small text-uppercase">
-								<th scope="col">Product</th>
-								<th scope="col" width="120">Quantity</th>
-								<th scope="col" width="120">Price</th>
-								<th scope="col" class="text-right" width="200"> </th>
+								<th width='30%' scope="col">Product</th>
+								<th scope="col" >Quantity</th>
+								<th scope="col" >Price</th>
+								<th scope="col"> </th>
 							</tr>
 						</thead>
 						<tbody>
@@ -31,7 +36,15 @@
 							<tr id="{{cart_item.product.id}}">
 								<td>
 									<figure class="itemside align-items-center">
-										<div class="aside"><img src="{{ cart_item.product.image_1.url }}" class="img-sm"></div>
+										<div class="aside">
+												{% if cart_item.product.image_1 %}
+												<a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1.url }}" class="img-sm">
+												</a>
+												{% else %}
+												<a href="{% url 'product' cart_item.product.id %}" > <img src="{% static 'users/images/image-not-found.png' %}" class="img-sm">
+												</a>
+												{% endif %}
+										</div>
 										<figcaption class="info">
 											<a href="{% url 'product' cart_item.product.id %}" class="title text-dark">{{ cart_item.product.product_name }}</a>
 											<p class="text-muted small">Quantity: {{ cart_item.product.quantity }}<br> Brand: {{ cart_item.product.brand.brand_name }}</p>
@@ -40,7 +53,6 @@
 								</td>
 								<td>
 									<!-- col.// -->
-									<div class="col">
 										<div class="input-group input-spinner">
 											<div class="input-group-prepend">
 												<button onclick="removeFromCart('{{cart_item.product.id}}','{{cart_item.product.product_name}}')" class="btn btn-light remove-from-cart-btn" type="button" id="button-minus"> <i
@@ -52,7 +64,6 @@
 														class="fa fa-plus"></i> </button>
 											</div>
 										</div> <!-- input-group.// -->
-									</div> <!-- col.// -->
 								</td>
 								<td>
 									<div class="price-wrap">

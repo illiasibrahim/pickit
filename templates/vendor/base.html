@@ -26,6 +26,11 @@
     integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- chart.js -->
+  <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    
+
 
 </head>
 
@@ -95,7 +100,7 @@
           </li>
           <li class="{% block coupon %} {% endblock %}">
             <a href="{% url 'coupon' %}">
-              <i class="fab fa-cuttlefish"></i>
+              <i class="fas fa-tags"></i>
               <p>Offer management</p>
             </a>
           </li>
@@ -159,6 +164,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"
   integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw=="
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+    
 
 <!-- custom jquery -->
 <script src="{% static 'admin/js/main.js' %}" type="text/javascript"></script>

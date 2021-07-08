@@ -5,9 +5,10 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager, User
 from django.db.models.deletion import CASCADE
 from django.db.models.expressions import F
 from django.db.models.fields import EmailField
-from django.db.models.query_utils import check_rel_lookup_compatibility, select_related_descend
+from django.db.models.query_utils import check_rel_lookup_compatibility, select_related_descend, subclasses
 from django.utils.translation import TranslatorCommentWarning
 from vendor.models import Product
+from django.utils import timezone
 
 # Create your models here.
 
@@ -195,6 +196,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_number
+    
+    def order_date(self):
+        return self.created_at.strftime("%Y-%m-%d")
 
 class OrderProduct(models.Model):
     order           = models.ForeignKey(Order,on_delete=models.CASCADE)
@@ -217,3 +221,15 @@ class OrderProduct(models.Model):
         return self.product.mrp * self.quantity
 
 
+class ReviewRating(models.Model):
+    product         = models.ForeignKey(Product,on_delete=models.CASCADE)
+    user            = models.ForeignKey(Account,on_delete=models.CASCADE)
+    subject         = models.CharField(max_length=100,blank=True)
+    review          = models.TextField(max_length=500,blank=True)
+    rating          = models.FloatField()
+    status          = models.BooleanField(default=True)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.product.product_name)+' '+str(self.user.username)

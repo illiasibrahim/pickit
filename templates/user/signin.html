@@ -14,7 +14,9 @@
            <input type="text" class="form-control" placeholder="Phone number" name="phone">
         </div> <!-- form-group// -->
         {% for message in messages %}
+        {% if 'blocked' or 'not-registered' in message.tags %}
         <label class="text-danger" for="message">{{ message }}</label>
+        {% endif %}
         {% endfor %}
         <div class="form-group">
             <button type="submit" class="btn btn-major btn-block m"> Generate OTP  </button>
@@ -31,7 +33,9 @@
             <input type="password" class="form-control" placeholder="Password" name="password" required>
          </div> <!-- form-group// -->
         {% for message in messages %}
+        {% if 'invalid' or 'blocked' in message.tags %}
         <label class="text-danger" for="message">{{ message }}</label>
+        {% endif %}
         {% endfor %}
         <div class="form-group">
             <button type="submit" class="btn btn-major btn-block m"> Login  </button>

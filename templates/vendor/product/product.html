@@ -39,6 +39,9 @@
                                     Name
                                 </th>
                                 <th>
+                                    Image
+                                </th>
+                                <th>
                                     Quantity
                                 </th>
                                 <th>
@@ -65,6 +68,13 @@
                                     </td>
                                     <td>
                                         {{ product.product_name }}
+                                    </td>
+                                    <td>
+                                        {% if product.image_1 %}
+                                        <img style="width: 70px;" src="{{ product.image_1.url }}" alt="">
+                                        {% else %}
+                                        <img style="width: 70px;" src="{% static 'admin/img/image-not-found.png' %}" alt="">
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {{ product.quantity }}

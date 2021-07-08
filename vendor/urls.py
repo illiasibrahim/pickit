@@ -21,16 +21,19 @@ urlpatterns = [
     path('add-product/',views.add_product, name='add-product'),
     path('delete-product/<product_id>',views.delete_product,name='delete-product'),
     path('edit-product/<product_id>',views.edit_product,name='edit-product'),
+    
 
     path('banner/',views.banner_view,name='banner'),
     path('add-banner/',views.add_banner, name='add-banner'),
     path('delete-banner/<banner_id>',views.delete_banner, name='delete-banner'),
     path('edit-banner/<banner_id>', views.edit_banner, name='edit-banner'),
+    path('update-banner-status/',views.update_banner_status,name='update-banner-status'),
 
     path('poster/',views.poster_view, name='poster'),
     path('add-poster/', views.add_poster, name='add-poster'),
     path('delete-poster/<poster_id>', views.delete_poster, name='delete-poster'),
     path('edit-poster/<poster_id>', views.edit_poster, name='edit-poster'),
+    path('update-poster-status/',views.update_poster_status,name='update-poster-status'),
 
     path('user/',views.user_view, name='user'),
     path('delete-user/<user_id>/',views.delete_user,name='delete-user'),
@@ -42,6 +45,8 @@ urlpatterns = [
     path('dispatch/',views.dispatch,name='dispatch'),
     path('deliver/',views.deliver,name='deliver'),
     path('reject/',views.reject,name='reject'),
+    path('export/',views.export,name='export'),
+    path('filter-order/',views.filter_order,name='filter-order'),
 
     path('coupon/',views.coupon_view,name='coupon'),
     path('add-coupon/',views.add_coupon,name='add-coupon'),
@@ -49,7 +54,8 @@ urlpatterns = [
     path('edit-coupon/<coupon_id>/',views.edit_coupon,name='edit-coupon'),
     path('update-category-offer/',views.update_cat_offer,name='update-category-offer'),
     path('delete-category-offer/',views.delete_cat_offer,name='delete-category-offer'),
-
+    path('update-coupon-status/',views.update_coupon_status,name='update-coupon-status'),
+    path('update-product-offer/',views.update_product_offer,name='update-product-offer'),
 
    
 ]

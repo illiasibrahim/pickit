@@ -1,4 +1,3 @@
-
 # from vendor.views import brand_view, category_view
 from django.db import models
 from math import ceil,floor
@@ -25,9 +24,7 @@ class Brand(models.Model):
 class Product(models.Model):
     product_name    = models.CharField(max_length=100, unique=True)
     mrp             = models.IntegerField()
-    offer           = models.IntegerField()
-    discount        = models.IntegerField(default=0)
-    discount_price  = models.IntegerField(default=0)
+    offer           = models.IntegerField(default=0)
     quantity        = models.CharField(max_length=10)
     description     = models.TextField(blank=True)
     brand           = models.ForeignKey(Brand, on_delete=models.CASCADE)
@@ -53,13 +50,14 @@ class Product(models.Model):
             discount_amount = self.mrp * ((int(self.offer)/100))
         return floor(discount_amount)
 
-
     def __str__(self):
         return self.product_name
+    
+    
 
 
 class Banner(models.Model):
-    banner_title    = models.CharField(max_length=50, unique=True)
+    banner_title    = models.CharField(max_length=50)
     banner          = models.ImageField(upload_to = 'photos/banner')
     added_at        = models.DateTimeField(auto_now_add=True)
     status          = models.BooleanField(default=True)
@@ -68,7 +66,7 @@ class Banner(models.Model):
         return self.banner_title
 
 class Poster(models.Model):
-    poster_name     = models.CharField(max_length=40, unique=True)
+    poster_name     = models.CharField(max_length=40)
     poster          = models.ImageField(upload_to = 'photos/poster')
     added_at        = models.DateTimeField(auto_now_add=True)
     status          = models.BooleanField(default=True)

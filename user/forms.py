@@ -1,7 +1,7 @@
 from django import forms
 from django.db import models
 from django.db.models import fields
-from .models import DeliveryAddress, Profile
+from .models import DeliveryAddress, Profile,ReviewRating
 
 class AddressForm(forms.ModelForm):
     class Meta:
@@ -50,3 +50,8 @@ class ProfileForm(forms.ModelForm):
         self.fields['display_picture'].widget.attrs['required'] = 'required'
         self.fields['display_picture'].widget.attrs['id'] = 'id_image'
  
+
+class ReviewRatingForm(forms.ModelForm):
+     class Meta:
+        model = ReviewRating
+        fields = ['subject','review','rating']
