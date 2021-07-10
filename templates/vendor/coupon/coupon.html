@@ -1,6 +1,5 @@
 {% extends 'vendor/base.html' %}
-{% load static %}
-
+{% load static %}   
 {% block coupon %} active {% endblock %}
 {% block nav-brand %} Offer management {% endblock %}
 
@@ -32,10 +31,10 @@
                             onclick="openUpdateCategoryOffer(cat_offer='{{category.cat_offer}}',cat_id ='{{category.id}}',cat_name='{{category.category_name }}')"><i
                                 class="text-success fa fa-edit"></i></a>
                         {% if category.cat_offer != 0 %}
-                        <a id="{{category.id}}{{category.id}}" onclick="deleteCategoryOffer('{{category.id}}')"><i
+                        <a id="catoffer{{category.id}}" onclick="deleteCategoryOffer('{{category.id}}')"><i
                                 class="text-danger fa fa-trash"></i></a>
                         {% endif %}
-                        <a class="not-visible" id="{{category.id}}{{category.id}}"
+                        <a class="not-visible" id="catoffer{{category.id}}"
                             onclick="deleteCategoryOffer('{{category.id}}')"><i class="text-danger fa fa-trash"></i></a>
                     </div>
                 </div>
@@ -138,7 +137,7 @@
                                     
                                 </div>
                                 <div class="align-self-center">
-                                    <h6 id="{{product.id}}{{product.id}}{{product.id}}" class="card-subtitle text-muted">{{product.offer}}% off</h6>
+                                    <h6 id="offer{{product.id}}" class="card-subtitle text-muted">{{product.offer}}% off</h6>
                                     
                                 </div>
                                 <div class="align-self-center">

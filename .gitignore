@@ -1,0 +1,5 @@
+.env
+assets
+env
+media
+db.sqlite3

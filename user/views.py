@@ -1,4 +1,5 @@
 import builtins
+from typing import cast
 from django.contrib.auth import SESSION_KEY, backends, login
 from django.core import paginator
 from django.db.models.query import RawQuerySet
@@ -24,6 +25,7 @@ from django.core.mail import EmailMessage
 import razorpay
 from twilio.rest import Client
 from google_currency import convert
+from decouple import config
 
 # Create your views here.
 
@@ -71,12 +73,12 @@ def sign_up(request):
                 request.session['username'] = username
                 request.session['password'] = password
 
-                account_sid = 'ACebf98e0fff644ccb36708cc0984af114'
-                auth_token = '51506441ae54bd14f1fe080f44bc8f2c'
+                account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
+                auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
                 client = Client(account_sid, auth_token)
 
                 verification = client.verify \
-                     .services('VA9736ae797c849f3dac70a67fec361811') \
+                     .services(config('services', cast=str)) \
                      .verifications \
                      .create(to=f'+91{phone}', channel='sms')
 
@@ -94,12 +96,12 @@ def verify_signup(request):
             phone = request.session['phone']
             entered_otp = str(request.POST['otp'])
 
-            account_sid = 'ACebf98e0fff644ccb36708cc0984af114'
-            auth_token = '51506441ae54bd14f1fe080f44bc8f2c'
+            account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
+            auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
             client = Client(account_sid, auth_token)
 
             verification_check = client.verify \
-                           .services('VA9736ae797c849f3dac70a67fec361811') \
+                           .services(config('services', cast=str)) \
                            .verification_checks \
                            .create(to=f'+91{phone}', code=entered_otp)
 
@@ -138,12 +140,12 @@ def sign_in(request):
                 user = None
             if user is not None:
                 if user.has_access:
-                    account_sid = 'ACebf98e0fff644ccb36708cc0984af114'
-                    auth_token = '51506441ae54bd14f1fe080f44bc8f2c'
+                    account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
+                    auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
                     client = Client(account_sid, auth_token)
 
                     verification = client.verify \
-                     .services('VA9736ae797c849f3dac70a67fec361811') \
+                     .services(config('services', cast=str)) \
                      .verifications \
                      .create(to=f'+91{phone}', channel='sms')
 
@@ -163,12 +165,12 @@ def verify_signin(request):
             entered_otp = str(request.POST['otp'])
             phone = request.session['phone']
 
-            account_sid = 'ACebf98e0fff644ccb36708cc0984af114'
-            auth_token = '51506441ae54bd14f1fe080f44bc8f2c'
+            account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
+            auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
             client = Client(account_sid, auth_token)
 
             verification_check = client.verify \
-                           .services('VA9736ae797c849f3dac70a67fec361811') \
+                           .services(config('services', cast=str)) \
                            .verification_checks \
                            .create(to=f'+91{phone}', code=entered_otp)
 
@@ -589,7 +591,9 @@ def checkout(request):
 @login_required(login_url='sign-in')
 def place_order(request):
     if request.method == 'POST':
-        client = razorpay.Client(auth=("rzp_test_jjMwguJFthIdMi", "EyAVgWSa8ZQQMudKbOJSWUk1"))
+        auth1= config('razorpayauth1',cast=str)
+        auth2= config('razorpayauth2',cast=str)
+        client = razorpay.Client(auth=(auth1, auth2))
         order_amount = 50000
         order_currency = 'INR'
         payment = client.order.create({'amount':order_amount,'currency':'INR'})
@@ -694,8 +698,6 @@ def paypal(request):
 
     order_number = order.order_number
     transID = payment.payment_id
-    print(order_number)
-    print(transID)
     
     data = {
         'order_number' : order.order_number,
@@ -706,13 +708,15 @@ def paypal(request):
 
 
 def razor(request):
+    # auth1= config('razorpayauth1',cast=str)
+    # auth2= config('razorpayauth2',cast=str)
     response = request.POST
     #     params_dict = {
     #     'razorpay_order_id': response['razorpay_order_id'],
     #     'razorpay_payment_id': response['razorpay_payment_id'],
     #     'razorpay_signature': response['razorpay_signature']
     # }
-    #     client = razorpay.Client(auth=("rzp_test_jjMwguJFthIdMi", "EyAVgWSa8ZQQMudKbOJSWUk1"))
+    #     client = razorpay.Client(auth=(auth1, auth2))
 
     #     try:
     #         status = client.utility.verify_payment_signature(params_dict)

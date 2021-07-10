@@ -434,7 +434,7 @@ function updateCategoryOffer() {
       success: function (res) {
         document.getElementById(cat_id).innerHTML = res.cat_offer + '%'
         if (res.cat_offer != 0) {
-          document.getElementById(cat_id + cat_id).classList.remove('not-visible')
+          document.getElementById('catoffer' + cat_id).classList.remove('not-visible')
         }
       }
     })
@@ -454,7 +454,7 @@ function deleteCategoryOffer(cat_id) {
       dataType: 'json',
       success: function (res) {
         document.getElementById(cat_id).innerHTML = '0%'
-        document.getElementById(cat_id + cat_id).classList.add('not-visible')
+        document.getElementById('catoffer' + cat_id).classList.add('not-visible')
       }
     })
   }
@@ -498,7 +498,7 @@ function updateProductOffer() {
       data: dat,
       dataType: 'json',
       success: function (res) {
-        document.getElementById(product_id + product_id + product_id).innerHTML = res.product_offer + '% off'
+        document.getElementById('offer' + product_id).innerHTML = res.product_offer + '% off'
       }
     })
   }
