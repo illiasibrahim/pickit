@@ -73,8 +73,8 @@ def sign_up(request):
                 request.session['username'] = username
                 request.session['password'] = password
 
-                account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
-                auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
+                account_sid = config('account_sid', cast=str)
+                auth_token = config('auth_token', cast=str)
                 client = Client(account_sid, auth_token)
 
                 verification = client.verify \
@@ -96,8 +96,8 @@ def verify_signup(request):
             phone = request.session['phone']
             entered_otp = str(request.POST['otp'])
 
-            account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
-            auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
+            account_sid = config('account_sid', cast=str)
+            auth_token = config('auth_token', cast=str)
             client = Client(account_sid, auth_token)
 
             verification_check = client.verify \
@@ -140,8 +140,8 @@ def sign_in(request):
                 user = None
             if user is not None:
                 if user.has_access:
-                    account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
-                    auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
+                    account_sid = config('account_sid', cast=str)
+                    auth_token = config('auth_token', cast=str)
                     client = Client(account_sid, auth_token)
 
                     verification = client.verify \
@@ -165,8 +165,8 @@ def verify_signin(request):
             entered_otp = str(request.POST['otp'])
             phone = request.session['phone']
 
-            account_sid = config('TWILIO_ACCOUNT_SID', cast=str)
-            auth_token = config('TWILIO_AUTH_TOKEN', cast=str)
+            account_sid = config('account_sid', cast=str)
+            auth_token = config('auth_token', cast=str)
             client = Client(account_sid, auth_token)
 
             verification_check = client.verify \
