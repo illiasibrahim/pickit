@@ -18,7 +18,7 @@
                     <a class="list-group-item activate" style="color: white;">Saved addresses</a>
                 </ul>
                 <br>
-                <a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log
+                <a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log
                         out</span> </a>
                 <!--   SIDEBAR .//END   -->
             </aside>
@@ -29,13 +29,13 @@
                     <div class="col-md-6">
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h5 class="card-title">{{ address.first_name }} {{ address.last_name }}
+                                <h5 style="text-transform: capitalize;" class="card-title">{{ address.first_name }} {{ address.last_name }}
                                     {% if address == default.default_address %}<span class="text-secondary"><i
                                             class="fas fa-check-circle fa-xs text-major"></i> default</span>{% endif %}
                                 </h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ address.email }}</h6>
                                 <p class="card-text">
-                                <p>{{address.street}}
+                                <p style="text-transform: capitalize;">{{address.street}}
                                     <br>{{address.city}}, {{address.state}}
                                     {{address.pin}}
                                     <br>{{address.country}}

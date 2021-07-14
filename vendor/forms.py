@@ -20,6 +20,22 @@ class CategoryForm(forms.ModelForm):
             self.fields[field].widget.attrs['class']='form-control'
 
 
+class EditCategoryForm(forms.ModelForm):
+    cat_image = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
+    class Meta:
+        model = Category
+        fields = [
+            'category_name',
+            'cat_image',
+        ]
+    def __init__(self,*args,**kwargs):
+        super(EditCategoryForm,self).__init__(*args,**kwargs)
+        self.fields['category_name'].widget.attrs['required'] = 'required'
+        self.fields['cat_image'].widget.attrs['id'] = 'id_image'
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+
+
 class BrandForm(forms.ModelForm):
     class Meta:
         model = Brand

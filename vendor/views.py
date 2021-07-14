@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import activate
 from vendor.models import Category, Brand, Product, Banner,Poster
 from .forms import CategoryForm,BrandForm, CouponForm, PosterForm, ProductForm, BannerForm, EditProductForm
+from .forms import EditCategoryForm
 from user.models import Account, Coupon
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required
@@ -232,12 +233,12 @@ def edit_category(request,category_id):
     if request.session.has_key('admin'):
         category = Category.objects.get(id=category_id)
         if request.method == 'POST':
-            category_form = CategoryForm(request.POST,request.FILES, instance=category)
+            category_form = EditCategoryForm(request.POST,request.FILES, instance=category)
             if category_form.is_valid():
                 category_form.save()
                 return redirect('category')
         else:
-            form = CategoryForm(instance=category)
+            form = EditCategoryForm(instance=category)
         
         context ={
             'form' : form,

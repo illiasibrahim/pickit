@@ -23,7 +23,7 @@
 									<figure class="itemside  mb-4">
 										<div class="aside">
 											{% if cart_item.product.image_1 %}
-											<a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1.url }}" class="img-sm border">
+											<a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1_small_thumbnail.url }}" class="img-sm border">
 											</a>
 											{% else %}
 											<a href="{% url 'product' cart_item.product.id %}" > <img src="{% static 'users/images/image-not-found.png' %}" class="img-sm border">
@@ -31,10 +31,10 @@
 											{% endif %}
 									</div>
 										<figcaption class="info">
-											<p><b>{{ cart_item.product.product_name }} 
+											<p style="text-transform: capitalize;"><b>{{ cart_item.product.product_name }} 
 												{{ cart_item.product.quantity }}</b>
 											</p>
-											<p class="text-secondary">Brand: {{ cart_item.product.brand.brand_name }}
+											<p class="text-secondary">Brand: <span style="text-transform: uppercase;"> {{ cart_item.product.brand.brand_name }}</span>
 											</p>
 											<span class="text-muted">{{ cart_item.quantity }}x =
 												₹{{cart_item.sub_total}}.00
@@ -62,7 +62,7 @@
 										 checked 
 										 {% endif %}
 											type="radio" value="{{ delivery_address.id }}">
-										<h6 class="form-check-label">
+										<h6 style="text-transform: capitalize;" class="form-check-label">
 											{{delivery_address.first_name}}, {{delivery_address.city}}
 										</h6>
 									</label>
@@ -72,7 +72,7 @@
 							 show
 							{% endif %}" data-parent="#accordion_pay">
 									<div class="card-body">
-										<p>{{delivery_address.first_name}} {{delivery_address.last_name}}
+										<p style="text-transform: capitalize;">{{delivery_address.first_name}} {{delivery_address.last_name}}
 											<br>{{delivery_address.street}}
 											<br>{{delivery_address.city}}, {{delivery_address.state}}
 											{{delivery_address.pin}}

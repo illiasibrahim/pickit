@@ -14,7 +14,7 @@
            <input type="text" class="form-control" placeholder="Phone number" name="phone">
         </div> <!-- form-group// -->
         {% for message in messages %}
-        {% if 'blocked' or 'not-registered' in message.tags %}
+        {% if 'blocked' or 'not-registered' or 'twilio_sign_in' in message.tags %}
         <label class="text-danger" for="message">{{ message }}</label>
         {% endif %}
         {% endfor %}
@@ -33,7 +33,7 @@
             <input type="password" class="form-control" placeholder="Password" name="password" required>
          </div> <!-- form-group// -->
         {% for message in messages %}
-        {% if 'invalid' or 'blocked' in message.tags %}
+        {% if 'invalid' or 'blocked'  in message.tags %}
         <label class="text-danger" for="message">{{ message }}</label>
         {% endif %}
         {% endfor %}

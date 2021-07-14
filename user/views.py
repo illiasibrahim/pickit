@@ -1,4 +1,3 @@
-import builtins
 from typing import cast
 from django.contrib.auth import SESSION_KEY, backends, login
 from django.core import paginator
@@ -19,13 +18,15 @@ from django.db.models import Q
 from django.contrib import sessions
 import datetime
 import json
-from math import ceil,floor
+from math import ceil,floor, log
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 import razorpay
 from twilio.rest import Client
 from google_currency import convert
 from decouple import config
+from django.views.decorators.cache import never_cache
+import hashlib
 
 # Create your views here.
 
@@ -34,6 +35,7 @@ def _cart_id(request):
     if not cart:
         cart = request.session.create()
     return cart   
+
 
 def home(request):
     banners = Banner.objects.filter(status = True)
@@ -48,7 +50,7 @@ def home(request):
     }
     return render(request,'user/index.html',context)
 
-
+@never_cache
 def sign_up(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -72,22 +74,25 @@ def sign_up(request):
                 request.session['phone'] = phone
                 request.session['username'] = username
                 request.session['password'] = password
+                try:
+                    account_sid = config('account_sid', cast=str)
+                    auth_token = config('auth_token', cast=str)
+                    client = Client(account_sid, auth_token)
 
-                account_sid = config('account_sid', cast=str)
-                auth_token = config('auth_token', cast=str)
-                client = Client(account_sid, auth_token)
-
-                verification = client.verify \
-                     .services(config('services', cast=str)) \
-                     .verifications \
-                     .create(to=f'+91{phone}', channel='sms')
+                    verification = client.verify \
+                        .services(config('services', cast=str)) \
+                        .verifications \
+                        .create(to=f'+91{phone}', channel='sms')
 
 
-                return redirect('verify-signup')
+                    return redirect('verify-signup')
+                except:
+                    messages.info(request,'Some error occured with your mobile number',extra_tags='twilio')
+                    return render(request,'user/register.html')
 
         return render(request,'user/register.html')
 
-
+@never_cache
 def verify_signup(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -123,10 +128,13 @@ def verify_signup(request):
                 return redirect('verified-user')
             else:
                 messages.info(request,'The OTP you entered is wrong please try again',extra_tags='wrong otp')
-        return render(request,'user/verify_otp.html')
+        phone = request.session['phone']
+        context = {'phone':phone,}
+        return render(request,'user/verify_otp.html',context)
 
 # sign-in functions
 
+@never_cache
 def sign_in(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -140,16 +148,19 @@ def sign_in(request):
                 user = None
             if user is not None:
                 if user.has_access:
-                    account_sid = config('account_sid', cast=str)
-                    auth_token = config('auth_token', cast=str)
-                    client = Client(account_sid, auth_token)
+                    try:
+                        account_sid = config('account_sid', cast=str)
+                        auth_token = config('auth_token', cast=str)
+                        client = Client(account_sid, auth_token)
 
-                    verification = client.verify \
-                     .services(config('services', cast=str)) \
-                     .verifications \
-                     .create(to=f'+91{phone}', channel='sms')
+                        verification = client.verify \
+                        .services(config('services', cast=str)) \
+                        .verifications \
+                        .create(to=f'+91{phone}', channel='sms')
 
-                    return redirect('verify-signin')
+                        return redirect('verify-signin')
+                    except:
+                        messages.info(request,'There is something error with your entered mobile numbrer',extra_tags='twilio_sign_in')
                 else:
                     messages.info(request,'This account is been blocked',extra_tags='blocked')
             else:
@@ -157,6 +168,7 @@ def sign_in(request):
         return render(request,'user/signin.html')
 
 
+@never_cache
 def verify_signin(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -205,6 +217,7 @@ def verify_signin(request):
         return render(request,'user/verify_otp.html')
 
 
+@never_cache
 def signin_password(request):
     if request.user.is_authenticated:
         return redirect(home)
@@ -245,6 +258,7 @@ def signin_password(request):
                 messages.info(request,'Invalid login credentials','invalid')
         return redirect('sign-in')
 
+@never_cache
 # this is to login a verified user either signed up or signed in
 def verified_user(request):
     if request.user.is_authenticated:
@@ -271,10 +285,13 @@ def verified_user(request):
         return redirect('sign-in')
 
 
-@login_required(login_url='home')
 def logout(request):
-    auth.logout(request)
-    return redirect('/')
+    if request.user.is_authenticated:
+        auth.logout(request)
+        return redirect('/')
+    else:
+        return redirect('home')
+
 
 
 def store(request):
@@ -317,6 +334,7 @@ def product_detail(request,product_id):
     return render(request, 'user/product_detail.html',context)
 
 
+@login_required(login_url='sign-in')
 def submit_review(request,product_id):
     url = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
@@ -432,7 +450,7 @@ def add_cart(request):
     else:
         cart_items = CartItem.objects.all().filter(cart=cart)
     for cart_ite in cart_items: #inorder to avoid conflict with same name cartite
-        cart_count += int(cart_ite.quantity)
+        cart_count += 1
         cart_value += int(cart_ite.quantity)* int(cart_ite.product.selling_price())
     ind_count = cart_item.quantity
     ind_price = int(cart_item.quantity) * int(cart_item.product.selling_price())
@@ -461,11 +479,12 @@ def remove_cart(request): # to remove single quantity of a purticular cart item
     cart_count = 0
     cart_value = 0
     for cart_ite in cart_items: #inorder to avoid conflict with same name cartitem and cartite
-        cart_count += int(cart_ite.quantity)
+        cart_count += 1
         cart_value += int(cart_ite.quantity)* int(cart_ite.product.selling_price())
     ind_count = cart_item.quantity
     ind_price = int(cart_item.quantity) * int(cart_item.product.selling_price())
     return JsonResponse({'data':cart_count,'ind_count':ind_count,'rem':rem,'ind_price':ind_price,'cart_value':cart_value})
+
 
 def remove_cart_item(request,product_id): # to remove the entire quantity of a purticular cart item
     product = get_object_or_404(Product, id=product_id)
@@ -480,6 +499,7 @@ def remove_cart_item(request,product_id): # to remove the entire quantity of a p
 
 # checkout
 
+@never_cache
 @login_required(login_url='sign-in')
 def checkout(request):
     total = 0
@@ -488,26 +508,22 @@ def checkout(request):
     cart_items = None
     
     cart_items = CartItem.objects.filter(user=request.user,is_active=True)
+    if not cart_items:
+        return redirect('home')
     for cart_item in cart_items:
         total_mrp += (cart_item.product.mrp * cart_item.quantity)
         total += (cart_item.product.selling_price() * cart_item.quantity)
         discount += (cart_item.product.discount_amount() * cart_item.quantity)
     if request.method == 'POST':
-        print('post')
         order = Order()
         selected = request.POST['delivery-address']
-        print(selected)
         if selected == "add_new":
-            print('yes')
             form = AddressForm(request.POST)
-            print('form')
             if form.is_valid():
-                print('valid')
                 try:
                     save_address = request.POST['save_address']
                 except:
                     save_address = None
-                print(save_address)
                 if save_address  == "save":
                     print('save')   
                     address = DeliveryAddress()
@@ -587,25 +603,18 @@ def checkout(request):
 
 
 # place order
-
+@never_cache
 @login_required(login_url='sign-in')
 def place_order(request):
-    if request.method == 'POST':
-        auth1= config('razorpayauth1',cast=str)
-        auth2= config('razorpayauth2',cast=str)
-        client = razorpay.Client(auth=(auth1, auth2))
-        order_amount = 50000
-        order_currency = 'INR'
-        payment = client.order.create({'amount':order_amount,'currency':'INR'})
+    cart_items = CartItem.objects.filter(user=request.user,is_active=True)
     discount = 0
     total_mrp =0
-    cart_items = None
-    order_number = request.session['order_number']
-    
-    cart_items = CartItem.objects.filter(user=request.user,is_active=True)
+    if not cart_items:
+        return redirect('home')
     for cart_item in cart_items:
         total_mrp += (cart_item.product.mrp * cart_item.quantity)
         discount += (cart_item.product.discount_amount() * cart_item.quantity)
+    order_number = request.session['order_number']
     order = Order.objects.get(user= request.user,is_ordered=False,order_number=order_number)
     coupon_discount = '0'
     if order.coupon is not None:
@@ -615,8 +624,14 @@ def place_order(request):
     converted = convert('inr', 'usd',order.total)
     json_object = json.loads(converted)
     converted_amount = json_object['amount']
-    
+    auth1= config('razorpayauth1',cast=str)
+    auth2= config('razorpayauth2',cast=str)
+    client = razorpay.Client(auth=(auth1, auth2))
+    order_amount = int(order.total)*100
+    razorpay_order = client.order.create({'amount':order_amount,'currency':'INR'})
+    request.session['order_id']=razorpay_order['id']
     context = {
+        'order_id':razorpay_order['id'],
         'order':order,
         'total':total,
         'cart_items':cart_items,
@@ -628,6 +643,7 @@ def place_order(request):
     return render(request,'user/place_order.html',context)
 
 
+@login_required(login_url='sign-in')
 def apply_coupon(request):
     order_id = request.GET['order_id']
     coupon_code = request.GET['coupon_code']
@@ -638,7 +654,7 @@ def apply_coupon(request):
     if coupon is not None:
         if coupon.status:
             try:
-                previous_order = Order.objects.get(user=request.user,coupon=coupon)
+                previous_order = Order.objects.get(user=request.user,coupon=coupon,is_ordered=True)
             except:
                 previous_order = None
             if previous_order is None:
@@ -661,10 +677,9 @@ def apply_coupon(request):
 
 
 # payments
-
+login_required(login_url='sign-in')
 def paypal(request):
     body = json.loads(request.body)
-    print(body)
     order = Order.objects.get(user=request.user, is_ordered=False,order_number=body['orderID'])
     payment = Payment(
         user = request.user,
@@ -694,11 +709,6 @@ def paypal(request):
 
     # clear cart
     CartItem.objects.filter(user=request.user).delete()
-
-
-    order_number = order.order_number
-    transID = payment.payment_id
-    
     data = {
         'order_number' : order.order_number,
         'transID' : payment.payment_id
@@ -707,59 +717,72 @@ def paypal(request):
     return JsonResponse(data)
 
 
+
+def encrypt_string(hash_string):
+    sha_signature = \
+        hashlib.sha256(hash_string.encode()).hexdigest()
+    return sha_signature
+
+
+login_required(login_url='sign-in')
 def razor(request):
+    response = request.POST
     # auth1= config('razorpayauth1',cast=str)
     # auth2= config('razorpayauth2',cast=str)
-    response = request.POST
-    #     params_dict = {
-    #     'razorpay_order_id': response['razorpay_order_id'],
-    #     'razorpay_payment_id': response['razorpay_payment_id'],
-    #     'razorpay_signature': response['razorpay_signature']
+    # order_number = request.session['order_number']
+    # order = Order.objects.get(user=request.user, is_ordered=False,order_number=order_number)
+    # order_id = request.session['order_id']
+    # razorpay_payment_id = response['razorpay_payment_id']
+    # secret = auth2
+    # string = order_id + "|" + razorpay_payment_id
+    # print(secret)
+    # generated_signature = encrypt_string(string)
+    # print(generated_signature)
+    # print(response)
+    # params_dict = {
+    # 'razorpay_order_id': response['razorpay_order_id'],
+    # 'razorpay_payment_id': response['razorpay_payment_id'],
+    # 'razorpay_signature': response['razorpay_signature']
     # }
-    #     client = razorpay.Client(auth=(auth1, auth2))
+    # client = razorpay.Client(auth=(auth1, auth2))
 
-    #     try:
-    #         status = client.utility.verify_payment_signature(params_dict)
+    try:
+        order_number = request.session['order_number']
+        order = Order.objects.get(user=request.user, is_ordered=False,order_number=order_number)
+        payment = Payment(
+            user = request.user,
+            payment_id = response['razorpay_payment_id'],
+            payment_method = 'razorpay',
+            amount_paid = order.total,
+            status = 'COMPLETED'
+        )
+        payment.save()
+        order.payment = payment
+        order.is_ordered = True
+        order.save()
 
-    #         return redirect('order-complete')
-    #     except:
-    #         return redirect('order-failed')
-    payment_id = response['razorpay_payment_id']
-    order_number = request.session['order_number']
-    order = Order.objects.get(user=request.user, is_ordered=False,order_number=order_number)
-    payment = Payment(
-        user = request.user,
-        payment_id = response['razorpay_payment_id'],
-        payment_method = 'razorpay',
-        amount_paid = order.total,
-        status = 'COMPLETED'
-    )
-    payment.save()
-    order.payment = payment
-    order.is_ordered = True
-    order.save()
+        # move cart item to order product table
+        cart_item = CartItem.objects.filter(user=request.user)
 
-    # move cart item to order product table
-    cart_item = CartItem.objects.filter(user=request.user)
+        for item in cart_item:
+            order_product = OrderProduct()
+            order_product.order = order
+            order_product.payment = payment
+            order_product.user = request.user
+            order_product.product = item.product
+            order_product.quantity = item.quantity
+            order_product.product_price = item.product.selling_price()
+            order_product.ordered = True
+            order_product.save()
 
-    for item in cart_item:
-        order_product = OrderProduct()
-        order_product.order = order
-        order_product.payment = payment
-        order_product.user = request.user
-        order_product.product = item.product
-        order_product.quantity = item.quantity
-        order_product.product_price = item.product.selling_price()
-        order_product.ordered = True
-        order_product.save()
-
-    # clear cart
-    CartItem.objects.filter(user=request.user).delete()
-
+        # clear cart
+        CartItem.objects.filter(user=request.user).delete()
+        return redirect('order-complete')
+    except:
+        return redirect('order-failed')
     
-    return redirect('order-complete')
 
-
+@never_cache
 @login_required(login_url='sign-in')
 def order_complete(request):
     total_mrp = 0
@@ -775,14 +798,30 @@ def order_complete(request):
         total_mrp += (product.product.mrp * product.quantity)
         total += (product.product.selling_price() * product.quantity)
         discount += (product.product.discount_amount() * product.quantity)
+    coupon_discount = 0
+    if order.coupon is not None:
+        coupon_discount = floor(int(order.coupon.discount)/100 * int(total))
+        discount = int(discount) + int(coupon_discount)
     context = {
         'order':order,
         'products':products,
         'total_mrp':total_mrp,
         'total':total,
         'discount':discount,
+        'coupon_discount':coupon_discount,
     }
+    del request.session['order_number']
     return render(request,'user/order_complete.html',context)
+
+@never_cache
+@login_required(login_url='sign-in')
+def order_failed(request):
+    try:
+        order_number = request.session['order_number']
+    except:
+        return redirect('home')
+    del request.session['order_number']
+    return render(request,'user/order_failed.html')
 
 
 # add addresss
@@ -805,8 +844,7 @@ def add_address(request):
             return redirect('checkout')
     return redirect('checkout')
 
-
-
+@never_cache
 @login_required(login_url='sign-in')       
 def account(request):
     orders = Order.objects.all().filter(user=request.user,is_ordered=True).order_by('-created_at')
@@ -818,6 +856,7 @@ def account(request):
     return render(request,'user/dashboard.html',context)
 
 
+@login_required(login_url='sign-in') 
 def cancel_order(request,order_id):
     try:
         order = Order.objects.get(id=order_id)
@@ -827,7 +866,8 @@ def cancel_order(request,order_id):
     order.save()
     return redirect('account')
 
-
+@never_cache
+@login_required(login_url='sign-in') 
 def profile(request):
     if request.method == 'POST':
         first_name = request.POST['first_name']
@@ -836,7 +876,10 @@ def profile(request):
         email = request.POST['email']
         phone = request.POST['phone']
         user_id = request.user.id
-        user = Account.objects.get(id=user_id)
+        try:
+            user = Account.objects.get(id=user_id)
+        except:
+            return redirect('sign-in')
 
         if username != user.username:
             if Account.objects.filter(username=username).exists():
@@ -872,6 +915,7 @@ def profile(request):
         }
     return render(request,'user/profile.html',context)
 
+@login_required(login_url='sign-in')
 def change_dp(request):
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST,request.FILES)
@@ -886,7 +930,8 @@ def change_dp(request):
             profile.save()
             return redirect('profile')
 
-
+@never_cache
+@login_required(login_url='sign-in')
 def change_password(request):
     if request.method == 'POST':
         current_password = request.POST['current_password']
@@ -900,6 +945,8 @@ def change_password(request):
     return render(request,'user/change_password.html')
 
 
+@never_cache
+@login_required(login_url='sign-in')
 def saved_address(request):
     addresses = DeliveryAddress.objects.all().filter(user=request.user)
     is_default = default = DefaultAddress.objects.filter(user=request.user).exists()
@@ -914,6 +961,7 @@ def saved_address(request):
     }
     return render(request,'user/addresses.html',context)
 
+
 @login_required(login_url='sign-in')
 def new_address(request):
     if request.method == 'POST':
@@ -924,6 +972,7 @@ def new_address(request):
             new_address.save()
             return redirect('saved-address')
     return redirect('saved-address')
+
 
 @login_required(login_url='sign-in')
 def edit_address(request):
@@ -985,11 +1034,12 @@ def edit_address(request):
     }
     return JsonResponse(data)
 
-
+@login_required(login_url='sign-in')
 def delete_address(request,address_id):
     DeliveryAddress.objects.filter(user=request.user,id=address_id).delete()
     return redirect('saved-address')
 
+@login_required(login_url='sign-in')
 def make_default(request,address_id):
     address = DeliveryAddress.objects.get(id=address_id)
     is_default = default = DefaultAddress.objects.filter(user=request.user).exists()

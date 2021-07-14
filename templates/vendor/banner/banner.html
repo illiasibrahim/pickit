@@ -51,7 +51,7 @@
                                     </td>
                                     <td>
                                         <div class="banner-container"> 
-                                        <img src="{{ banner.banner.url }}" alt="" >
+                                        <img src="{{ banner.banner_thumbnail.url }}" alt="" >
                                         </div>
                                     </td>
                                     <td>
@@ -61,7 +61,7 @@
                                         <!-- {{ banner.status|yesno:"Active,Inactive" }} -->
                                         <div class="align-self-center">
                                             <label class="switch">
-                                                <input onchange="changeBannerStatus('{{banner.id}}')" {% if banner.status %}
+                                                <input class="trigger" onchange="changeBannerStatus('{{banner.id}}')" {% if banner.status %}
                                                     checked {% endif %} type="checkbox">
                                                 <span  class="slider round"></span>
                                             </label>

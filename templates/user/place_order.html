@@ -16,18 +16,23 @@
                                 <figure class="itemside  mb-4">
                                     <div class="aside">
                                         {% if cart_item.product.image_1 %}
-                                        <a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1.url }}" class="img-sm border">
+                                        <a href="{% url 'product' cart_item.product.id %}"> <img
+                                                src="{{ cart_item.product.image_1_small_thumbnail.url }}"
+                                                class="img-sm border">
                                         </a>
                                         {% else %}
-                                        <a href="{% url 'product' cart_item.product.id %}" > <img src="{% static 'users/images/image-not-found.png' %}" class="img-sm border">
+                                        <a href="{% url 'product' cart_item.product.id %}"> <img
+                                                src="{% static 'users/images/image-not-found.png' %}"
+                                                class="img-sm border">
                                         </a>
                                         {% endif %}
-                                </div>
+                                    </div>
                                     <figcaption class="info">
-                                        <p><b>{{ cart_item.product.product_name }}
+                                        <p style="text-transform:capitalize;"><b>{{ cart_item.product.product_name }}
                                                 {{ cart_item.product.quantity }}</b>
                                         </p>
-                                        <p class="text-secondary">Brand: {{ cart_item.product.brand.brand_name }}
+                                        <p class="text-secondary">Brand: <span
+                                                style="text-transform:uppercase; font-size:15px">{{cart_item.product.brand.brand_name }}</span>
                                         </p>
                                         <span class="text-muted">{{ cart_item.quantity }}x =
                                             ₹{{cart_item.sub_total}}.00
@@ -44,12 +49,12 @@
                     <div class="card-body">
                         <h4 class="card-title mb-4">Shipping address</h4>
                         <div class="row">
-                            <p>{{order.first_name}} {{order.last_name}}
-                                <br>{{order.street}}
-                                <br>{{order.city}}, {{order.state}}
+                            <p style="text-transform:capitalize;">{{order.first_name}} {{order.last_name}}
+                                <br style="text-transform:capitalize;">{{order.street}}
+                                <br style="text-transform:capitalize;">{{order.city}}, {{order.state}}
                                 {{order.pin}}
                                 <br>{{order.country}}
-                                <br>phone: {{order.phone}}
+                                <br>phone: +91 {{order.phone}}
                             </p>
                         </div> <!-- row.// -->
                     </div> <!-- card-body.// -->
@@ -74,7 +79,7 @@
                         </dl>
                         <dl id="couponDiscount" class="dlist-align ">
                             <dt>Coupon discount:</dt>
-                            <dd id="discount"  class="text-right text-success">₹ {{coupon_discount}}.00</dd>
+                            <dd id="discount" class="text-right text-success">₹ {{coupon_discount}}.00</dd>
                         </dl>
                         {% endif %}
                         <dl id="code" class="dlist-align not-visible ">
@@ -91,19 +96,20 @@
                         </dl>
                         <hr>
                         <h5>Apply coupon</h5>
-							<div class="mb-2 mt-3 d-flex ">
-								<input style="width: 75%; height:2.5em;" type="text" name="coupon" id="couponCode" placeholder="Enter the coupon code here"><button style="width: 25%; height:2.5em;" type="button" onclick="applyCoupon('{{order.id}}')" class="btn btn-major">Apply</button>
-                                
-							</div>
-                            <label class="text-danger" id="couponError" for=""></label>
+                        <div class="mb-2 mt-3 d-flex ">
+                            <input style="width: 75%; height:2.5em;" type="text" name="coupon" id="couponCode"
+                                placeholder="Enter the coupon code here"><button style="width: 25%; height:2.5em;"
+                                type="button" onclick="applyCoupon('{{order.id}}')" class="btn btn-major">Apply</button>
+
+                        </div>
+                        <label class="text-danger" id="couponError" for=""></label>
 
                         <main class="col-md-12">
                             <article class="accordion" id="accordion_pay">
                                 <!-- for loop start -->
                                 <div class="card">
                                     <header class="card-header">
-                                        <label class="form-check" data-toggle="collapse"
-                                            data-target="#payWithPaypal">
+                                        <label class="form-check" data-toggle="collapse" data-target="#payWithPaypal">
                                             Pay with paypal
                                         </label>
                                     </header>
@@ -115,8 +121,7 @@
                                 </div> <!-- card.// -->
                                 <div class="card">
                                     <header class="card-header">
-                                        <label class="form-check" data-toggle="collapse"
-                                            data-target="#payWithRazorpay">
+                                        <label class="form-check" data-toggle="collapse" data-target="#payWithRazorpay">
                                             Pay with razorpay
                                         </label>
                                     </header>
@@ -124,24 +129,20 @@
                                         <div class="card-body">
                                             <form action="{% url 'razor' %}" method="POST">
                                                 {% csrf_token %}
-                                            <script src="https://checkout.razorpay.com/v1/checkout.js" 
-                                            data-key="rzp_test_jjMwguJFthIdMi"
-                                            data-amount="{{ total }}"
-                                            data-currency="INR" 
-                                            data-order_id="{{ payment.id }}"
-                                            data-buttontext="Pay with Razorpay" 
-                                            data-name="Pickit India ltd."
-                                            data-description="Sit back and enjoy the comfort of home"
-                                            data-image="" 
-                                            data-prefill.name="{{ order.first_name }}"
-                                            data-prefill.email="{{order.email }}" 
-                                            data-theme.color="#F37254"></script>
-                                            <input type="hidden" custom="Hidden Element" name="hidden">
+                                                <script src="https://checkout.razorpay.com/v1/checkout.js"
+                                                    data-key="rzp_test_jjMwguJFthIdMi" data-amount="{{ total }}"
+                                                    data-currency="INR" data-order_id="{{ order_id }}"
+                                                    data-buttontext="Pay with Razorpay" data-name="Pickit India ltd."
+                                                    data-description="Sit back and enjoy the comfort of home"
+                                                    data-image="" data-prefill.name="{{ order.first_name }}"
+                                                    data-prefill.email="{{order.email }}" 
+                                                    data-theme.color="#F37254"></script>
                                             </form>
                                         </div> <!-- card body .// -->
                                     </div> <!-- collapse .// -->
+                                    
                                 </div> <!-- card.// -->
-                                <div class="card">
+                                <!-- <div class="card">
                                     <header class="card-header">
                                         <label class="form-check" data-toggle="collapse"
                                             data-target="#cashOnDelivery">
@@ -151,22 +152,22 @@
                                     <div id="cashOnDelivery" class="collapse" data-parent="#accordion_pay">
                                         <div class="card-body">
                                             <button type="submit" class="btn btn-outline-major btn-block"> Cash on delivery </button>
-                                        </div> <!-- card body .// -->
-                                    </div> <!-- collapse .// -->
-                                </div> <!-- card.// -->
-    
+                                        </div> 
+                                    </div> 
+                                </div>  -->
+
                             </article>
                             <!-- accordion end.// -->
-    
+
                         </main>
                         <!-- <p class="text-center mb-3">
                             <img src="{% static 'users/images/payments.png' %}" height="26">
                         </p> -->
-                        
 
 
-                       
-                        
+
+
+
 
 
                     </div> <!-- card-body.// -->
@@ -212,6 +213,7 @@
     var orderID = '{{ order.order_number }}'
     var payment_method = 'Paypal'
     var redirect_url = "{% url 'order-complete' %}"
+    var failed_url = "{% url 'order-failed' %}"
 
     // Render the PayPal button into #paypal-button-container
     paypal.Buttons({
@@ -234,6 +236,9 @@
                     }
                 }]
             });
+        },
+        onCancel: function (data) {
+            window.location.href = failed_url
         },
 
         // Finalize the transaction

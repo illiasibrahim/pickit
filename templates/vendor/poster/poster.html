@@ -51,7 +51,7 @@
                                     </td>
                                     <td>
                                         <div class="poster-container">
-                                        <img src="{{ poster.poster.url }}" alt="">
+                                        <img src="{{ poster.poster_thumbnail.url }}" alt="">
                                         </div>
                                     </td>
                                     <td>
@@ -60,7 +60,7 @@
                                     <td>
                                         <div class="align-self-center">
                                             <label class="switch">
-                                                <input onchange="changePosterStatus('{{poster.id}}')" {% if poster.status %}
+                                                <input class="trigger" onchange="changePosterStatus('{{poster.id}}')" {% if poster.status %}
                                                     checked {% endif %} type="checkbox">
                                                 <span  class="slider round"></span>
                                             </label>

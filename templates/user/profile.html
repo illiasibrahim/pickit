@@ -18,7 +18,7 @@
 					<a class="list-group-item" href="{% url 'saved-address' %}">Saved addresses</a>
 				</ul>
 				<br>
-				<a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log
+				<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log
 						out</span> </a>
 				<!--   SIDEBAR .//END   -->
 			</aside>
@@ -61,7 +61,7 @@
 											</div>
 											<div class="d-flex flex-column align-content-center imagePreview">
 												{% if profile.display_picture %}
-												<img src="{{ profile.display_picture.url }}" id="cropped" alt="">
+												<img src="{{ profile.display_picture_thumbnail.url }}" id="cropped" alt="">
 												{% else %}
 												<img src="{% static 'users/images/profile.jpg' %}" id="cropped" alt="">
 												{% endif %}

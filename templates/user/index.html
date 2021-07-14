@@ -45,7 +45,7 @@
 				<div class="card-body">
 					<a href="{% url 'category' category.id %}"><img src="{{ category.cat_image.url }}"
 							class="card-img-top mx-auto" alt="..."></a>
-					<p class="cat-name">{{ category.category_name }}</p>
+					<p style="text-transform: capitalize;" class="cat-name">{{ category.category_name }}</p>
 				</div>
 
 			</div>
@@ -96,7 +96,7 @@
 				<div class="card card-product-grid">
 					<div class="card-image-div">
 						{% if product.image_1 %}
-						<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1.url }}">
+						<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{{ product.image_1_big_thumbnail.url }}">
 						</a>
 						{% else %}
 						<a href="{% url 'product' product.id %}" class="img-wrap"> <img src="{% static 'users/images/image-not-found.png' %}">
@@ -104,13 +104,13 @@
 						{% endif %}
 					</div>
 					<figcaption class="info-wrap">
-						<p class="title">{{ product.product_name }} {{ product.quantity }}</p>
+						<p style="text-transform: capitalize;" class="title">{{ product.product_name }} {{ product.quantity }}</p>
 						<h4 class="price mt-1 text-success">₹ {{ product.selling_price }}.00</h4>
 
 						<p class="">₹ <s>{{ product.mrp }}.00</s></p>
 					</figcaption>
 					<button onclick="addToCart('{{product.id}}')"
-						class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn" id="{{ product.id }}{{ product.id }}">Add to cart</button>
+						class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn" id="add{{ product.id }}">Add to cart</button>
 				</div>
 			</div> <!-- col.// -->
 			{% endfor %}

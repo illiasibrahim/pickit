@@ -62,7 +62,7 @@ $(document).ready(function () {
             },
             last_name: {
                 required: true,
-                minlength: 2,
+                minlength: 1,
                 maxlength: 15,
             },
             email: {
@@ -77,9 +77,11 @@ $(document).ready(function () {
                 maxlength: 10
             },
             password: {
+                required:true,
                 minlength: 6
             },
             password_confirm: {
+                required:true,
                 minlength: 6,
                 equalTo: "#password"
             },
@@ -140,16 +142,10 @@ $(document).ready(function () {
 
     $('#showAddAddress').click(function () {
         $('#addAddress').toggle()
+        $('#editAddress').hide()
     })
 
-    //   product zoom
 
-
-    $(function () {
-        $("#exzoom").exzoom({
-            "autoPlay": false,
-        });
-    });
 
     $('#loginWithPassword').click(function () {
         $('#signInFormPassword').show()
@@ -168,7 +164,7 @@ $(document).ready(function () {
 
 function addToCart(product_id, product_name = null) {
     // var btn = $('.add-to-cart-btn');
-    var id = product_id+product_id
+    var id = "add"+product_id
     var btn = $('#'+id)
     // var btn = document.getElementById(product_id+product_id)
     var dat = {};
@@ -257,8 +253,12 @@ function removeFromCart(product_id, product_name) {
 }
 }
 
+
+// edit address
+
 function editAddress(address_id){
-    console.log('edit address')
+    $('#editAddress').toggle()
+    $('#addAddress').hide()
     var section = document.getElementById('editAddress')
     var dat = {};
     dat['address_id'] = address_id
@@ -292,6 +292,7 @@ function editAddress(address_id){
 
 // Makes sure that validation is done when a customer chooses a new address and 
 // avoids validation when customer selects an existing addresss
+
 if (path.includes('checkout')){
     var selected = $('input[name="delivery-address"]:checked').val();
     if (selected == 'add_new'){
@@ -313,6 +314,9 @@ if (path.includes('checkout')){
     console.log(selected)
  
 }
+
+
+// apply coupon
 
 function applyCoupon(order_id){
     var coupon_code = $('#couponCode').val()
@@ -348,6 +352,7 @@ function applyCoupon(order_id){
 
 
 // crop profile picture
+
 if (path.includes('profile')) {
     var imageBox = document.getElementById('image-box')
     var confirmBtn = document.getElementById('confirm-btn')
@@ -424,6 +429,7 @@ if (path.includes('profile')) {
 }
 
 // validate password update form
+
 $('#passwordForm').validate({
     rules: {
         new_password: {
@@ -442,6 +448,9 @@ $('#passwordForm').validate({
         error.insertAfter(element);
     }
 });
+
+
+// image zoom
 
 if (path.includes('product')){
     var image = document.querySelector('#image')
@@ -467,9 +476,13 @@ if (path.includes('product')){
     var image2 = document.querySelector('#image2');
     var image3 = document.querySelector('#image3');
     var image4 = document.querySelector('#image4');
+    var image_1_big = document.querySelector('#image1Big')
+    var image_2_big = document.querySelector('#image2Big')
+    var image_3_big = document.querySelector('#image3Big')
+    var image_4_big = document.querySelector('#image4Big')
 
     image1.addEventListener('mouseover',function(){
-        var imgsrc = image1.src;
+        var imgsrc = image_1_big.src;
         image.style.backgroundImage = `url(${imgsrc})`;
         image1.classList.add('img-border')
         image2.classList.remove('img-border')
@@ -477,7 +490,7 @@ if (path.includes('product')){
         image4.classList.remove('img-border')
     })
     image2.addEventListener('mouseover',function(){
-        var imgsrc = image2.src;
+        var imgsrc = image_2_big.src;
         image.style.backgroundImage = `url(${imgsrc})`;
         image1.classList.remove('img-border')
         image2.classList.add('img-border')
@@ -485,7 +498,7 @@ if (path.includes('product')){
         image4.classList.remove('img-border')
     })
     image3.addEventListener('mouseover',function(){
-        var imgsrc = image3.src;
+        var imgsrc = image_3_big.src;
         image.style.backgroundImage = `url(${imgsrc})`;
         image1.classList.remove('img-border')
         image2.classList.remove('img-border')
@@ -493,7 +506,7 @@ if (path.includes('product')){
         image4.classList.remove('img-border')
     })
     image4.addEventListener('mouseover',function(){
-        var imgsrc = image4.src;
+        var imgsrc = image_4_big.src;
         image.style.backgroundImage = `url(${imgsrc})`;
         image1.classList.remove('img-border')
         image2.classList.remove('img-border')

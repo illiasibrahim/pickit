@@ -36,7 +36,7 @@ urlpatterns = [
     path('make-default/<address_id>/',views.make_default,name='make-default'),
     path('new-address/',views.new_address,name='new-address'),
     path('edit-address/',views.edit_address,name='edit-address'),    
-    
+    path('order-failed/',views.order_failed,name='order-failed'),
 
 
     

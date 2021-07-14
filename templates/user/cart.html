@@ -3,11 +3,6 @@
 {% load static %}
 
 {% block content %}
-<style>
-	.exzoom_zoom_outer{
-		width: 100%;
-	}
-</style>
 <section class="section-content padding-y bg">
 	<div class="container">
 
@@ -38,7 +33,7 @@
 									<figure class="itemside align-items-center">
 										<div class="aside">
 												{% if cart_item.product.image_1 %}
-												<a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1.url }}" class="img-sm">
+												<a href="{% url 'product' cart_item.product.id %}" > <img src="{{ cart_item.product.image_1_small_thumbnail.url }}" class="img-sm">
 												</a>
 												{% else %}
 												<a href="{% url 'product' cart_item.product.id %}" > <img src="{% static 'users/images/image-not-found.png' %}" class="img-sm">
@@ -46,8 +41,8 @@
 												{% endif %}
 										</div>
 										<figcaption class="info">
-											<a href="{% url 'product' cart_item.product.id %}" class="title text-dark">{{ cart_item.product.product_name }}</a>
-											<p class="text-muted small">Quantity: {{ cart_item.product.quantity }}<br> Brand: {{ cart_item.product.brand.brand_name }}</p>
+											<a style="text-transform: capitalize;" href="{% url 'product' cart_item.product.id %}" class="title text-dark">{{ cart_item.product.product_name }}</a>
+											<p class="text-muted small">Quantity: {{ cart_item.product.quantity }}<br> Brand: <span style="text-transform: uppercase;">{{ cart_item.product.brand.brand_name }}</span></p>
 										</figcaption>
 									</figure>
 								</td>
@@ -60,7 +55,7 @@
 											</div>
 											<span  id="{{cart_item.product.product_name}}" class="form-control text-center">{{ cart_item.quantity }}</span>
 											<div class="input-group-append">
-												<button onclick="addToCart('{{cart_item.product.id}}','{{cart_item.product.product_name}}')"  class="btn btn-light add-to-cart-btn" id="{{ product.id }}{{ product.id }}" type="button" > <i
+												<button onclick="addToCart('{{cart_item.product.id}}','{{cart_item.product.product_name}}')"  class="btn btn-light add-to-cart-btn" id="add{{ product.id }}" type="button" > <i
 														class="fa fa-plus"></i> </button>
 											</div>
 										</div> <!-- input-group.// -->
@@ -68,7 +63,7 @@
 								<td>
 									<div class="price-wrap">
 										<var id="{{cart_item.product.product_name}}{{cart_item.product.id}}" class="price">₹ {{ cart_item.sub_total }}.00</var>
-										<small class="text-muted">₹ {{ cart_item.product.selling_price}}  each </small>
+										<small class="text-muted">₹ {{ cart_item.product.selling_price}}.00 each </small>
 									</div> <!-- price-wrap .// -->
 								</td>
 								<td class="text-right">

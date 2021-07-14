@@ -589,7 +589,7 @@ p:last-child {
   left: 0%;
   width: 100vw;
   margin: 0;
-  z-index: 4;
+  z-index: 444;
 }
 .spacing{
   margin-top: 6em;
@@ -1759,6 +1759,15 @@ a[class*=card]:hover .title {
   padding: 0.7em 0;
   background: #f1f1f1;
   margin-bottom: 50px;
+}
+
+/* remove transition delay in bootstrap carousal */
+
+.carousel-item {
+  -webkit-transition: 0s !important;
+  -o-transition: 0s !important;
+  transition:  0.3s ease-in-out !important;
+  
 }
 
 

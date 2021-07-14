@@ -19,7 +19,7 @@
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-3">
                                 <label for="">Category name</label>
                                 {{ form.category_name }}
                             </div>
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="update ml-4 mt-3">
-                    <button href="edit-category" type="submit" class="btn btn-primary btn-round">Save
+                    <button id="addBtn" href="edit-category" type="submit" class="btn btn-primary btn-round">Save
                         Changes</button>
                     <a href="{% url 'category' %}" class="btn btn-secondary btn-round">Cancel</a>
                 </div>

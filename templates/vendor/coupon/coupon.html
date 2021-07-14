@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="align-self-center">
                                     <label class="switch">
-                                        <input onchange="changeCouponStatus('{{coupon.id}}')" {% if coupon.status %}
+                                        <input class="trigger" onchange="changeCouponStatus('{{coupon.id}}')" {% if coupon.status %}
                                             checked {% endif %} type="checkbox">
                                         <span class="slider round"></span>
                                     </label>

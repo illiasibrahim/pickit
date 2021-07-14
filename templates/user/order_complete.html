@@ -29,10 +29,10 @@
                             <div class="invoice-from">
                                 <ul class="list-unstyled text-right">
                                     <li><strong>Invoiced To</strong></li>
-                                    <li>{{ order.first_name }} {{ order.last_name }}</li>
-                                    <li>{{order.street}}</li>
-                                    <li>{{order.city}}, {{order.pin}}</li>
-                                    <li>{{order.state}}, {{ order.country }}</li>
+                                    <li style="text-transform: capitalize;">{{ order.first_name }} {{ order.last_name }}</li>
+                                    <li style="text-transform: capitalize;">{{order.street}}</li>
+                                    <li style="text-transform: capitalize;">{{order.city}}, {{order.pin}}</li>
+                                    <li style="text-transform: capitalize;">{{order.state}}, {{ order.country }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                         <tbody>
                                             {% for item in products %}
                                             <tr>
-                                                <td>{{ item.product.product_name }} {{ item.product.quantity }}</td>
+                                                <td style="text-transform: capitalize;">{{ item.product.product_name }} {{ item.product.quantity }}</td>
                                                 <td class="text-center">{{ item.quantity }}</td>
                                                 <td class="text-center">₹ {{ item.sub_total }}0{% if item.product.offer > 0 or item.product.category.cat_offer > 0 %} <s>₹ {{item.total_mrp}}.00{% endif %}</s></td>
                                             </tr>
@@ -72,10 +72,22 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="2" class="text-right">Grand Total:</th>
+                                                <th colspan="2" class="text-right">Total:</th>
                                                 <th class="text-center">₹ {{total}}.00</th>
 
                                             </tr>
+                                            {% if coupon_discount %}
+                                            <tr>
+                                                <th colspan="2" class="text-right">Coupon discount:</th>
+                                                <th class="text-center">₹ {{coupon_discount}}.00</th>
+
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" class="text-right">Grand total:</th>
+                                                <th class="text-center">₹ {{order.total}}0</th>
+
+                                            </tr>
+                                            {% endif %}
                                         </tfoot>
                                     </table>
                                 </div>

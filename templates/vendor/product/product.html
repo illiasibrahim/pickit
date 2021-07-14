@@ -71,7 +71,7 @@
                                     </td>
                                     <td>
                                         {% if product.image_1 %}
-                                        <img style="width: 70px;" src="{{ product.image_1.url }}" alt="">
+                                        <img style="width: 70px;" src="{{ product.image_1_big_thumbnail.url }}" alt="">
                                         {% else %}
                                         <img style="width: 70px;" src="{% static 'admin/img/image-not-found.png' %}" alt="">
                                         {% endif %}

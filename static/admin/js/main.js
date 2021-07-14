@@ -21,7 +21,7 @@ $(document).ready(function () {
     var input = document.getElementById('id_image')
     var cropped = document.getElementById('cropped')
     var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-
+    var addBtn = document.getElementById('addBtn')
     input.addEventListener('change', () => {
       if (!allowedExtensions.exec(input.value)) {
         alert('Invalid file type');
@@ -32,70 +32,80 @@ $(document).ready(function () {
 
       }
       else {
+        var size = parseFloat(input.files[0].size / 1024).toFixed(2);
+        if (size > 200) {
+          alert('Please choose an image of size less than 200KB')
+          input.value = '';
+          cropped.src = '';
+          confirmBtn.classList.add('not-visible')
+          imageBox.classList.add('not-visible')
+        }
+        else {
+          addBtn.setAttribute("disabled", true)
+          confirmBtn.classList.remove('not-visible')
+          imageBox.classList.remove('not-visible')
+          cropped.src = ''
 
-        confirmBtn.classList.remove('not-visible')
-        imageBox.classList.remove('not-visible')
-        cropped.src = ''
+          var img_data = input.files[0]
+          var url = URL.createObjectURL(img_data)
+          imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
 
-        var img_data = input.files[0]
-        var url = URL.createObjectURL(img_data)
-        imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
+          var $image = $('#image');
 
-        var $image = $('#image');
-
-        if (path.includes('add-banner')) {
-          aspect_ratio = 21 / 4;
-        }
-        else if (path.includes('edit-banner')) {
-          aspect_ratio = 21 / 4;
-        }
-        else if (path.includes('add-poster')) {
-          aspect_ratio = 12 / 7;
-        }
-        else if (path.includes('edit-poster')) {
-          aspect_ratio = 12 / 7;
-        }
-        else if (path.includes('add-category')) {
-          aspect_ratio = 1 / 1;
-        }
-        else if (path.includes('edit-category')) {
-          aspect_ratio = 1 / 1;
-        }
-
-        $image.cropper({
-          aspectRatio: aspect_ratio,
-          crop: function (event) {
-            console.log(event.detail.x);
-            console.log(event.detail.y);
-            console.log(event.detail.width);
-            console.log(event.detail.height);
-            console.log(event.detail.rotate);
-            console.log(event.detail.scaleX);
-            console.log(event.detail.scaleY);
+          if (path.includes('add-banner')) {
+            aspect_ratio = 21 / 4;
           }
-        });
+          else if (path.includes('edit-banner')) {
+            aspect_ratio = 21 / 4;
+          }
+          else if (path.includes('add-poster')) {
+            aspect_ratio = 12 / 7;
+          }
+          else if (path.includes('edit-poster')) {
+            aspect_ratio = 12 / 7;
+          }
+          else if (path.includes('add-category')) {
+            aspect_ratio = 1 / 1;
+          }
+          else if (path.includes('edit-category')) {
+            aspect_ratio = 1 / 1;
+          }
 
-        // Get the Cropper.js instance after initialized
-        var cropper = $image.data('cropper');
-
-        confirmBtn.addEventListener('click', () => {
-          cropper.getCroppedCanvas().toBlob((blob) => {
-            let fileInputElement = document.getElementById('id_image');
-            let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
-            let container = new DataTransfer();
-            container.items.add(file);
-            fileInputElement.files = container.files;
-
-            var reader = new FileReader();
-            reader.onload = function (e) {
-              cropped.src = e.target.result
+          $image.cropper({
+            aspectRatio: aspect_ratio,
+            crop: function (event) {
+              console.log(event.detail.x);
+              console.log(event.detail.y);
+              console.log(event.detail.width);
+              console.log(event.detail.height);
+              console.log(event.detail.rotate);
+              console.log(event.detail.scaleX);
+              console.log(event.detail.scaleY);
             }
-            reader.readAsDataURL(input.files[0]);
-            confirmBtn.classList.add('not-visible')
-            imageBox.classList.add('not-visible')
+          });
 
+          // Get the Cropper.js instance after initialized
+          var cropper = $image.data('cropper');
+
+          confirmBtn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+              let fileInputElement = document.getElementById('id_image');
+              let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+              let container = new DataTransfer();
+              container.items.add(file);
+              fileInputElement.files = container.files;
+
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                cropped.src = e.target.result
+              }
+              reader.readAsDataURL(input.files[0]);
+              confirmBtn.classList.add('not-visible')
+              imageBox.classList.add('not-visible')
+              addBtn.removeAttribute('disabled')
+            }, "image/jpeg", 0.75);  // mime=JPEG, quality=0.75 quality control
           })
-        })
+        }
       }
     })
   }
@@ -113,6 +123,7 @@ $(document).ready(function () {
     var cropped3 = document.getElementById('cropped3')
     var cropped4 = document.getElementById('cropped4')
     var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    var addBtn = document.getElementById('addBtn')
 
     input1.addEventListener('change', () => {
       if (!allowedExtensions.exec(input1.value)) {
@@ -124,6 +135,19 @@ $(document).ready(function () {
 
       }
       else {
+        var size = parseFloat(input1.files[0].size / 1024).toFixed(2);
+        if (size > 200) {
+          alert('Please choose an image of size less than 200KB')
+          input1.value = '';
+          cropped1.src = '';
+          confirmBtn.classList.add('not-visible')
+          imageBox.classList.add('not-visible')
+        }
+        else {
+        addBtn.setAttribute('disabled', true)
+        input2.setAttribute('disabled', true)
+        input3.setAttribute('disabled', true)
+        input4.setAttribute('disabled', true)
         confirmBtn.classList.remove('not-visible')
         imageBox.classList.remove('not-visible')
         cropped1.src = ''
@@ -165,186 +189,242 @@ $(document).ready(function () {
             reader.readAsDataURL(input1.files[0]);
             confirmBtn.classList.add('not-visible')
             imageBox.classList.add('not-visible')
+            addBtn.removeAttribute('disabled')
+            input2.removeAttribute('disabled')
+            input3.removeAttribute('disabled')
+            input4.removeAttribute('disabled')
+
+          }, "image/jpeg", 0.75);
+        })
+      }
+    }
+    })
+    // second image
+
+    input2.addEventListener('change', () => {
+      if (!allowedExtensions.exec(input2.value)) {
+        alert('Invalid file type');
+        input2.value = '';
+        cropped2.src = '';
+        confirmBtn.classList.add('not-visible')
+        imageBox.classList.add('not-visible')
+
+      }
+      else {
+        var size = parseFloat(input2.files[0].size / 1024).toFixed(2);
+        if (size > 200) {
+          alert('Please choose an image of size less than 200KB')
+          input2.value = '';
+          cropped2.src = '';
+          confirmBtn.classList.add('not-visible')
+          imageBox.classList.add('not-visible')
+        }
+        else {
+        addBtn.setAttribute('disabled', true)
+        input1.setAttribute('disabled', true)
+        input3.setAttribute('disabled', true)
+        input4.setAttribute('disabled', true)
+        confirmBtn.classList.remove('not-visible')
+        imageBox.classList.remove('not-visible')
+        cropped2.src = ''
+
+        var img_data = input2.files[0]
+        var url = URL.createObjectURL(img_data)
+        imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
+
+        var $image = $('#image');
+
+        $image.cropper({
+          aspectRatio: 1 / 1,
+          crop: function (event) {
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+            console.log(event.detail.rotate);
+            console.log(event.detail.scaleX);
+            console.log(event.detail.scaleY);
+          }
+        });
+
+        // Get the Cropper.js instance after initialized
+        var cropper = $image.data('cropper');
+
+        confirmBtn.addEventListener('click', () => {
+          cropper.getCroppedCanvas().toBlob((blob) => {
+            let fileInputElement = document.getElementById('id_image_2');
+            let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+            let container = new DataTransfer();
+            container.items.add(file);
+            fileInputElement.files = container.files;
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              cropped2.src = e.target.result
+            }
+            reader.readAsDataURL(input2.files[0]);
+            confirmBtn.classList.add('not-visible')
+            imageBox.classList.add('not-visible')
+            addBtn.removeAttribute('disabled')
+            input1.removeAttribute('disabled')
+            input3.removeAttribute('disabled')
+            input4.removeAttribute('disabled')
 
           })
         })
+      }
+    }
+    })
+    // third image 
 
-        // second image
 
-        input2.addEventListener('change', () => {
-          if (!allowedExtensions.exec(input2.value)) {
-            alert('Invalid file type');
-            input2.value = '';
-            cropped2.src = '';
+    input3.addEventListener('change', () => {
+      if (!allowedExtensions.exec(input3.value)) {
+        alert('Invalid file type');
+        input3.value = '';
+        cropped3.src = '';
+        confirmBtn.classList.add('not-visible')
+        imageBox.classList.add('not-visible')
+
+      }
+      else {
+        var size = parseFloat(input3.files[0].size / 1024).toFixed(2);
+        if (size > 200) {
+          alert('Please choose an image of size less than 200KB')
+          input3.value = '';
+          cropped3.src = '';
+          confirmBtn.classList.add('not-visible')
+          imageBox.classList.add('not-visible')
+        }
+        else {
+        addBtn.setAttribute('disabled', true)
+        input1.setAttribute('disabled', true)
+        input2.setAttribute('disabled', true)
+        input4.setAttribute('disabled', true)
+        confirmBtn.classList.remove('not-visible')
+        imageBox.classList.remove('not-visible')
+        cropped3.src = ''
+
+        var img_data = input3.files[0]
+        var url = URL.createObjectURL(img_data)
+        imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
+
+        var $image = $('#image');
+
+        $image.cropper({
+          aspectRatio: 1 / 1,
+          crop: function (event) {
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+            console.log(event.detail.rotate);
+            console.log(event.detail.scaleX);
+            console.log(event.detail.scaleY);
+          }
+        });
+
+        // Get the Cropper.js instance after initialized
+        var cropper = $image.data('cropper');
+
+        confirmBtn.addEventListener('click', () => {
+          cropper.getCroppedCanvas().toBlob((blob) => {
+            let fileInputElement = document.getElementById('id_image_3');
+            let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+            let container = new DataTransfer();
+            container.items.add(file);
+            fileInputElement.files = container.files;
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              cropped3.src = e.target.result
+            }
+            reader.readAsDataURL(input3.files[0]);
             confirmBtn.classList.add('not-visible')
             imageBox.classList.add('not-visible')
-
-          }
-          else {
-            confirmBtn.classList.remove('not-visible')
-            imageBox.classList.remove('not-visible')
-            cropped2.src = ''
-
-            var img_data = input2.files[0]
-            var url = URL.createObjectURL(img_data)
-            imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
-
-            var $image = $('#image');
-
-            $image.cropper({
-              aspectRatio: 1 / 1,
-              crop: function (event) {
-                console.log(event.detail.x);
-                console.log(event.detail.y);
-                console.log(event.detail.width);
-                console.log(event.detail.height);
-                console.log(event.detail.rotate);
-                console.log(event.detail.scaleX);
-                console.log(event.detail.scaleY);
-              }
-            });
-
-            // Get the Cropper.js instance after initialized
-            var cropper = $image.data('cropper');
-
-            confirmBtn.addEventListener('click', () => {
-              cropper.getCroppedCanvas().toBlob((blob) => {
-                let fileInputElement = document.getElementById('id_image_2');
-                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
-                let container = new DataTransfer();
-                container.items.add(file);
-                fileInputElement.files = container.files;
-
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                  cropped2.src = e.target.result
-                }
-                reader.readAsDataURL(input2.files[0]);
-                confirmBtn.classList.add('not-visible')
-                imageBox.classList.add('not-visible')
-
-              })
-            })
-          }
-        })
-        // third image 
-
-
-        input3.addEventListener('change', () => {
-          if (!allowedExtensions.exec(input3.value)) {
-            alert('Invalid file type');
-            input3.value = '';
-            cropped3.src = '';
-            confirmBtn.classList.add('not-visible')
-            imageBox.classList.add('not-visible')
-
-          }
-          else {
-            confirmBtn.classList.remove('not-visible')
-            imageBox.classList.remove('not-visible')
-            cropped3.src = ''
-
-            var img_data = input3.files[0]
-            var url = URL.createObjectURL(img_data)
-            imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
-
-            var $image = $('#image');
-
-            $image.cropper({
-              aspectRatio: 1 / 1,
-              crop: function (event) {
-                console.log(event.detail.x);
-                console.log(event.detail.y);
-                console.log(event.detail.width);
-                console.log(event.detail.height);
-                console.log(event.detail.rotate);
-                console.log(event.detail.scaleX);
-                console.log(event.detail.scaleY);
-              }
-            });
-
-            // Get the Cropper.js instance after initialized
-            var cropper = $image.data('cropper');
-
-            confirmBtn.addEventListener('click', () => {
-              cropper.getCroppedCanvas().toBlob((blob) => {
-                let fileInputElement = document.getElementById('id_image_3');
-                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
-                let container = new DataTransfer();
-                container.items.add(file);
-                fileInputElement.files = container.files;
-
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                  cropped3.src = e.target.result
-                }
-                reader.readAsDataURL(input3.files[0]);
-                confirmBtn.classList.add('not-visible')
-                imageBox.classList.add('not-visible')
-
-              })
-            })
-          }
-        })
-        // fourth image
-
-        input4.addEventListener('change', () => {
-          if (!allowedExtensions.exec(input4.value)) {
-            alert('Invalid file type');
-            input4.value = '';
-            cropped4.src = '';
-            confirmBtn.classList.add('not-visible')
-            imageBox.classList.add('not-visible')
-
-          }
-          else {
-            confirmBtn.classList.remove('not-visible')
-            imageBox.classList.remove('not-visible')
-            cropped4.src = ''
-
-            var img_data = input4.files[0]
-            var url = URL.createObjectURL(img_data)
-            imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
-
-            var $image = $('#image');
-
-            $image.cropper({
-              aspectRatio: 1 / 1,
-              crop: function (event) {
-                console.log(event.detail.x);
-                console.log(event.detail.y);
-                console.log(event.detail.width);
-                console.log(event.detail.height);
-                console.log(event.detail.rotate);
-                console.log(event.detail.scaleX);
-                console.log(event.detail.scaleY);
-              }
-            });
-
-            // Get the Cropper.js instance after initialized
-            var cropper = $image.data('cropper');
-
-            confirmBtn.addEventListener('click', () => {
-              cropper.getCroppedCanvas().toBlob((blob) => {
-                let fileInputElement = document.getElementById('id_image_4');
-                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
-                let container = new DataTransfer();
-                container.items.add(file);
-                fileInputElement.files = container.files;
-
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                  cropped4.src = e.target.result
-                }
-                reader.readAsDataURL(input4.files[0]);
-                confirmBtn.classList.add('not-visible')
-                imageBox.classList.add('not-visible')
-
-              })
-            })
-          }
+            addBtn.removeAttribute('disabled')
+            input1.removeAttribute('disabled')
+            input2.removeAttribute('disabled')
+            input4.removeAttribute('disabled')
+          }, "image/jpeg", 0.75);
         })
       }
+    }
+    })
+    // fourth image
+
+    input4.addEventListener('change', () => {
+      if (!allowedExtensions.exec(input4.value)) {
+        alert('Invalid file type');
+        input4.value = '';
+        cropped4.src = '';
+        confirmBtn.classList.add('not-visible')
+        imageBox.classList.add('not-visible')
+
+      }
+      else {
+        var size = parseFloat(input4.files[0].size / 1024).toFixed(2);
+        if (size > 200) {
+          alert('Please choose an image of size less than 200KB')
+          input4.value = '';
+          cropped4.src = '';
+          confirmBtn.classList.add('not-visible')
+          imageBox.classList.add('not-visible')
+        }
+        else {
+        addBtn.setAttribute('disabled', true)
+        input1.setAttribute('disabled', true)
+        input2.setAttribute('disabled', true)
+        input3.setAttribute('disabled', true)
+        confirmBtn.classList.remove('not-visible')
+        imageBox.classList.remove('not-visible')
+        cropped4.src = ''
+
+        var img_data = input4.files[0]
+        var url = URL.createObjectURL(img_data)
+        imageBox.innerHTML = `<img src="${url}" id="image" width="500px">`
+
+        var $image = $('#image');
+
+        $image.cropper({
+          aspectRatio: 1 / 1,
+          crop: function (event) {
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+            console.log(event.detail.rotate);
+            console.log(event.detail.scaleX);
+            console.log(event.detail.scaleY);
+          }
+        });
+
+        // Get the Cropper.js instance after initialized
+        var cropper = $image.data('cropper');
+
+        confirmBtn.addEventListener('click', () => {
+          cropper.getCroppedCanvas().toBlob((blob) => {
+            let fileInputElement = document.getElementById('id_image_4');
+            let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+            let container = new DataTransfer();
+            container.items.add(file);
+            fileInputElement.files = container.files;
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              cropped4.src = e.target.result
+            }
+            reader.readAsDataURL(input4.files[0]);
+            confirmBtn.classList.add('not-visible')
+            imageBox.classList.add('not-visible')
+            addBtn.removeAttribute('disabled')
+            input1.removeAttribute('disabled')
+            input2.removeAttribute('disabled')
+            input3.removeAttribute('disabled')
+          }, "image/jpeg", 0.75);
+        })
+      }
+    }
     })
   }
 
@@ -471,7 +551,11 @@ function changeCouponStatus(coupon_id) {
     type: 'GET',
     data: dat,
     dataType: 'json',
+    beforeSend: function () {
+      document.querySelectorAll(".trigger").forEach(e => e.disabled = true)
+    },
     success: function (res) {
+      document.querySelectorAll(".trigger").forEach(e => e.disabled = false)
     }
   })
 }
@@ -568,6 +652,7 @@ $('#productOfferForm').validate({
     offer: {
       number: true,
       digits: true,
+      maxlength: 2,
     },
   },
 
@@ -584,6 +669,7 @@ $('#catOfferForm').validate({
     offer: {
       number: true,
       digits: true,
+      maxlength: 2,
     },
   },
 
@@ -595,6 +681,23 @@ $('#catOfferForm').validate({
 });
 
 
+// validate category offer form
+$('#couponForm').validate({
+  rules: {
+    discount: {
+      number: true,
+      digits: true,
+      maxlength: 2,
+    },
+  },
+
+  errorPlacement: function (error, element) {
+    element.css('background', 'none');
+    error.css('background', 'none');
+    error.insertAfter(element);
+  }
+});
+
 function changeBannerStatus(banner_id) {
   dat = {
     'banner_id': banner_id,
@@ -604,7 +707,11 @@ function changeBannerStatus(banner_id) {
     type: 'GET',
     data: dat,
     dataType: 'json',
+    beforeSend: function () {
+      document.querySelectorAll(".trigger").forEach(e => e.disabled = true)
+    },
     success: function (res) {
+      document.querySelectorAll(".trigger").forEach(e => e.disabled = false)
     }
   })
 }
@@ -618,7 +725,11 @@ function changePosterStatus(poster_id) {
     type: 'GET',
     data: dat,
     dataType: 'json',
+    beforeSend: function () {
+      document.querySelectorAll(".trigger").forEach(e => e.disabled = true)
+    },
     success: function (res) {
+      document.querySelectorAll(".trigger").forEach(e => e.disabled = false)
     }
   })
 }
@@ -708,20 +819,20 @@ function orderTo() {
 }
 
 
-  
-function toClick(){
-    var to = document.getElementById('toDate')
-    var from = document.getElementById('fromDate').value
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-    today = yyyy + '-' + mm + '-' + dd;
-    to.setAttribute("max", today);
-    to.setAttribute("min",from)
-  }
 
-function fromClick(){
+function toClick() {
+  var to = document.getElementById('toDate')
+  var from = document.getElementById('fromDate').value
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var yyyy = today.getFullYear();
+  today = yyyy + '-' + mm + '-' + dd;
+  to.setAttribute("max", today);
+  to.setAttribute("min", from)
+}
+
+function fromClick() {
   var to = document.getElementById('toDate').value
   var from = document.getElementById('fromDate')
   from.setAttribute("max", to);

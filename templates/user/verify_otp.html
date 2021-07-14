@@ -11,7 +11,7 @@
           <form method="POST">
               {% csrf_token %}
               <div class="form-group">
-                <label for="otp">Enter the OTP sent to your number</label>
+                <label for="otp">Enter the OTP sent to +91{{phone}}</label>
                  <input type="text" class="form-control" placeholder="OTP" name="otp" required>
                  {% for message in messages %}
                  <label class="text-danger" for="messages">{{message}}</label>

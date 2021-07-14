@@ -89,28 +89,32 @@
 						<div class=" d-flex justify-content-center">
 							<div class="img-block">
 								{% if product.image_1 %}
-								<img class="img-border" id="image1" src="{{ product.image_1.url }}" alt="">
+								<img class="img-border" id="image1" src="{{ product.image_1_small_thumbnail.url }}" alt="">
+								<img class="not-visible" type="hidden" src="{{ product.image_1.url }}" id="image1Big">
 								{% else %}
 								<img class="img-border" id="image1" src="{% static 'users/images/image-not-found.png' %}">
 								{% endif %}
 							</div>
 							<div  class="img-block">
 								{% if product.image_2 %}
-								<img id="image2" src="{{ product.image_2.url }}" alt="">
+								<img id="image2" src="{{ product.image_2_thumbnail.url }}" alt="">
+								<img class="not-visible" type="hidden" src="{{ product.image_2.url }}" id="image2Big">
 								{% else %}
 								<img id="image2" src="{% static 'users/images/image-not-found.png' %}">
 								{% endif %}
 							</div>
 							<div  class="img-block">
 								{% if product.image_3 %}
-								<img id="image3" src="{{ product.image_3.url }}" alt="">
+								<img id="image3" src="{{ product.image_3_thumbnail.url }}" alt="">
+								<img class="not-visible" type="hidden" src="{{ product.image_3.url }}" id="image3Big">
 								{% else %}
 								<img id="image3" src="{% static 'users/images/image-not-found.png' %}">
 								{% endif %}
 							</div>
 							<div class="img-block">
 								{% if product.image_4 %}
-								<img id="image4" src="{{ product.image_4.url }}" alt="">
+								<img id="image4" src="{{ product.image_4_thumbnail.url }}" alt="">
+								<img class="not-visible" type="hidden" src="{{ product.image_4.url }}" id="image4Big">
 								{% else %}
 								<img id="image4" src="{% static 'users/images/image-not-found.png' %}">
 								{% endif %}
@@ -122,7 +126,7 @@
 			<main class="col-md-6 border-left">
 				<article class="content-body">
 
-					<h4 class="title product-title">{{ product.product_name }} {{product.quantity }}</h4>
+					<h4 style="text-transform: capitalize;" class="title product-title">{{ product.product_name }} {{product.quantity }}</h4>
 					<p style="text-transform: uppercase; color:#3b3b3b;">{{ product.brand.brand_name }}</p>
 
 					<div class="mb-3">
@@ -133,7 +137,7 @@
 					<hr>
 					<input type="hidden" class="product-id" value="{{ product.id }}">
 					<button onclick="addToCart('{{product.id}}')" class="btn  btn-major add-to-cart-btn"
-						id="{{ product.id }}{{ product.id }}"> <span class="text">Add to cart</span>
+						id="add{{ product.id }}"> <span class="text">Add to cart</span>
 						<i class="fas fa-shopping-cart "></i> </button>
 					
 					<hr>
@@ -245,7 +249,7 @@
 					<div class="icontext">
 						{% for profile in profiles %}
 						{% if profile.user == review.user %}
-						<img src="{{ profile.display_picture.url }}" class="img-xs icon rounded-circle">
+						<img src="{{ profile.display_picture_small_thumbnail.url }}" class="img-xs icon rounded-circle">
 						{% endif %}
 						{% endfor %}
 						<div class="text">

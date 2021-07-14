@@ -9,6 +9,8 @@ from django.db.models.query_utils import check_rel_lookup_compatibility, select_
 from django.utils.translation import TranslatorCommentWarning
 from vendor.models import Product
 from django.utils import timezone
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 # Create your models here.
 
@@ -88,6 +90,20 @@ class Profile(models.Model):
     user            = models.OneToOneField(Account,on_delete=CASCADE)
     display_picture = models.ImageField(blank=True,upload_to = 'photos/user/profile')
 
+    display_picture_thumbnail    = ImageSpecField(
+                                        source='display_picture',
+                                        processors=[ResizeToFill(200,200)],
+                                        format='JPEG',
+                                        options={'quality':70}
+                                        )
+                            
+    display_picture_small_thumbnail    = ImageSpecField(
+                                        source='display_picture',
+                                        processors=[ResizeToFill(100,100)],
+                                        format='JPEG',
+                                        options={'quality':80}
+                                        )
+
     def __str__(self):
         return str(self.user.first_name)
 
@@ -141,7 +157,7 @@ class DefaultAddress(models.Model):
 
 class Coupon(models.Model):
     code            = models.CharField(max_length=40,unique=True)
-    discount        = models.CharField(max_length=10)
+    discount        = models.IntegerField()
     status          = models.BooleanField(default=True)
     created_at      = models.DateTimeField(auto_now_add=True)
 

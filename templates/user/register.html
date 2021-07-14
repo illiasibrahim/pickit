@@ -65,8 +65,11 @@
 					    <input class="form-control" placeholder="Repeat your password" type="password" name="password_confirm">
 					</div> 
 				</div>
-
-
+				{% for message in messages %}
+				{% if 'twilio' in message.tags %}
+				<label class="form-group text-danger" for="message">{{message}}</label>
+				{% endif %}
+				{% endfor %}
 				<div class="form-group col mt-4">
 					<button type="submit" class="btn btn-major btn-block"> Register </button>
 				</div>
