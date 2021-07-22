@@ -37,7 +37,7 @@ urlpatterns = [
     path('new-address/',views.new_address,name='new-address'),
     path('edit-address/',views.edit_address,name='edit-address'),    
     path('order-failed/',views.order_failed,name='order-failed'),
-
+    path('cod/',views.cod,name='cod'),
 
     
 ]

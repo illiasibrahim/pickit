@@ -620,25 +620,14 @@ def place_order(request):
     if order.coupon is not None:
         coupon_discount = int(order.order_total)-int(order.order_discount)-int(order.total)
     total = int(order.total) * 100
-    # to convert currency from usd to inr for paypal transaction
-    converted = convert('inr', 'usd',order.total)
-    json_object = json.loads(converted)
-    converted_amount = json_object['amount']
-    auth1= config('razorpayauth1',cast=str)
-    auth2= config('razorpayauth2',cast=str)
-    client = razorpay.Client(auth=(auth1, auth2))
-    order_amount = int(order.total)*100
-    razorpay_order = client.order.create({'amount':order_amount,'currency':'INR'})
-    request.session['order_id']=razorpay_order['id']
+    
     context = {
-        'order_id':razorpay_order['id'],
         'order':order,
         'total':total,
         'cart_items':cart_items,
         'discount':discount,
         'total_mrp':total_mrp,
         'coupon_discount':coupon_discount,
-        'converted_amount':converted_amount,
     }
     return render(request,'user/place_order.html',context)
 
@@ -780,7 +769,44 @@ def razor(request):
         return redirect('order-complete')
     except:
         return redirect('order-failed')
-    
+
+@login_required(login_url='sign-in')
+def cod(request):
+    try:
+        order_number = request.session['order_number']
+    except:
+        return redirect('home')
+    order = Order.objects.get(user=request.user, is_ordered=False,order_number=order_number)
+    payment = Payment(
+        user = request.user,
+        payment_id = 'X0X0X0X0X0X0X0',
+        payment_method = 'Cash on delivery',
+        amount_paid = order.total,
+        status = 'pending'
+    )
+    payment.save()
+    order.payment = payment
+    order.is_ordered = True
+    order.save()
+
+    # move cart item to order product table
+    cart_item = CartItem.objects.filter(user=request.user)
+
+    for item in cart_item:
+        order_product = OrderProduct()
+        order_product.order = order
+        order_product.payment = payment
+        order_product.user = request.user
+        order_product.product = item.product
+        order_product.quantity = item.quantity
+        order_product.product_price = item.product.selling_price()
+        order_product.ordered = True
+        order_product.save()
+
+    # clear cart
+    CartItem.objects.filter(user=request.user).delete()
+    return redirect('order-complete')
+
 
 @never_cache
 @login_required(login_url='sign-in')

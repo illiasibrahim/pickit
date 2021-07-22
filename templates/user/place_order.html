@@ -103,73 +103,12 @@
 
                         </div>
                         <label class="text-danger" id="couponError" for=""></label>
-
                         <main class="col-md-12">
-                            <article class="accordion" id="accordion_pay">
-                                <!-- for loop start -->
-                                <div class="card">
-                                    <header class="card-header">
-                                        <label class="form-check" data-toggle="collapse" data-target="#payWithPaypal">
-                                            Pay with paypal
-                                        </label>
-                                    </header>
-                                    <div id="payWithPaypal" class="collapse show" data-parent="#accordion_pay">
+                            
                                         <div class="card-body">
-                                            <div id="paypal-button-container"></div>
-                                        </div> <!-- card body .// -->
-                                    </div> <!-- collapse .// -->
-                                </div> <!-- card.// -->
-                                <div class="card">
-                                    <header class="card-header">
-                                        <label class="form-check" data-toggle="collapse" data-target="#payWithRazorpay">
-                                            Pay with razorpay
-                                        </label>
-                                    </header>
-                                    <div id="payWithRazorpay" class="collapse" data-parent="#accordion_pay">
-                                        <div class="card-body">
-                                            <form action="{% url 'razor' %}" method="POST">
-                                                {% csrf_token %}
-                                                <script src="https://checkout.razorpay.com/v1/checkout.js"
-                                                    data-key="rzp_test_jjMwguJFthIdMi" data-amount="{{ total }}"
-                                                    data-currency="INR" data-order_id="{{ order_id }}"
-                                                    data-buttontext="Pay with Razorpay" data-name="Pickit India ltd."
-                                                    data-description="Sit back and enjoy the comfort of home"
-                                                    data-image="" data-prefill.name="{{ order.first_name }}"
-                                                    data-prefill.email="{{order.email }}" 
-                                                    data-theme.color="#F37254"></script>
-                                            </form>
-                                        </div> <!-- card body .// -->   
-                                    </div> <!-- collapse .// -->
-                                    
-                                </div> <!-- card.// -->
-                                <!-- <div class="card">
-                                    <header class="card-header">
-                                        <label class="form-check" data-toggle="collapse"
-                                            data-target="#cashOnDelivery">
-                                            Cash on delivery
-                                        </label>
-                                    </header>
-                                    <div id="cashOnDelivery" class="collapse" data-parent="#accordion_pay">
-                                        <div class="card-body">
-                                            <button type="submit" class="btn btn-outline-major btn-block"> Cash on delivery </button>
+                                            <a href="{% url 'cod' %}" class="btn btn-major btn-block"> Cash on delivery </a>
                                         </div> 
-                                    </div> 
-                                </div>  -->
-
-                            </article>
-                            <!-- accordion end.// -->
-
                         </main>
-                        <!-- <p class="text-center mb-3">
-                            <img src="{% static 'users/images/payments.png' %}" height="26">
-                        </p> -->
-
-
-
-
-
-
-
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->
             </aside>
@@ -187,92 +126,3 @@
 
 {% endblock %}
 
-{% block script %}
-
-<script>
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-
-    var amount = '{{converted_amount}}'
-    var url = '{% url "paypal" %}'
-    var csrftoken = getCookie('csrftoken');
-    var orderID = '{{ order.order_number }}'
-    var payment_method = 'Paypal'
-    var redirect_url = "{% url 'order-complete' %}"
-    var failed_url = "{% url 'order-failed' %}"
-
-    // Render the PayPal button into #paypal-button-container
-    paypal.Buttons({
-
-
-
-        style: {
-            color: 'blue',
-            shape: 'rect',
-            label: 'pay',
-            height: 36
-        },
-
-        // Set up the transaction
-        createOrder: function (data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: amount
-                    }
-                }]
-            });
-        },
-        onCancel: function (data) {
-            window.location.href = failed_url
-        },
-
-        // Finalize the transaction
-        onApprove: function (data, actions) {
-            return actions.order.capture().then(function (details) {
-                // Show a success message to the buyer
-                console.log(details)
-                sendData();
-                function sendData() {
-                    fetch(url, {
-                        method: "POST",
-                        headers: {
-                            "Content-type": "application/json",
-                            "X-CSRFToken": csrftoken
-                        },
-                        body: JSON.stringify({
-                            orderID: orderID,
-                            transactionID: details.id,
-                            payment_method: payment_method,
-                            status: details.status,
-                        }),
-                    })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            window.location.href = redirect_url;
-                        });
-
-                }
-            });
-        }
-
-
-    }).render('#paypal-button-container');
-</script>
-
-
-{% endblock %}
