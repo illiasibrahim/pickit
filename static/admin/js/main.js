@@ -7,6 +7,8 @@ $(document).ready(function () {
   });
 
 
+
+
   // admin form validations
   $('#inputForm').validate()
 
@@ -838,3 +840,18 @@ function fromClick() {
   from.setAttribute("max", to);
 }
 
+// product offer search
+
+$(document).ready(function () {
+  $("#search-input").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+    $(".search-item").filter(function () {
+      console.log(this)
+      var parent =  $(this).parent()
+      var grandparent = parent.parent()
+      var grandgrandparent = grandparent.parent()
+      var card = grandgrandparent.parent()
+      card.toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  })
+})
