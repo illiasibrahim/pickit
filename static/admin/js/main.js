@@ -53,10 +53,12 @@ $(document).ready(function () {
           var $image = $('#image');
 
           if (path.includes('add-banner')) {
-            aspect_ratio = 21 / 4;
+            // aspect_ratio = 21 / 4;
+            aspect_ratio = 21 / 5;
           }
           else if (path.includes('edit-banner')) {
-            aspect_ratio = 21 / 4;
+            aspect_ratio = 21 / 5;
+            // aspect_ratio = 21 / 4;
           }
           else if (path.includes('add-poster')) {
             aspect_ratio = 12 / 7;
