@@ -33,7 +33,6 @@
                                     {% if address == default.default_address %}<span class="text-secondary"><i
                                             class="fas fa-check-circle fa-xs text-major"></i> default</span>{% endif %}
                                 </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ address.email }}</h6>
                                 <p class="card-text">
                                 <p style="text-transform: capitalize;">{{address.street}}
                                     <br>{{address.city}}, {{address.state}}
@@ -55,7 +54,7 @@
                     </div>
                     {% endfor %}
                     <div class="col-md-6">
-                        <div class="card mb-3" style="height: 15.5em;">
+                        <div class="card mb-3" style="height: 14em;">
                             <div class="card-body ">
                                 <div class="d-flex flex-column align-items-center justify-content-center">
                                     <h5 class="card-title">add new</h5>
@@ -76,11 +75,11 @@
                     <div id="pay_payme" class="collapse show" data-parent="#accordion_pay">
                         <div class="card-body">
 
-                            <form action="/new-address/" method="POST">
+                            <form id="addressForm" action="/new-address/" method="POST">
                                 {% csrf_token %}
                                 <div class="row">
                                     <h4 class="card-title mb-4">Contact info</h4>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
                                         <label>Frst name</label>
                                         {{address_form.first_name}}
                                     </div>
@@ -91,10 +90,6 @@
                                     <div class="form-group col-md-6">
                                         <label>Phone</label>
                                         {{address_form.phone}}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Email</label>
-                                        {{address_form.email}}
                                     </div>
                                 </div> <!-- row.// -->
                                 <div class="row">
@@ -149,11 +144,11 @@
                     <div id="pay_payme" class="collapse show" data-parent="#accordion_pay">
                         <div class="card-body">
 
-                            <form action="/edit-address/" method="POST">
+                            <form id="addressForm" action="/edit-address/" method="POST">
                                 {% csrf_token %}
                                 <div class="row">
                                     <h4 class="card-title mb-4">Contact info</h4>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
                                         <label>Frst name</label>
                                         <input class="form-control" type="text" name="first_name" id="firstName" required>
                                         <input type="hidden" name="id" id="ID">
@@ -165,10 +160,6 @@
                                     <div class="form-group col-md-6">
                                         <label>Phone</label>
                                         <input class="form-control" type="text" name="phone" id="phone" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Email</label>
-                                        <input class="form-control" type="text" name="email" id="email" required>
                                     </div>
                                 </div> <!-- row.// -->
                                 <div class="row">

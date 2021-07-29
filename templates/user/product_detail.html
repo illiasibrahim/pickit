@@ -247,11 +247,11 @@
 				{% for review in reviews %}
 				<article class="box mb-3">
 					<div class="icontext">
-						{% for profile in profiles %}
-						{% if profile.user == review.user %}
-						<img src="{{ profile.display_picture_small_thumbnail.url }}" class="img-xs icon rounded-circle">
+						{% if review.user.display_picture %}
+						<img src="{{ review.user.display_picture_small_thumbnail.url }}" class="img-xs icon rounded-circle">
+						{% else %}
+						<img src="{% static 'users/images/profile.jpg' %}" class="img-xs icon rounded-circle"  alt="">
 						{% endif %}
-						{% endfor %}
 						<div class="text">
 							<span class="date text-muted float-md-right">{{ review.updated_at }} </span>
 							<h6 class="mb-1">{{ review.user.first_name}} {{ review.user.last_name }} </h6>

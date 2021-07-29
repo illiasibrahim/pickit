@@ -276,7 +276,6 @@ function editAddress(address_id){
             document.getElementById('firstName').value = data.first_name
             document.getElementById('lastName').value = data.last_name
             document.getElementById('phone').value = data.phone
-            document.getElementById('email').value = data.email
             document.getElementById('street').value = data.street
             document.getElementById('house').value = data.building
             document.getElementById('city').value = data.city
@@ -439,6 +438,60 @@ $('#passwordForm').validate({
         password_confirm: {
             minlength: 6,
             equalTo: "#newPassword"
+        },
+    },
+
+    errorPlacement: function (error, element) {
+        element.css('background', 'none');
+        error.css('background', 'none');
+        error.insertAfter(element);
+    }
+});
+
+
+// validate address form
+
+$('#addressForm').validate({
+    rules: {
+        first_name: {
+            minlength: 4,
+            required: true,
+        },
+
+        last_name: {
+            minlength: 1,
+            required: true,
+        },
+        phone: {
+            minlength: 10,
+            maxlength: 10,
+            required: true,
+            number: true,
+            digits: true,
+
+        },
+        email: {
+            email:true,
+            required: true,
+        },
+        state: {
+            minlength: 3,
+            required: true,
+        },
+        street: {
+            minlength: 5,
+            required: true,
+        },
+        city: {
+            minlength: 3,
+            required: true,
+        },
+        pin: {
+            minlength: 6,
+            maxlength:6,
+            number: true,
+            digits: true,
+            required: true,
         },
     },
 

@@ -5,7 +5,7 @@ from django.db.models.query import RawQuerySet
 from django.http.response import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, resolve_url
 from vendor.models import Banner,Category,Poster,Product
-from .models import Account,CartItem, Cart, DeliveryAddress,DefaultAddress, Profile,Order,Payment,OrderProduct,Coupon, ReviewRating
+from .models import Account,CartItem, Cart, DeliveryAddress,DefaultAddress, Order,Payment,OrderProduct,Coupon, ReviewRating
 from .forms import AddressForm,ProfileForm, ReviewRatingForm
 from django.contrib import messages,auth
 import random
@@ -314,7 +314,6 @@ def product_detail(request,product_id):
     except:
         purchased = False
     reviews = ReviewRating.objects.filter(product=product,status= True)
-    profiles = Profile.objects.all()
     average_rating = 0
     for review in reviews:
         average_rating += review.rating
@@ -327,7 +326,6 @@ def product_detail(request,product_id):
         'cart_item':cart_item,
         'purchased':purchased,
         'reviews':reviews,
-        'profiles':profiles,
         'average_rating':average_rating,
         'rating_count':rating_count,
     }
@@ -525,12 +523,10 @@ def checkout(request):
                 except:
                     save_address = None
                 if save_address  == "save":
-                    print('save')   
                     address = DeliveryAddress()
                     address.first_name = form.cleaned_data['first_name']
                     address.last_name = form.cleaned_data['last_name']
                     address.phone = form.cleaned_data['phone']
-                    address.email = form.cleaned_data['email']
                     address.state = form.cleaned_data['state']
                     address.country = form.cleaned_data['country']
                     address.street = form.cleaned_data['street']
@@ -544,7 +540,6 @@ def checkout(request):
                 order.first_name = form.cleaned_data['first_name']
                 order.last_name = form.cleaned_data['last_name']
                 order.phone = form.cleaned_data['phone']
-                order.email = form.cleaned_data['email']
                 order.state = form.cleaned_data['state']
                 order.country = form.cleaned_data['country']
                 order.street = form.cleaned_data['street']
@@ -559,7 +554,6 @@ def checkout(request):
             order.first_name = delivery_address.first_name
             order.last_name = delivery_address.last_name
             order.phone = delivery_address.phone
-            order.email = delivery_address.email
             order.state = delivery_address.state
             order.country = delivery_address.country
             order.street = delivery_address.street
@@ -901,16 +895,9 @@ def profile(request):
         user.save()
         return redirect('profile')
     user = request.user
-    try:
-        profile = Profile.objects.get(user=request.user)
-    except:
-        profile = Profile.objects.create(user=request.user)
-        profile.dispaly_picture = None
-        profile.save()
     profile_form = ProfileForm()
     context = {
         'user':user,
-        'profile':profile,
         'profile_form':profile_form
         }
     return render(request,'user/profile.html',context)
@@ -921,11 +908,7 @@ def change_dp(request):
         profile_form = ProfileForm(request.POST,request.FILES)
         if profile_form.is_valid():
             display = profile_form.cleaned_data.get('display_picture')
-            print(display)
-            try:
-                profile = Profile.objects.get(user=request.user)
-            except:
-                profile = Profile.objects.create(user=request.user)
+            profile = request.user
             profile.display_picture = display
             profile.save()
             return redirect('profile')
@@ -981,7 +964,6 @@ def edit_address(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         phone = request.POST['phone']
-        email = request.POST['email']
         street = request.POST['street']
         building = request.POST['house']
         city = request.POST['city']
@@ -993,7 +975,6 @@ def edit_address(request):
         address.first_name = first_name
         address.last_name = last_name
         address.phone = phone
-        address.email = email
         address.country = country
         address.state = state
         address.street = street
@@ -1008,7 +989,6 @@ def edit_address(request):
     first_name = address.first_name
     last_name = address.last_name
     phone = address.phone
-    email = address.email
     country = address.country
     state = address.state
     street = address.street
@@ -1022,7 +1002,6 @@ def edit_address(request):
         'first_name':first_name,
         'last_name':last_name,
         'phone':phone,
-        'email':email,
         'country':country,
         'state':state,
         'street':street,

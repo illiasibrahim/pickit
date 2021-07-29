@@ -1,7 +1,7 @@
 from django import forms
 from django.db import models
 from django.db.models import fields
-from .models import DeliveryAddress, Profile,ReviewRating
+from .models import Account, DeliveryAddress,ReviewRating
 
 class AddressForm(forms.ModelForm):
     class Meta:
@@ -10,7 +10,6 @@ class AddressForm(forms.ModelForm):
             'first_name',
             'last_name',
             'phone',
-            'email',
             'country',
             'state',
             'street',
@@ -24,14 +23,22 @@ class AddressForm(forms.ModelForm):
         super(AddressForm,self).__init__(*args,**kwargs)
         self.fields['first_name'].widget.attrs['placeholder'] = 'Enter the first name'
         self.fields['last_name'].widget.attrs['placeholder'] = 'Enter the first name'
-        self.fields['phone'].widget.attrs['placeholder'] = '+91 00000 00000'
-        self.fields['email'].widget.attrs['placeholder'] = 'example@mail.com'
+        self.fields['phone'].widget.attrs['placeholder'] = 'Mobile number'
         self.fields['state'].widget.attrs['placeholder'] = 'state'
         self.fields['street'].widget.attrs['placeholder'] = 'wall street 09'
         self.fields['city'].widget.attrs['placeholder'] = 'hilite city'
         self.fields['pin'].widget.attrs['placeholder'] = '000 000'
         self.fields['building'].widget.attrs['placeholder'] = ''
         self.fields['landmark'].widget.attrs['placeholder'] = "near st.sebastian's church"
+
+        self.fields['first_name'].widget.attrs['id'] = 'formFirstName'
+        self.fields['last_name'].widget.attrs['id'] = 'formLastName'
+        self.fields['phone'].widget.attrs['id'] = 'formNumber'
+        self.fields['state'].widget.attrs['id'] = 'formState'
+        self.fields['street'].widget.attrs['id'] = 'formStreet'
+        self.fields['city'].widget.attrs['id'] = 'formCity'
+        self.fields['pin'].widget.attrs['id'] = 'formPin'
+
         
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
@@ -40,7 +47,7 @@ class AddressForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     display_picture = forms.ImageField(required=False, error_messages={'invalid':("Image file only")}, widget=forms.FileInput)
     class Meta:
-        model = Profile
+        model = Account
         fields = {
             'display_picture'
         }
