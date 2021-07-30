@@ -511,7 +511,7 @@ def edit_poster(request, poster_id):
 def user_view(request):
     if request.session.has_key('admin'):
         users = Account.objects.all()
-        paginator = Paginator(users,8)
+        paginator = Paginator(users,20)
         page = request.GET.get('page')
         paged_users = paginator.get_page(page)
         context = {

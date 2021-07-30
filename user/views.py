@@ -298,7 +298,7 @@ def store(request):
     categories = Category.objects.all()
     products = Product.objects.all()
     product_count = products.count()
-    paginator = Paginator(products,8)
+    paginator = Paginator(products,12)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
     context = {'products':paged_products, 'product_count':product_count,'categories':categories}
@@ -364,7 +364,7 @@ def search(request):
     else:
         results = Product.objects.filter(Q(product_name__icontains=search_key) | Q(brand__brand_name__icontains=search_key) |Q(category__category_name__icontains=search_key))
         product_count = results.count() 
-        paginator = Paginator(results,4)
+        paginator = Paginator(results,12)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
     context = {'products':paged_products ,'product_count':product_count, 'categories':categories,'search_key':search_key}
@@ -376,7 +376,7 @@ def category_view(request, category_id):
     category = Category.objects.get(id=category_id)
     products = Product.objects.filter(category_id = category_id)  
     product_count = products.count() 
-    paginator = Paginator(products,4)
+    paginator = Paginator(products,12)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
     context = {'products':paged_products, 'category':category,'product_count':product_count,'categories':categories}
