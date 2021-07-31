@@ -179,6 +179,7 @@ function addToCart(product_id, product_name = null) {
         },
         success: function (res) {
             $('#badgeCount').html(res.data)
+            $('#badgeCountMob').html(res.data)
             btn.attr('disabled', false)
             if (product_name != null) {
                 document.getElementById(product_name).innerHTML = res.ind_count;
@@ -210,6 +211,7 @@ function removeFromCart(product_id, product_name) {
                 },
                 success: function (res) {
                     $('#badgeCount').html(res.data)
+                    $('#badgeCountMob').html(res.data)
                     if (res.rem == true) {
                         document.getElementById(product_id).remove()
                         location.reload()
