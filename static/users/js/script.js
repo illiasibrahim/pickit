@@ -169,6 +169,9 @@ function addToCart(product_id, product_name = null) {
     // var btn = document.getElementById(product_id+product_id)
     var dat = {};
     dat['product_id'] = product_id
+    if (product_name == null){
+        alert('Item added to cart');
+    }
     $.ajax({
         url: '/add-cart/',
         type: 'GET',
