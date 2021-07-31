@@ -214,7 +214,9 @@ def verify_signin(request):
                 return redirect('home')
             else:
                 messages.info(request,'The OTP you entered is wrong please try again',extra_tags='wrong otp')
-        return render(request,'user/verify_otp.html')
+        phone = request.session['phone']
+        context = {'phone':phone}
+        return render(request,'user/verify_otp.html',context)
 
 
 @never_cache
