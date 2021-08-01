@@ -201,6 +201,9 @@ def verify_signin(request):
                                     user_item = CartItem.objects.get(user=user,product=item.product)
                                     user_item.quantity += item.quantity
                                     user_item.save()
+                                    if user_item.quantity > 5:
+                                        user_item.quantity = 5
+                                        user_item.save()
                                 else:
                                     item.user = user
                                     item.save()
@@ -243,6 +246,9 @@ def signin_password(request):
                                         user_item = CartItem.objects.get(user=user,product=item.product)
                                         user_item.quantity += item.quantity
                                         user_item.save()
+                                        if user_item.quantity > 5:
+                                            user_item.quantity =5
+                                            user_item.save()
                                     else:
                                         item.user = user
                                         item.save()
