@@ -913,7 +913,7 @@ def change_dp(request):
             profile = request.user
             profile.display_picture = display
             profile.save()
-            return redirect('profile')
+    return redirect('profile')
 
 @never_cache
 @login_required(login_url='sign-in')
