@@ -412,6 +412,7 @@ def cart(request):
 
 
 def add_cart(request):
+    max_limit = False
     cart_items = None
     product_id = request.GET['product_id']
     product = Product.objects.get(id=product_id)
@@ -427,8 +428,11 @@ def add_cart(request):
                 )
             cart.save()
             cart_item = CartItem.objects.get(product=product, cart=cart)
-        cart_item.quantity += 1 
-        cart_item.save()
+        if cart_item.quantity == 5:
+            max_limit = True
+        else:
+            cart_item.quantity += 1 
+            cart_item.save()
     except :
         if request.user.is_authenticated:
             cart_item = CartItem.objects.create(
@@ -450,11 +454,11 @@ def add_cart(request):
     else:
         cart_items = CartItem.objects.all().filter(cart=cart)
     for cart_ite in cart_items: #inorder to avoid conflict with same name cartite
-        cart_count += 1
+        cart_count += cart_ite.quantity
         cart_value += int(cart_ite.quantity)* int(cart_ite.product.selling_price())
     ind_count = cart_item.quantity
     ind_price = int(cart_item.quantity) * int(cart_item.product.selling_price())
-    return JsonResponse({'data':cart_count,'ind_count':ind_count,'ind_price':ind_price,'cart_value':cart_value})
+    return JsonResponse({'data':cart_count,'ind_count':ind_count,'ind_price':ind_price,'cart_value':cart_value,'max_limit':max_limit})
     
 
 def remove_cart(request): # to remove single quantity of a purticular cart item
@@ -479,7 +483,7 @@ def remove_cart(request): # to remove single quantity of a purticular cart item
     cart_count = 0
     cart_value = 0
     for cart_ite in cart_items: #inorder to avoid conflict with same name cartitem and cartite
-        cart_count += 1
+        cart_count += cart_ite.quantity
         cart_value += int(cart_ite.quantity)* int(cart_ite.product.selling_price())
     ind_count = cart_item.quantity
     ind_price = int(cart_item.quantity) * int(cart_item.product.selling_price())

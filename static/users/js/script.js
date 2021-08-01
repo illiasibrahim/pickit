@@ -169,9 +169,6 @@ function addToCart(product_id, product_name = null) {
     // var btn = document.getElementById(product_id+product_id)
     var dat = {};
     dat['product_id'] = product_id
-    if (product_name == null){
-        alert('Item added to cart');
-    }
     $.ajax({
         url: '/add-cart/',
         type: 'GET',
@@ -183,12 +180,14 @@ function addToCart(product_id, product_name = null) {
         success: function (res) {
             $('#badgeCount').html(res.data)
             $('#badgeCountMob').html(res.data)
+            if (res.max_limit == true) {
+                alert('Sorry, You have reached the maximum limit!')
+            }
             btn.attr('disabled', false)
             if (product_name != null) {
                 document.getElementById(product_name).innerHTML = res.ind_count;
                 document.getElementById('cartValue').innerHTML = '₹'+res.cart_value+'.00';
                 document.getElementById(product_name+product_id).innerHTML = '₹ '+res.ind_price+'.00';
-                
             }
 
         }
