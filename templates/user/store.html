@@ -142,7 +142,7 @@
                             <figcaption class="info-wrap">
                                 <p style="text-transform: capitalize;" class="title">{{ product.product_name }} {{ product.quantity }}</p>
                                 <h4 class="price mt-1 text-success">₹ {{ product.selling_price }}.00</h4>
-                                <p class="">₹ <s>{{ product.mrp }}.00</s></p>
+                                <p class="">₹ <s> {% widthratio  5 2 5 %}.00</s></p>
                             </figcaption>
                             <button onclick="addToCart('{{product.id}}')"
                                 class="btn btn-major mr-2 ml-2 mb-2 add-to-cart-btn"

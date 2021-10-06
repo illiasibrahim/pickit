@@ -492,17 +492,13 @@ function reject(order_id) {
 
 function openUpdateCategoryOffer(cat_offer, cat_id, cat_name) {
   document.getElementById('catOffer').value = cat_offer
-  console.log(cat_offer)
   document.getElementById('catId').value = cat_id
   document.getElementById('exampleModalLongTitle').innerHTML = cat_name
-  console.log(cat_id)
 }
 
 function updateCategoryOffer() {
   cat_offer = document.getElementById('catOffer').value
   cat_id = document.getElementById('catId').value
-  console.log(cat_offer)
-  console.log(cat_id)
   dat = {
     'cat_id': cat_id,
     'cat_offer': cat_offer,

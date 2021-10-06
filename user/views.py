@@ -318,7 +318,7 @@ def product_detail(request,product_id):
     in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product=product).exists()
     cart_item = CartItem.objects.filter(cart__cart_id=_cart_id(request),product=product)
     try:
-        purchased = OrderProduct.objects.filter(user=request.user,product=product).exists()
+        purchased = OrderProduct.objects.filter(user=request.user,product=product,ordered=True).exists()
     except:
         purchased = False
     reviews = ReviewRating.objects.filter(product=product,status= True)
@@ -390,7 +390,7 @@ def category_view(request, category_id):
     context = {'products':paged_products, 'category':category,'product_count':product_count,'categories':categories}
     return render(request,'user/category.html',context)
 
- 
+@never_cache
 def cart(request):
     try:
         total = 0

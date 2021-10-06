@@ -113,7 +113,7 @@ def dashboard(request):
         # takes the data for users per month
         today = datetime.date.today()
         users_count = Account.objects.filter(data_joined__month=today.month).count()
-        users_dict = {today.strftime('%B'):users_count}
+        users_dict = {today.strftime('%B'):users_count} 
         for i in range(7):
             try:
                 today = today.replace(month=today.month-1,day=1)
