@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY',cast=str)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','pickitindia.herokuapp.com/']
 
 
 # Application definition
